@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="kotlin 深入学习笔记(三)">
+
+
+
+
+  <meta name="keywords" content="kotlin, Deskid's Blog">
+
+
+
+
+
+  <meta name="google-site-verification" content="UA-110544275-1">
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Deskid's Blog">
+
+
+
+
+
+
+<link rel="canonical" href="https://deskid.github.io/2017/07/07/kotlin-learn-notes-3/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> kotlin 深入学习笔记(三) - Deskid's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Deskid's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            Categories
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Deskid's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              Categories
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          kotlin 深入学习笔记(三)
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-07-07
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/Android/">Android</a>
+            
+              <a href="/categories/Android/kotlin/">kotlin</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-默认参数"><span class="toc-text">6. 默认参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-命名参数"><span class="toc-text">7. 命名参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-std自带函数"><span class="toc-text">8. Std自带函数</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>本文主要介绍kotlin的几个特性如下：</p>
+<ul>
+<li>默认参数</li>
+<li>命名参数</li>
+<li>std自带函数</li>
+</ul>
+<a id="more"></a>
+<p>继续，如果把编程语言看做一款应用产品，产品的功能对应语言特性，那么大多数编程语言功能都还算齐全，该有的也都有了，剩下一些增增减减，发个版本迭代也是和应用开发类似。这个应用的目的是为了什么呢，为了实现OOP？为了实现函数式编程？</p>
+<p>不对，这种思路是本末倒置。就像我们写诗是为了抒发情感，而不是为了拼凑五言绝句平平仄仄平的韵律格式。编程语言设计出来，不是为了实现某个设计哲学，而是要为了被程序员使用。</p>
+<p>就像面对 NPE，程序员说：我们不想写if null 判断，语言设计师说：可是添加个 null 实现起来更简单啊，我们加上吧。</p>
+<p>你猜，要是编程语言是一个应用产品，这样的产品经理会不会被用户打。</p>
+<h3 id="6-默认参数">6. 默认参数</h3>
+<p>Java为了避免在一个方法中传入过多参数，往往有两个解决方法：</p>
+<ol>
+<li>将参数用builder封装一下</li>
+<li>写多个方法重载，每次重载设置最后一个参数为默认值</li>
+</ol>
+<!-- more -->
+<p>这里举个方法重载的例子：<br>
+下面代码是用Java写的一个路由跳转类的toUriAct方法封装。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">toUriAct</span><span class="params">(Context ctx, String uriStr)</span> </span>&#123;</span><br><span class="line">        toUriAct(ctx, uriStr, (HashMap)<span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">toUriAct</span><span class="params">(Context ctx, String uriStr, HashMap&lt;String, String&gt; params)</span> </span>&#123;</span><br><span class="line">        toUriAct(ctx, uriStr, params, <span class="keyword">false</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">toUriAct</span><span class="params">(Context ctx, String uriStr, HashMap&lt;String, String&gt; params, <span class="keyword">boolean</span> newTask)</span> </span>&#123;</span><br><span class="line">        toUriAct(ctx, uriStr, params, newTask, -<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">toUriActWithAnim</span><span class="params">(Context ctx, String uriStr, <span class="keyword">int</span> animIn, <span class="keyword">int</span> animOut)</span> </span>&#123;</span><br><span class="line">        toUriAct(ctx, uriStr, (HashMap)<span class="keyword">null</span>, <span class="keyword">false</span>, -<span class="number">1</span>, <span class="keyword">true</span>, animIn, animOut);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">toUriAct</span><span class="params">(Context ctx, String uriStr, HashMap&lt;String, String&gt; params, <span class="keyword">boolean</span> newTask, <span class="keyword">int</span> requestCode)</span> </span>&#123;</span><br><span class="line">        toUriAct(ctx, uriStr, params, newTask, requestCode, <span class="keyword">false</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">toUriAct</span><span class="params">(Context ctx, String uriStr, HashMap&lt;String, String&gt; params, <span class="keyword">boolean</span> newTask, <span class="keyword">int</span> requestCode, <span class="keyword">boolean</span> needAnim, <span class="keyword">int</span> animIn, <span class="keyword">int</span> animOut)</span> </span>&#123;</span><br><span class="line">        toUriAct(ctx, uriStr, params, newTask, requestCode, needAnim, animIn, animOut, <span class="keyword">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">toUriAct</span><span class="params">(Context ctx, String uriStr, HashMap&lt;String, String&gt; params, <span class="keyword">boolean</span> newTask, <span class="keyword">int</span> requestCode, <span class="keyword">boolean</span> needAnim, <span class="keyword">int</span> animIn, <span class="keyword">int</span> animOut, <span class="keyword">boolean</span> useDedaultAnimation)</span> </span>&#123;</span><br><span class="line">        toUriActWithReturn(ctx, uriStr, params, newTask, requestCode, needAnim, animIn, animOut, useDedaultAnimation);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>重复代码多，可读性差。但是，在Java中没得选，只能这么写。</p>
+<p>而在kotlin中，只需要写一个方法：</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">toUriAct</span><span class="params">(ctx: <span class="type">Context</span>, uriStr: <span class="type">String</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">             params: <span class="type">HashMap</span>&lt;<span class="type">String</span>, String&gt;? = <span class="literal">null</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">             newTask: <span class="type">Boolean</span> = <span class="literal">false</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">             requestCode: <span class="type">Int</span> = <span class="number">-1</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">             needAnim: <span class="type">Boolean</span> = <span class="literal">false</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">             animIn: <span class="type">Int</span> = <span class="number">0</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">             animOut: <span class="type">Int</span> = <span class="number">0</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">             useDedaultAnimation: <span class="type">Boolean</span> = <span class="literal">false</span>)</span></span> &#123;</span><br><span class="line">    toUriActWithReturn(ctx, uriStr, params, newTask, requestCode, needAnim, animIn, animOut, useDedaultAnimation)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>kotlin是这么实现默认参数的呢？</p>
+<p>kotlin 会为带默认参数的方法生成一个bridge方法，bridge 方法中添加了一个新的int型的mask参数，其值默认为2<sup>n</sup>-1(n = args.length)。mask的二进制位对应n个参数位。</p>
+<p>调用时，如果传参覆盖了默认值，则将参数位对应的mask位置0。</p>
+<p>在bridge方法中会检测默认参数的参数位是否置0，否则使用默认值去调用原方法。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// $FF: synthetic method</span></span><br><span class="line"><span class="comment">// $FF: bridge method</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> toUriAct$<span class="keyword">default</span>(Context var0, String var1, HashMap var2, <span class="keyword">boolean</span> var3, <span class="keyword">int</span> var4, <span class="keyword">boolean</span> var5, <span class="keyword">int</span> var6, <span class="keyword">int</span> var7, <span class="keyword">int</span> var8, Object var9) &#123;</span><br><span class="line"> <span class="keyword">if</span>((var8 &amp; <span class="number">1</span>) != <span class="number">0</span>) &#123;</span><br><span class="line">    var0 = (Context)<span class="keyword">null</span>;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">if</span>((var8 &amp; <span class="number">2</span>) != <span class="number">0</span>) &#123;</span><br><span class="line">    var1 = <span class="string">""</span>;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">if</span>((var8 &amp; <span class="number">4</span>) != <span class="number">0</span>) &#123;</span><br><span class="line">    var2 = (HashMap)<span class="keyword">null</span>;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">if</span>((var8 &amp; <span class="number">8</span>) != <span class="number">0</span>) &#123;</span><br><span class="line">    var3 = <span class="keyword">false</span>;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">if</span>((var8 &amp; <span class="number">16</span>) != <span class="number">0</span>) &#123;</span><br><span class="line">    var4 = -<span class="number">1</span>;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">if</span>((var8 &amp; <span class="number">32</span>) != <span class="number">0</span>) &#123;</span><br><span class="line">    var5 = <span class="keyword">false</span>;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">if</span>((var8 &amp; <span class="number">64</span>) != <span class="number">0</span>) &#123;</span><br><span class="line">    var6 = <span class="number">0</span>;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">if</span>((var8 &amp; <span class="number">128</span>) != <span class="number">0</span>) &#123;</span><br><span class="line">    var7 = <span class="number">0</span>;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> toUriAct(var0, var1, var2, var3, var4, var5, var6, var7);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但是这种参数带默认值的方法只能在kotlin代码中调用，如果要在Java中调用，只要方法声明前加上<code>@JvmOverloads</code>标注，kotlin就会自动生成上述的方法重载，和用Java写的一样。</p>
+<h3 id="7-命名参数">7. 命名参数</h3>
+<p>举例说明：</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">reformat</span><span class="params">(str: <span class="type">String</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">             normalizeCase: <span class="type">Boolean</span> = <span class="literal">true</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">             upperCaseFirstLetter: <span class="type">Boolean</span> = <span class="literal">true</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">             divideByCamelHumps: <span class="type">Boolean</span> = <span class="literal">false</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">             wordSeparator: <span class="type">Char</span> = <span class="string">' '</span>)</span></span> &#123;</span><br><span class="line">      <span class="comment">//……</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用形式改变如下：</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">reformat(str, <span class="literal">true</span>, <span class="literal">true</span>, <span class="literal">false</span>, <span class="string">'_'</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">reformat(str,</span><br><span class="line">    normalizeCase = <span class="literal">true</span>,</span><br><span class="line">    upperCaseFirstLetter = <span class="literal">true</span>,</span><br><span class="line">    divideByCamelHumps = <span class="literal">false</span>,</span><br><span class="line">    wordSeparator = <span class="string">'_'</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>Android Studio 3.0 已经自带了 parameter name hints ，所以这条现在看上去算不上特别吸引人了 :)<br>
+<img src="/media/14994116820658.jpg" alt=""></p>
+<h3 id="8-std自带函数">8. Std自带函数</h3>
+<p>在kotlin的<code>Standard.kt</code>中定义了一些顶层高阶函数。<br>
+<img src="/media/14994119797611.jpg" alt=""></p>
+<p><code>TODO</code>、<code>take**</code>的几个顾名思义的方法不提了。下面的<code>run、with、apply、also、let</code>方法命名并不是一个好的实践（动词+名词），我们无法直接从名字上看出这些方法怎么用，怎么区分，只好read code 。</p>
+<p>下面一一分析：</p>
+<ul>
+<li>let</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* Calls the specified function [block] with `this` value as its argument and returns its result.</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@kotlin</span>.<span class="keyword">internal</span>.InlineOnly</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T, R&gt;</span> T.<span class="title">let</span><span class="params">(block: (<span class="type">T</span>)</span></span> -&gt; R): R = block(<span class="keyword">this</span>)</span><br></pre></td></tr></table></figure>
+<ol>
+<li>receiver的扩展函数</li>
+<li>参数是一个block，block参数为receiver，block内部通过it引用receiver</li>
+<li>返回block的返回值</li>
+<li>常常和安全调用操作符 <code>?.</code> 配合使用，用来保证let代码块中的it是已经null check过的</li>
+</ol>
+<p>demo</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="keyword">val</span> layout = LayoutStyle()</span><br><span class="line">SharedState.previousOrientation?.let &#123; layout.orientation = it &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>apply</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* Calls the specified function [block] with `this` value as its receiver and returns `this` value.</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@kotlin</span>.<span class="keyword">internal</span>.InlineOnly</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T&gt;</span> T.<span class="title">apply</span><span class="params">(block: <span class="type">T</span>.()</span></span> -&gt; <span class="built_in">Unit</span>): T &#123; block(); <span class="keyword">return</span> <span class="keyword">this</span> &#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>receiver的扩展函数</li>
+<li>参数是一个block，这个block本身也是receiver的扩展函数，block会在receiver的闭包内执行</li>
+<li>最终返回receiver自身</li>
+<li>常常被用来当做内置的builder，可以方便地实现chain式调用</li>
+</ol>
+<p>demo</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LayoutStyle</span> </span>&#123;</span><br><span class="line"> <span class="keyword">var</span> orientation = HORIZONTAL</span><br><span class="line">&#125;</span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(<span class="keyword">vararg</span> args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line"> <span class="keyword">val</span> layout = LayoutStyle().apply &#123; orientation = VERTICAL &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>with</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* Calls the specified function [block] with the given [receiver] as its receiver and returns its result.</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@kotlin</span>.<span class="keyword">internal</span>.InlineOnly</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T, R&gt;</span> <span class="title">with</span><span class="params">(receiver: <span class="type">T</span>, block: <span class="type">T</span>.()</span></span> -&gt; R): R = receiver.block()</span><br></pre></td></tr></table></figure>
+<ol>
+<li>with 不是扩展函数</li>
+<li>参数是 receiver 和 block，这个block是receiver的扩展函数，block会在receiver的闭包内执行</li>
+<li>返回block的返回值</li>
+<li>当需要频繁access某个实例时，可以把他包在with代码块中，然后直接访问实例内部变量和方法。</li>
+</ol>
+<p>demo</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="keyword">val</span> layout = with(contextWrapper) &#123; </span><br><span class="line"> <span class="comment">// `this` is the contextWrapper</span></span><br><span class="line"> LayoutStyle(context, attrs).apply &#123; orientation = VERTICAL &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>run</p>
+<p>run 有两个版本，第一个简单的调用block，第二个带上了泛型信息，成为了扩展函数。</p>
+</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* Calls the specified function [block] and returns its result.</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@kotlin</span>.<span class="keyword">internal</span>.InlineOnly</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;R&gt;</span> <span class="title">run</span><span class="params">(block: ()</span></span> -&gt; R): R = block()</span><br></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* Calls the specified function [block] with `this` value as its receiver and returns its result.</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@kotlin</span>.<span class="keyword">internal</span>.InlineOnly</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T, R&gt;</span> T.<span class="title">run</span><span class="params">(block: <span class="type">T</span>.()</span></span> -&gt; R): R = block()</span><br></pre></td></tr></table></figure>
+<p>第一种使用场景不明。。。，这里只看第二种。</p>
+<ol>
+<li>receiver的扩展函数</li>
+<li>参数是block，这个block是receiver的扩展函数，block会在receiver的闭包内执行</li>
+<li>返回block的返回值</li>
+</ol>
+<p>剩下的<code>also</code>分析省略，总结成表格如下：</p>
+<table>
+<thead>
+<tr>
+<th>function</th>
+<th>是否是扩展函数</th>
+<th>block闭包环境</th>
+<th>返回值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>let</td>
+<td>是</td>
+<td>it</td>
+<td>block result</td>
+</tr>
+<tr>
+<td>run</td>
+<td>是</td>
+<td>this</td>
+<td>block result</td>
+</tr>
+<tr>
+<td>also</td>
+<td>是</td>
+<td>it</td>
+<td>receiver self</td>
+</tr>
+<tr>
+<td>apply</td>
+<td>是</td>
+<td>this</td>
+<td>receiver self</td>
+</tr>
+<tr>
+<td>缺</td>
+<td>否</td>
+<td>it</td>
+<td>block result</td>
+</tr>
+<tr>
+<td>with</td>
+<td>否</td>
+<td>this</td>
+<td>block result</td>
+</tr>
+<tr>
+<td>缺</td>
+<td>否</td>
+<td>it</td>
+<td>receiver self</td>
+</tr>
+<tr>
+<td>缺</td>
+<td>否</td>
+<td>this</td>
+<td>receiver self</td>
+</tr>
+</tbody>
+</table>
+<p>从上面的表看出，这种function按理应该有 2 <sup>3</sup> 8种。目前只提供了5种（是否是因为kotlin conf想不到更多的方法名了呢？）。</p>
+<p>根据返回值来看：<br>
+also 和 apply 返回的 receiver self，方便chain式调用。</p>
+<p>let 和 run 返回的是 block result ，可以获取block运行结果。</p>
+<p>它们的区别是block内部引用receiver时：</p>
+<p><code>let</code>和<code>also</code>使用it，而<code>run</code>和<code>apply</code>使用this。</p>
+<p>从这个角度上看<code>let</code>(带有被动式的操作it)、<code>apply</code>(主动的应用到this)的命名还是比较贴切的。</p>
+<p><code>with</code>作为非扩展函数是单独一档（没有同伴）。with返回 block result，而且 block 使用 this 引用receiver。从主要用法来说——简化对实例内部地访问，命名也很贴切，而且和别的语言惯例也是统一的。</p>
+<p>另外在 <code>kotlin.io.Closeable.kt</code> 中还定义了<code>use</code> 扩展函数，也比较有意思。</p>
+<ul>
+<li>use</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Executes the given [block] function on this resource and then closes it down correctly whether an exception</span></span><br><span class="line"><span class="comment"> * is thrown or not.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> block a function to process this [Closeable] resource.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> the result of [block] function invoked on this resource.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@InlineOnly</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;T : Closeable?, R&gt;</span> T.<span class="title">use</span><span class="params">(block: (<span class="type">T</span>)</span></span> -&gt; R): R &#123;</span><br><span class="line">    <span class="keyword">var</span> closed = <span class="literal">false</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> block(<span class="keyword">this</span>)</span><br><span class="line">    &#125; <span class="keyword">catch</span> (e: Exception) &#123;</span><br><span class="line">        closed = <span class="literal">true</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">this</span>?.close()</span><br><span class="line">        &#125; <span class="keyword">catch</span> (closeException: Exception) &#123;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">throw</span> e</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (!closed) &#123;</span><br><span class="line">            <span class="keyword">this</span>?.close()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>use</code> 功能上会自动处理资源关闭的逻辑。有点类似 Java 7 的 try-with-resources 特性。</p>
+<p><code>use</code> 和 <code>let</code> 在函数定义上相似，返回的是 block result，使用it引用receiver。区别是<code>use</code>的receiver 必须是<code>Closeable</code>的子类。</p>
+<p>demo 可以看第一篇开头的例子：</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> AssetManager.<span class="title">fileToString</span><span class="params">(filename: <span class="type">String</span>)</span></span>: String &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">open</span>(filename).use &#123;</span><br><span class="line">        it.readBytes().toString(Charset.defaultCharset())</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>参考：</p>
+<p><a href="https://android.jlelse.eu/mastering-kotlin-standard-functions-run-with-let-also-and-apply-9cd334b0ef84" target="_blank" rel="noopener">Mastering Kotlin standard functions: run, with, let, also and apply</a></p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://deskid.github.io">deskid</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://deskid.github.io/2017/07/07/kotlin-learn-notes-3/">https://deskid.github.io/2017/07/07/kotlin-learn-notes-3/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/kotlin/">kotlin</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/07/28/ViewModel/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">深入理解 ViewModel</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/07/06/kotlin-learn-notes-2/">
+        <span class="next-text nav-default">kotlin 深入学习笔记(二)</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:deskidzhou@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/deskid" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2018
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">deskid</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://deskid.github.io/2017/07/07/kotlin-learn-notes-3/';
+        this.page.identifier = '2017/07/07/kotlin-learn-notes-3/';
+        this.page.title = 'kotlin 深入学习笔记(三)';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//deskid.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

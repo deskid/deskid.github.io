@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="gradle 新依赖函数 implementation api详解">
+
+
+
+
+  <meta name="keywords" content="gradle, Deskid's Blog">
+
+
+
+
+
+  <meta name="google-site-verification" content="UA-110544275-1">
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Deskid's Blog">
+
+
+
+
+
+
+<link rel="canonical" href="https://deskid.github.io/2017/12/04/gradle-compile/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> gradle 新依赖函数 implementation api详解 - Deskid's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Deskid's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            Categories
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Deskid's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              Categories
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          gradle 新依赖函数 implementation api详解
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-12-04
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/Android/">Android</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#api"><span class="toc-text">api</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#implementation"><span class="toc-text">implementation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#compile"><span class="toc-text">compile</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何判断自己library的依赖属于哪种类型呢？"><span class="toc-text">如何判断自己library的依赖属于哪种类型呢？</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>在 gradle 3.0 之后 compile、provided、apk 被 deprecated，取而代之的是 implementation 、api、compileOnly、runtimeOnly。</p>
+<p>本文重点是介绍implementation和api。</p>
+<a id="more"></a>
+<h3 id="api">api</h3>
+<p>api 修饰的依赖会被暴露并传递给外部，也就是说：在外部module引用该lib时，module会把该lib的api依赖传递依赖过来，并添加到module自己的compile classpath上。（在运行期和编译期api依赖都可见。）如果有一个api dependency修改了对外API，那么所有依赖和间接依赖了该 dependency 的module都会被重新编译。</p>
+<h3 id="implementation">implementation</h3>
+<p>implementation 则相反，implementation修饰的依赖不会被暴露给外部module，在引用该lib时，lib内通过implementation申明的依赖不会被添加到module 的 compile classpath上。（也就是说lib的依赖仅在runtime可见，编译期不可见。）如果有一个implementation dependency 修改了API，那么仅该dependency 和 直接依赖于它的module会被重新编译。</p>
+<h3 id="compile">compile</h3>
+<p>compile 的行为和api一致，已经被标记为deprecated。</p>
+<p>为什么要提供两种依赖函数呢？</p>
+<ul>
+<li>
+<p>可以更好的控制 transitive dependency</p>
+</li>
+<li>
+<p>compile classpath更精简，编译速度得到提升</p>
+</li>
+<li>
+<p>implementation dependencies 发生改变不会导致全量地重新编译</p>
+</li>
+<li>
+<p>在POM中依赖关系更加清晰：编译library的依赖和运行library的依赖区可以分开了。</p>
+</li>
+</ul>
+<!-- more -->
+<p>举例说明：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">└── App</span><br><span class="line">    ├── implementation A</span><br><span class="line">    │   └── implementation a1</span><br><span class="line">    │   └── api a2</span><br><span class="line">    └── implementation B</span><br><span class="line">       └── implementation b1</span><br><span class="line">       └── api b2</span><br></pre></td></tr></table></figure>
+<p>A lib分别通过implementation 和 api 依赖了a1、a2；<br>
+B lib分别通过implementation 和 api 依赖了b1、b2；<br>
+App 通过implementation直接依赖了A、B lib；<br>
+App 被A传递依赖了a2；<br>
+App 被B传递依赖了b2；</p>
+<ol>
+<li>编译App时，compile classpath中的依赖有 A、B、a2、b2</li>
+<li>a1 对外暴露的API有修改 —— 仅 a1 和 A 会被重新编译，b1 同理。</li>
+<li>a2 对外暴露的API有修改 —— a2 、 A 、App 都会被重新编译，b2 同理。</li>
+</ol>
+<h3 id="如何判断自己library的依赖属于哪种类型呢？">如何判断自己library的依赖属于哪种类型呢？</h3>
+<p>api 依赖一般是指那些暴露在library binary interface(也叫Application Binary Interface)中的，包括但不仅仅限于下面case：</p>
+<ul>
+<li>
+<p>在interface和父类中被引用到的</p>
+</li>
+<li>
+<p>在<code>public</code>方法参数中引用到的,包括泛型参数</p>
+</li>
+<li>
+<p>在<code>public</code>属性中引用到的</p>
+</li>
+<li>
+<p>在<code>public</code> annotation 中引用到的。</p>
+</li>
+</ul>
+<blockquote>
+<p><em>注这里 <code>public</code> 是广义上的，泛指对编译器可见，比如：<code>public</code>, <code>protected</code> 以及 <code>package private</code>概念都是<code>public</code>的)</em></p>
+</blockquote>
+<p>相反，下面case和ABI不相关的，则应该被申明为<code>implementation</code> dependency:</p>
+<ul>
+<li>
+<p>仅仅被方法内部引用的</p>
+</li>
+<li>
+<p>仅仅被 private 成员引用的</p>
+</li>
+<li>
+<p>仅仅被内部类引用的(未来，Gradle 会允许用户申明那些包属于公共API)</p>
+</li>
+</ul>
+<p>官方提供了一个<a href="https://docs.gradle.org/current/userguide/java_library_plugin.html#sec:java_library_recognizing_dependencies" target="_blank" rel="noopener">例子</a>，如何根据上述规则推导不同依赖类型。</p>
+<p>实际上使用时，可以偷懒地判断，大部分情况下：</p>
+<ol>
+<li>在app和test module中应该使用implementation引入dependency</li>
+<li>在library module中应该使用api引入dependency，除了非public引用的dependency。</li>
+</ol>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://deskid.github.io">deskid</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://deskid.github.io/2017/12/04/gradle-compile/">https://deskid.github.io/2017/12/04/gradle-compile/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/gradle/">gradle</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/12/08/throttle-vs-debounce/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">throttle 和 debounce</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/11/28/module-in-js/">
+        <span class="next-text nav-default">module in JavaScript</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:deskidzhou@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/deskid" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2018
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">deskid</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://deskid.github.io/2017/12/04/gradle-compile/';
+        this.page.identifier = '2017/12/04/gradle-compile/';
+        this.page.title = 'gradle 新依赖函数 implementation api详解';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//deskid.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

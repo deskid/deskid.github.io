@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="kotlin 深入学习笔记(四)">
+
+
+
+
+  <meta name="keywords" content="kotlin, Deskid's Blog">
+
+
+
+
+
+  <meta name="google-site-verification" content="UA-110544275-1">
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Deskid's Blog">
+
+
+
+
+
+
+<link rel="canonical" href="https://deskid.github.io/2017/09/07/kotlin-learn-notes-4/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> kotlin 深入学习笔记(四) - Deskid's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Deskid's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            Categories
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Deskid's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              Categories
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          kotlin 深入学习笔记(四)
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-09-07
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/Android/">Android</a>
+            
+              <a href="/categories/Android/kotlin/">kotlin</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#inline"><span class="toc-text">inline</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>本文主要介绍kotlin的<code>inline</code>关键字。</p>
+<a id="more"></a>
+<h3 id="inline">inline</h3>
+<p>在kotlin中使用高阶方法确实很方便，但是这种便利是有代价的。我们知道 lambda 表达式其实就是一个 Function 对象。</p>
+<p>例如：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">fun nonInlined(block: () -&gt; Unit) &#123;</span><br><span class="line">    println(&quot;before&quot;)</span><br><span class="line">    block()</span><br><span class="line">    println(&quot;after&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对应Java代码为</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public void nonInlined(Function block) &#123;</span><br><span class="line">    System.out.println(&quot;before&quot;);</span><br><span class="line">    block.invoke();</span><br><span class="line">    System.out.println(&quot;after&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在kotlin中调用时</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nonInlined &#123;</span><br><span class="line">    println(&quot;do something here&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>会被编译为下面的代码（简化）</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nonInlined(new Function() &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void invoke() &#123;</span><br><span class="line">        System.out.println(&quot;do something here&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>这里每次调用<code>nonInlined()</code>都会创建一个Function对象。如果这里调用的是非常通用的高阶函数，那么每次调用都会带来额外的内存、运行开销。</p>
+<p><code>inline</code> 就是 kotlin 是用来优化这个问题的关键字。</p>
+<!-- more -->
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">inline fun inlined(block: () -&gt; Unit) &#123;</span><br><span class="line">    println(&quot;before&quot;)</span><br><span class="line">    block()</span><br><span class="line">    println(&quot;after&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用和之前一样</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">inlined &#123;</span><br><span class="line">    println(&quot;do something here&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对应编译后的代码</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">System.out.println(&quot;before&quot;);</span><br><span class="line">System.out.println(&quot;do something here&quot;);</span><br><span class="line">System.out.println(&quot;after&quot;);</span><br></pre></td></tr></table></figure>
+<p>使用inline可以增加运行效率，降低内存占用。相应的，带来的副作用就是代码膨胀。所以，inline 的最佳使用场景是一些短小的高阶函数，或者需要在循环中调用的函数。</p>
+<p>在 kotlin std 库中定义的高阶函数基本上都是被inline 修饰的，我们自己在写库时也可以使用这个优化点。</p>
+<p>但是，被inline的函数有一些副作用。</p>
+<p>1、被inline的函数，无法在函数内部访问private变量、方法(除非用<code>internal</code>和<code>@PublishedApi</code>修饰)。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">private val aPrivateMemberVariable = &quot;I&apos;m private&quot;</span><br><span class="line"></span><br><span class="line">@PublishedApi</span><br><span class="line">internal val anInternalMemberVariable = &quot;I&apos;m internal&quot;</span><br><span class="line"></span><br><span class="line">val aPublicMemberVariable = &quot;I&apos;m public&quot;</span><br><span class="line"></span><br><span class="line">inline fun higherOrderFunction(aLambda: () -&gt; Unit) &#123;</span><br><span class="line"></span><br><span class="line">    //ERROR: can&apos;t access this variable in an inline function.</span><br><span class="line">    aPrivateMemberVariable.length</span><br><span class="line"></span><br><span class="line">    //Can access this variable because it&apos;s marked with @PublishedApi and internal</span><br><span class="line">    anInternalMemberVariable.length</span><br><span class="line"></span><br><span class="line">    //Can access this variable, it&apos;s public</span><br><span class="line">    aPublicMemberVariable.length</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2、在被<code>inline</code>修饰的Function闭包内运行的lambda 中，可以使用 return 退出 calling 函数。</p>
+<p>这种特性也被称为<code>non-local control flow</code>。<br>
+这样做其实是为了让我们可以在<code>forEach</code>中的lambda有能力控制循环。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">fun hasZeros(ints: List&lt;Int&gt;): Boolean &#123;</span><br><span class="line">    ints.forEach &#123;</span><br><span class="line">        if (it == 0) return true // returns from hasZeros</span><br><span class="line">    &#125;</span><br><span class="line">    return false</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但是，截止到1.1.4，kotlin 还不支持在<code>non-local control flow</code>中使用<code>break</code>和<code>continue</code>。😂</p>
+<p>这个特性其实很容易产生bug，因为这样做的话，相当于剥夺了高阶函数对lambda运行的控制。比如在涉及资源处理时，乱用return很容易跳过了资源释放语句，而且不易调试。</p>
+<p>而正常的lambda是没有能力return执行函数的，只能通过 <code>return@label</code> 的方式跳出 lambda自身。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">inline fun higherOrderFunction(aLambda: () -&gt; Unit) &#123;</span><br><span class="line"></span><br><span class="line">    aLambda()</span><br><span class="line"></span><br><span class="line">    print(&quot;I won&apos;t be executed when you call callingFunction()&quot;)</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fun callingFunction() &#123;</span><br><span class="line"></span><br><span class="line">    higherOrderFunction &#123;</span><br><span class="line"></span><br><span class="line">        print(&quot;Non-local control flow&quot;)</span><br><span class="line"></span><br><span class="line">        return</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>除了<code>inline</code>，kotlin中还有<code>noinline</code>、<code>crossinline</code>等关键字。</p>
+<p><code>noinline</code>顾名思义，和<code>inline</code>含义相反。用于标记某个lambda，表示这个lambda在<code>inline</code> Function内不内联。</p>
+<p><code>crossinline</code>用的比较少，主要用于在嵌套的Function内部使用lambda，被<code>crossinline</code>标记的lambda不能在lambda内部使用return。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">inline fun higherOrderFunction(crossinline aLambda: () -&gt; Unit) &#123;</span><br><span class="line"></span><br><span class="line">    normalFunction &#123;</span><br><span class="line">        aLambda() //must mark aLambda as crossinline to use in this context.</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fun normalFunction(aLambda: () -&gt; Unit) &#123;</span><br><span class="line">  </span><br><span class="line">    return</span><br><span class="line">  </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fun callingFunction() &#123;</span><br><span class="line"></span><br><span class="line">    higherOrderFunction &#123; </span><br><span class="line"></span><br><span class="line">        return  //Error. Can&apos;t return from here.</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://deskid.github.io">deskid</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://deskid.github.io/2017/09/07/kotlin-learn-notes-4/">https://deskid.github.io/2017/09/07/kotlin-learn-notes-4/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/kotlin/">kotlin</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/11/26/cookies-and-security/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Cookies and security(译)</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/09/02/git多用户配置实践/">
+        <span class="next-text nav-default">git多用户配置实践</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:deskidzhou@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/deskid" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2018
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">deskid</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://deskid.github.io/2017/09/07/kotlin-learn-notes-4/';
+        this.page.identifier = '2017/09/07/kotlin-learn-notes-4/';
+        this.page.title = 'kotlin 深入学习笔记(四)';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//deskid.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

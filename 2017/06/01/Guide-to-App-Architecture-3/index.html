@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="[简译]Google 官方 App 架构 Guide(3)">
+
+
+
+
+  <meta name="keywords" content="Android, Deskid's Blog">
+
+
+
+
+
+  <meta name="google-site-verification" content="UA-110544275-1">
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Deskid's Blog">
+
+
+
+
+
+
+<link rel="canonical" href="https://deskid.github.io/2017/06/01/Guide-to-App-Architecture-3/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> [简译]Google 官方 App 架构 Guide(3) - Deskid's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Deskid's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            Categories
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Deskid's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              Categories
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          [简译]Google 官方 App 架构 Guide(3)
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-06-01
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/Android/">Android</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#handling-lifecycles"><span class="toc-text">Handling Lifecycles</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#lifecycle"><span class="toc-text">Lifecycle</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#lifecycleowner"><span class="toc-text">LifecycleOwner</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#lifecycle的最佳实践"><span class="toc-text">Lifecycle的最佳实践</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#附录"><span class="toc-text">附录</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#在自定义-activities-或-fragments中实现lifecycleowner"><span class="toc-text">在自定义 activities 或 fragments中实现LifecycleOwner</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>本文将介绍Architecture Components中的Lifecycle组件</p>
+<a id="more"></a>
+<h3 id="handling-lifecycles">Handling Lifecycles</h3>
+<p><a href="https://developer.android.com/reference/android/arch/lifecycle/package-summary.html" target="_blank" rel="noopener"><code>android.arch.lifecycle</code></a> 包提供了能够构建拥有 <strong>lifecycle-aware</strong> 能力的组件的类和接口。 <strong>lifecycle-aware</strong> 在这里是指能自动感知activity或者fragment生命周期，并随之自动调整自己行为的能力。</p>
+<p>Android应用的大部分组件都是要么是系统自带生命周期的，要么框架管理的。如果无视这些，很有可能带来的后果是crash或者内存泄露。</p>
+<!-- more -->
+<p>举个例子：在activity中显示设备地址，通常的做法会将<code>MyLocationListener</code>和<code>MyActivity</code>的生命周期绑定在一起。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyLocationListener</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyLocationListener</span><span class="params">(Context context, Callback callback)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// connect to system location service</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// disconnect from system location service</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> MyLocationListener myLocationListener;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(...)</span> </span>&#123;</span><br><span class="line">        myLocationListener = <span class="keyword">new</span> MyLocationListener(<span class="keyword">this</span>, (location) -&gt; &#123;</span><br><span class="line">            <span class="comment">// update UI</span></span><br><span class="line">        &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onStart</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onStart();</span><br><span class="line">        myLocationListener.start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onStop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onStop();</span><br><span class="line">        myLocationListener.stop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>尽管上面的代码看起来没问题，但是——<code>onStart()</code>以及 <code>onStop()</code> 中慢慢会积累越来越多的这种注册、反注册调用。</p>
+<p>有时，也有可能components是在某个回调中starting，比如location observer start()在<code>Activity onStop</code>之后被调用，这意味着<code>myLocationListener.start()</code>会在<code>stop</code>之后重启。</p>
+<figure class="highlight diff"><table><tr><td class="code"><pre><span class="line">class MyActivity extends AppCompatActivity &#123;</span><br><span class="line">    private MyLocationListener myLocationListener;</span><br><span class="line"></span><br><span class="line">    public void onCreate(...) &#123;</span><br><span class="line">        myLocationListener = new MyLocationListener(this, location -&gt; &#123;</span><br><span class="line">            // update UI</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void onStart() &#123;</span><br><span class="line">        super.onStart();</span><br><span class="line"><span class="addition">+        Util.checkUserStatus(result -&gt; &#123;</span></span><br><span class="line"><span class="addition">+            // what if this callback is invoked AFTER activity is stopped?</span></span><br><span class="line"><span class="addition">+            if (result) &#123;</span></span><br><span class="line"><span class="addition">+               myLocationListener.start();</span></span><br><span class="line"><span class="addition">+            &#125;</span></span><br><span class="line"><span class="addition">+        &#125;);</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void onStop() &#123;</span><br><span class="line">        super.onStop();</span><br><span class="line">        myLocationListener.stop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面就要开始推销<code>android.arch.lifecycle</code>了</p>
+<h4 id="lifecycle">Lifecycle</h4>
+<hr>
+<p><a href="https://developer.android.com/reference/android/arch/lifecycle/Lifecycle.html" target="_blank" rel="noopener"><code>Lifecycle</code></a> 是一个状态类，主要维护了两个枚举值，来跟踪 component 的lifecycle</p>
+<ul>
+<li><strong>Event</strong></li>
+</ul>
+<blockquote>
+<p>由<code>Lifecycle</code>和Framework派发，这些event注册到对应的activities 和fragments的回调事件</p>
+</blockquote>
+<ul>
+<li><strong>State</strong></li>
+</ul>
+<blockquote>
+<p>记录component 当前的生命周期状态</p>
+</blockquote>
+<p><img src="/media/lifecycle-states.png" alt=""></p>
+<p>用图数据结构理解的话，status就是节点，而event是连接各个节点的边。</p>
+<p>要想监控component的生命周期，只需要在对应方法上面添加相应annotations</p>
+<figure class="highlight diff"><table><tr><td class="code"><pre><span class="line">public class MyObserver implements LifecycleObserver &#123;</span><br><span class="line"><span class="addition">+  @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)</span></span><br><span class="line">    public void onResume() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="addition">+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)</span></span><br><span class="line">    public void onPause() &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">aLifecycleOwner.getLifecycle().addObserver(new MyObserver());</span><br></pre></td></tr></table></figure>
+<h4 id="lifecycleowner">LifecycleOwner</h4>
+<hr>
+<p><a href="https://developer.android.com/reference/android/arch/lifecycle/LifecycleOwner.html" target="_blank" rel="noopener"><code>LifecycleOwner</code></a> 只是一个单一方法接口类，用于表明这个类有个<code>Lifecycle</code>状态类。<code>LifecycleOwner</code>通过<a href="https://developer.android.com/reference/android/arch/lifecycle/LifecycleOwner.html#getLifecycle()" target="_blank" rel="noopener"><code>getLifecycle()</code></a> 方法将activities 或 fragments抽出来。任何类都可以实现<code>LifecycleOwner</code>，没有限制。</p>
+<p><strong>Note:</strong> 在 alpha 阶段, <code>Fragment</code> 和 <code>AppCompatActivity</code>还没有实现这个接口。目前可以用<a href="https://developer.android.com/reference/android/arch/lifecycle/LifecycleActivity.html" target="_blank" rel="noopener"><code>LifecycleActivity</code></a> 和 <a href="https://developer.android.com/reference/android/arch/lifecycle/LifecycleFragment.html" target="_blank" rel="noopener"><code>LifecycleFragment</code></a> 替代。 release后，support库中的 fragments and activities 默认会实现 <code>LifecycleOwner</code></p>
+<p>下面修改例子中的<code>MyLocationListener</code> 继承自<code>LifecycleObserver</code></p>
+<figure class="highlight diff"><table><tr><td class="code"><pre><span class="line"><span class="addition">+ class MyActivity extends LifecycleActivity &#123;</span></span><br><span class="line">    private MyLocationListener myLocationListener;</span><br><span class="line"></span><br><span class="line">    public void onCreate(...) &#123;</span><br><span class="line"><span class="addition">+        myLocationListener = new MyLocationListener(this, getLifecycle(), location -&gt; &#123;</span></span><br><span class="line">            // update UI</span><br><span class="line">        &#125;);</span><br><span class="line">        Util.checkUserStatus(result -&gt; &#123;</span><br><span class="line">            if (result) &#123;</span><br><span class="line"><span class="addition">+                myLocationListener.enable();</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="addition">+ class MyLocationListener implements LifecycleObserver &#123;</span></span><br><span class="line">    private boolean enabled = false;</span><br><span class="line">    public MyLocationListener(Context context, Lifecycle lifecycle, Callback callback) &#123;</span><br><span class="line">       ...</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="addition">+    @OnLifecycleEvent(Lifecycle.Event.ON_START)</span></span><br><span class="line">    void start() &#123;</span><br><span class="line">        if (enabled) &#123;</span><br><span class="line">           // connect</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void enable() &#123;</span><br><span class="line">        enabled = true;</span><br><span class="line"><span class="addition">+        if (lifecycle.getState().isAtLeast(STARTED)) &#123;</span></span><br><span class="line">            // connect if not connected</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="addition">+    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)</span></span><br><span class="line">    void stop() &#123;</span><br><span class="line">        // disconnect if connected</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意上面的</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">if(lifecycle.getState().isAtLeast(STARTED))</span><br></pre></td></tr></table></figure>
+<p>我们有能力在回调特定方法时，随时检查lifecycle当前的状态。</p>
+<p>比如 Fragment 有一个著名crash：在Activity state save后调用fragment transaction，就可以通过这种方式避免。good :)</p>
+<p><code>LocationListener</code>现在已经能能感知到Activity的生命周期变化了。既不需要我们注册，也不需要注销，all is done。</p>
+<p>像<code>LocationListener</code>这种能和<code>Lifecycle</code>一起工作的类被称为 <em>lifecycle-aware components</em></p>
+<p><a href="https://developer.android.com/reference/android/arch/lifecycle/LiveData.html" target="_blank" rel="noopener"><code>LiveData</code></a> 就是一种 lifecycle-aware component。 结合 <code>LiveData</code>和 <code>ViewModel</code>可以在Android Lifecycle的基础上实现UI界面数据的更新。</p>
+<h4 id="lifecycle的最佳实践">Lifecycle的最佳实践</h4>
+<hr>
+<ul>
+<li>不要在 UI controllers 中直接获取数据 (activities and fragments)，使用<code>ViewModel</code>获取数据, 再通过 <code>LiveData</code>把数据映射到UI上。</li>
+<li>推荐写数据驱动的UI，而 UI controller的职责是在数据改变时更新UI, 或者将用户交互通知到<code>ViewModel</code></li>
+<li>将数据逻辑限制在 <code>ViewModel</code> 类中。但是获取数据（比如从网上）不是 <code>ViewModel</code>该做的事。 <code>ViewModel</code> 应该是 UI controller 和其他模块的连接器。比如<code>ViewModel</code>调用其他的模块去获取数据然后把结果传给UI controller。</li>
+<li>通过 <a href="https://developer.android.com/topic/libraries/data-binding/index.html" target="_blank" rel="noopener">Data Binding</a> 来保证 view 和 UI controller 之间接口的干净。最终目的是让 view 的变动引起的 activities 代码改动最小化。</li>
+<li>如果UI足够复杂，可以考虑抽出一个Presenter来处理UI更新。虽然有点大材小用，但是可以让view更容易测试.</li>
+<li>永远不要在ViewModel中直接引用 <code>View</code> 或者 <code>Activity</code> context。记住 ViewModel在Activity重建(configuration changes)后会恢复为同一个实例，那么之前引用的context就会内存泄露。</li>
+</ul>
+<h4 id="附录">附录</h4>
+<hr>
+<h5 id="在自定义-activities-或-fragments中实现lifecycleowner">在自定义 activities 或 fragments中实现LifecycleOwner</h5>
+<p>其实不用继承<code>LifecycleFragment</code> 或者 <code>LifecycleActivity</code>，只要自定义 fragment 或者 activity 实现了<code>LifecycleRegistryOwner</code> 接口，它就可以被看为<code>LifecycleOwner</code>，</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyFragment</span> <span class="keyword">extends</span> <span class="title">Fragment</span> <span class="keyword">implements</span> <span class="title">LifecycleRegistryOwner</span> </span>&#123;</span><br><span class="line">    LifecycleRegistry lifecycleRegistry = <span class="keyword">new</span> LifecycleRegistry(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> LifecycleRegistry <span class="title">getLifecycle</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> lifecycleRegistry;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果你想让一个自定义类成为 <code>LifecycleOwner</code>, 你可以用<a href="https://developer.android.com/reference/android/arch/lifecycle/LifecycleRegistry.html" target="_blank" rel="noopener">LifecycleRegistry</a>, 只不过你得自己负责派发生命周期事件到自定义类。而对于实现了<code>LifecycleRegistryOwner</code>的fragments 和 activities ，这个派发动作是自动完成的。</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://deskid.github.io">deskid</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://deskid.github.io/2017/06/01/Guide-to-App-Architecture-3/">https://deskid.github.io/2017/06/01/Guide-to-App-Architecture-3/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/Android/">Android</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/06/14/Guide-to-App-Architecture-4/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">[简译]Google 官方 App 架构 Guide(4)</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/05/31/Guide-to-App-Architecture-2/">
+        <span class="next-text nav-default">[简译]Google 官方 App 架构 Guide(2)</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:deskidzhou@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/deskid" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2018
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">deskid</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://deskid.github.io/2017/06/01/Guide-to-App-Architecture-3/';
+        this.page.identifier = '2017/06/01/Guide-to-App-Architecture-3/';
+        this.page.title = '[简译]Google 官方 App 架构 Guide(3)';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//deskid.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

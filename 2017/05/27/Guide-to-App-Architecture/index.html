@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="[简译]Google 官方 App 架构 Guide">
+
+
+
+
+  <meta name="keywords" content="Android, Deskid's Blog">
+
+
+
+
+
+  <meta name="google-site-verification" content="UA-110544275-1">
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Deskid's Blog">
+
+
+
+
+
+
+<link rel="canonical" href="https://deskid.github.io/2017/05/27/Guide-to-App-Architecture/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> [简译]Google 官方 App 架构 Guide - Deskid's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Deskid's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            Categories
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Deskid's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              Categories
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          [简译]Google 官方 App 架构 Guide
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-05-27
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/Android/">Android</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#app-开发者面临的问题"><span class="toc-text">App 开发者面临的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#通用的架构设计理念"><span class="toc-text">通用的架构设计理念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#推荐架构"><span class="toc-text">推荐架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-构建ui"><span class="toc-text">1. 构建UI</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-获取网络数据"><span class="toc-text">2. 获取网络数据</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#处理-components-之间的依赖"><span class="toc-text">处理 components 之间的依赖:</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-连接-viewmodel-和-repository"><span class="toc-text">3. 连接 ViewModel 和 repository</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-数据缓存"><span class="toc-text">4. 数据缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-数据持久化"><span class="toc-text">5. 数据持久化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#single-source-of-truth"><span class="toc-text">Single source of truth</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-如何测试"><span class="toc-text">6. 如何测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-最终架构图"><span class="toc-text">7. 最终架构图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#guiding-principles"><span class="toc-text">Guiding principles</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#附录-exposing-network-status"><span class="toc-text">附录: exposing network status</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>[简译]Google 官方 App 架构 Guide</p>
+<p>本文将介绍Google 官方 App 架构——Architecture Components，并展示了一个简单的使用场景。</p>
+<a id="more"></a>
+<h2 id="app-开发者面临的问题">App 开发者面临的问题</h2>
+<p>相比 desktop app，写 Android apps 更加复杂，需要涉及更多组件交互（activities, fragments, services, content providers and broadcast receivers），同时还要考虑各个app、task之间的切换。</p>
+<p>比如考虑这样一个例子——在社交App中调起相机应用拍照，然后相机调起文件选择器选择刚刚拍的照片，最终回到社交App分享刚刚完成的照片。</p>
+<p>在保证这一串数据流正确的同时，你还得担心App随时可能会被系统回收。</p>
+<p>总结：</p>
+<ul>
+<li>system random kill</li>
+<li>out-of-order launched</li>
+<li>out-of-control lifecycle</li>
+</ul>
+<!--more--> 
+<h2 id="通用的架构设计理念">通用的架构设计理念</h2>
+<ol>
+<li>
+<p>合理的拆分<br>
+不要在Activity，Fragment中写非UI操作或非系统交互的代码，避免LifeCycle依赖。make it clean</p>
+</li>
+<li>
+<p>尽量通过 Model 驱动 UI<br>
+比如一个支持持久化的Model，以防止data lose。此外还能让业务代码和View拆分开。</p>
+</li>
+</ol>
+<h2 id="推荐架构">推荐架构</h2>
+<p>下面是通过实现一个用户主页的场景，来介绍<a href="https://developer.android.com/topic/libraries/architecture/index.html" target="_blank" rel="noopener">Architecture Components</a></p>
+<h3 id="1-构建ui">1. 构建UI</h3>
+<p><code>UserProfileFragment.java</code></p>
+<p><code>user_profile_layout.xml</code></p>
+<p><code>UserProfileViewModel</code></p>
+<p><a href="https://developer.android.com/topic/libraries/architecture/viewmodel.html" target="_blank" rel="noopener">ViewModel</a></p>
+<blockquote>
+<ul>
+<li>提供数据给UI component</li>
+</ul>
+</blockquote>
+<ul>
+<li>处理业务逻辑交互, 比如调用dataHandler进行数据加载.</li>
+<li>ViewModel不知道View实现细节，也不受Phone Config改变影响</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserProfileViewModel</span> <span class="keyword">extends</span> <span class="title">ViewModel</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> String userId;</span><br><span class="line">        <span class="keyword">private</span> User user;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(String userId)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.userId = userId;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> User <span class="title">getUser</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> user;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserProfileFragment</span> <span class="keyword">extends</span> <span class="title">LifecycleFragment</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String UID_KEY = <span class="string">"uid"</span>;</span><br><span class="line">        <span class="keyword">private</span> UserProfileViewModel viewModel;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onActivityCreated</span><span class="params">(@Nullable Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">super</span>.onActivityCreated(savedInstanceState);</span><br><span class="line">            String userId = getArguments().getString(UID_KEY);</span><br><span class="line">            viewModel = ViewModelProviders.of(<span class="keyword">this</span>).get(UserProfileViewModel.class);</span><br><span class="line">            viewModel.init(userId);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> View <span class="title">onCreateView</span><span class="params">(LayoutInflater inflater,</span></span></span><br><span class="line"><span class="function"><span class="params">                                 @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> inflater.inflate(R.layout.user_profile, container, <span class="keyword">false</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p><strong>Note:</strong>  <a href="https://developer.android.com/reference/android/arch/lifecycle/LifecycleFragment.html" target="_blank" rel="noopener"><code>LifecycleFragment</code></a> 是实现了 <a href="https://developer.android.com/reference/android/arch/lifecycle/LifecycleOwner.html" target="_blank" rel="noopener"><code>LifecycleOwner</code></a>接口的<a href="https://developer.android.com/reference/android/support/v4/app/Fragment.html" target="_blank" rel="noopener"><code>Fragment</code></a><br>
+（据说稳定之后support包的Fragment会默认实现）</p>
+<p>新概念——<em>LiveData</em>，用来通知UI，ViewModel的数据发生来更新。</p>
+<blockquote>
+<p><strong><a href="https://developer.android.com/topic/libraries/architecture/livedata.html" target="_blank" rel="noopener">LiveData</a></strong> 可以理解为自带Lifecycle管理的RxJava Observerable，一旦离开生命周期，会自己clean相关引用。</p>
+</blockquote>
+<blockquote>
+<p><strong>Note:</strong> 如果使用 <a href="https://github.com/ReactiveX/RxJava" target="_blank" rel="noopener">RxJava</a> 或者 <a href="https://github.com/google/agera" target="_blank" rel="noopener">Agera</a>, 你得自己管理 LifecycleOwener 的Observerable生命周期。</p>
+</blockquote>
+<blockquote>
+<p>或者你可以使用<br>
+<code>android.arch.lifecycle:reactivestreams</code> 来集成LiveData 和其他Stream库 (for example, RxJava2).</p>
+</blockquote>
+<figure class="highlight diff"><table><tr><td class="code"><pre><span class="line">public class UserProfileViewModel extends ViewModel &#123;</span><br><span class="line">    ...</span><br><span class="line"><span class="deletion">-    private User user;</span></span><br><span class="line"><span class="addition">+    private LiveData&lt;User&gt; user;</span></span><br><span class="line"><span class="addition">+   public LiveData&lt;User&gt; getUser() &#123;</span></span><br><span class="line"><span class="addition">+        return user;</span></span><br><span class="line"><span class="addition">+   &#125;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight diff"><table><tr><td class="code"><pre><span class="line">@Override</span><br><span class="line">public void onActivityCreated(@Nullable Bundle savedInstanceState) &#123;</span><br><span class="line">    super.onActivityCreated(savedInstanceState);</span><br><span class="line"><span class="addition">+    viewModel.getUser().observe(this, user -&gt; &#123;</span></span><br><span class="line"><span class="addition">+      // update UI</span></span><br><span class="line"><span class="addition">+    &#125;);</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>LiveData 会保证在 fragment 处于 active 状态时[onStart，onStop] 才调用<code>onChanged</code>，并在<code>onDestroy()</code>时移除observer。</p>
+<p>在configuration changes（旋转屏幕后），重建的 fragment 会恢复同一个 ViewModel 实例（从这个意义上说ViewModel独立于View生命周期）<br>
+See<a href="https://developer.android.com/topic/libraries/architecture/viewmodel.html#the_lifecycle_of_a_viewmodel" target="_blank" rel="noopener">The lifecycle of a ViewModel</a>.<br>
+<img src="/media/14958803845939.jpg" alt=""></p>
+<blockquote>
+<p>so far so good, but how to init LiveData<user> through net api ?</user></p>
+</blockquote>
+<h3 id="2-获取网络数据">2. 获取网络数据</h3>
+<p>接下来使用 <a href="http://square.github.io/retrofit/" target="_blank" rel="noopener">Retrofit</a> 为例从后端获取数据。</p>
+<p><code>Webservice</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Webservice</span> </span>&#123;</span><br><span class="line">    <span class="meta">@GET</span>(<span class="string">"/users/&#123;user&#125;"</span>)</span><br><span class="line">    <span class="function">Call&lt;User&gt; <span class="title">getUser</span><span class="params">(@Path(<span class="string">"user"</span>)</span> String userId)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>不要直接在<code>ViewModel</code>中调用<code>Webservice</code>，Why？</p>
+<ol>
+<li>随着代码增长，不利于后继维护</li>
+<li>职责划分不明，ViewModel 应该只负责 drive UI change</li>
+<li>ViewModel 在Activity finished后，也会销毁，不适合存储数据。</li>
+</ol>
+<p><em>Repository</em></p>
+<blockquote>
+<p><strong>Repository</strong> 负责数据处理， 相当于一个从各个数据源读取数据的中间层。</p>
+</blockquote>
+<p>比如这里，在<code>UserRepository</code>类里调用 <code>WebService</code> 获取用户数据。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserRepository</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Webservice webservice;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> LiveData&lt;User&gt; <span class="title">getUser</span><span class="params">(<span class="keyword">int</span> userId)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// This is not an optimal implementation, we'll fix it below</span></span><br><span class="line">        <span class="keyword">final</span> MutableLiveData&lt;User&gt; data = <span class="keyword">new</span> MutableLiveData&lt;&gt;();</span><br><span class="line">        webservice.getUser(userId).enqueue(<span class="keyword">new</span> Callback&lt;User&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onResponse</span><span class="params">(Call&lt;User&gt; call, Response&lt;User&gt; response)</span> </span>&#123;</span><br><span class="line">                <span class="comment">// error case is left out for brevity</span></span><br><span class="line">                data.setValue(response.body());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">return</span> data;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>尽管看起来 repository module 没有存在的意义, 但是对ViewModel而言，Webservice是透明的，所以你可以很方便的跟换获取数据的实现代码。</p>
+<p><strong>Note:</strong> error status 处理，see<a href="https://developer.android.com/topic/libraries/architecture/guide.html#addendum" target="_blank" rel="noopener">Addendum: exposing network status</a>.</p>
+<h4 id="处理-components-之间的依赖">处理 components 之间的依赖:</h4>
+<p>这里使用<a href="https://google.github.io/dagger/" target="_blank" rel="noopener">Dagger 2</a>处理依赖</p>
+<h3 id="3-连接-viewmodel-和-repository">3. 连接 ViewModel 和 repository</h3>
+<p><code>UserProfileViewModel</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserProfileViewModel</span> <span class="keyword">extends</span> <span class="title">ViewModel</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> LiveData&lt;User&gt; user;</span><br><span class="line">    <span class="keyword">private</span> UserRepository userRepo;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Inject</span> <span class="comment">// UserRepository parameter is provided by Dagger 2</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">UserProfileViewModel</span><span class="params">(UserRepository userRepo)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.userRepo = userRepo;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(String userId)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.user != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">// ViewModel is created per Fragment so</span></span><br><span class="line">            <span class="comment">// we know the userId won't change</span></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        user = userRepo.getUser(userId);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> LiveData&lt;User&gt; <span class="title">getUser</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.user;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="4-数据缓存">4. 数据缓存</h3>
+<p>为UserRepository 添加一个缓存，避免重复的网络请求。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Singleton</span>  <span class="comment">// informs Dagger that this class should be constructed once</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserRepository</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Webservice webservice;</span><br><span class="line">    <span class="comment">// simple in memory cache, details omitted for brevity</span></span><br><span class="line">    <span class="keyword">private</span> UserCache userCache;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> LiveData&lt;User&gt; <span class="title">getUser</span><span class="params">(String userId)</span> </span>&#123;</span><br><span class="line">        LiveData&lt;User&gt; cached = userCache.get(userId);</span><br><span class="line">        <span class="keyword">if</span> (cached != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> cached;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> MutableLiveData&lt;User&gt; data = <span class="keyword">new</span> MutableLiveData&lt;&gt;();</span><br><span class="line">        userCache.put(userId, data);</span><br><span class="line">        <span class="comment">// this is still suboptimal but better than before.</span></span><br><span class="line">        <span class="comment">// a complete implementation must also handle the error cases.</span></span><br><span class="line">        webservice.getUser(userId).enqueue(<span class="keyword">new</span> Callback&lt;User&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onResponse</span><span class="params">(Call&lt;User&gt; call, Response&lt;User&gt; response)</span> </span>&#123;</span><br><span class="line">                data.setValue(response.body());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">return</span> data;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="5-数据持久化">5. 数据持久化</h3>
+<p>为了防止app被kill后重复请求数据，我们需要数据持久化。</p>
+<p>为了处理数据持久化过程中的数据不一致的问题，新轮子出现了——<strong>Room</strong></p>
+<blockquote>
+<p><strong><a href="https://developer.android.com/topic/libraries/architecture/room.html" target="_blank" rel="noopener">Room</a></strong><br>
+一个ORM库，旨在提供访问持久层能力的同时减少一些boilerplate code. 另外，它可以在编译期验证query的正确性。 Room 隐藏了SQL表和查询的底层细节。同时，还通过暴露<em>LiveData</em> 提供了观察数据库数据改动的能力。除此之外，它还限制了在主线程访问数据的这种常见失误。</p>
+</blockquote>
+<p><strong>Note:</strong> 没必要特地更换项目里的ORM库，你可以继续使用SQLite ORM 或者<a href="https://realm.io/products/realm-mobile-database/" target="_blank" rel="noopener">Realm</a>。</p>
+<p>要使用Room, 我们先要定义本地Schema.</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">  <span class="meta">@PrimaryKey</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">  <span class="keyword">private</span> String name;</span><br><span class="line">  <span class="keyword">private</span> String lastName;</span><br><span class="line">  <span class="comment">// getters and setters for fields</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>继承 <a href="https://developer.android.com/reference/android/arch/persistence/room/RoomDatabase.html" target="_blank" rel="noopener"><code>RoomDatabase</code></a> ，创建一个数据库类。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Database</span>(entities = &#123;User.class&#125;, version = <span class="number">1</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">MyDatabase</span> <span class="keyword">extends</span> <span class="title">RoomDatabase</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>MyDatabase</code> 这里被声明为 abstract. Room 会自动的提供各种实现. See <a href="https://developer.android.com/topic/libraries/architecture/room.html" target="_blank" rel="noopener">Room</a></p>
+<p>为了插入UserData，还得创建一个DAO（data access object）</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Dao</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserDao</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Insert</span>(onConflict = REPLACE)</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">save</span><span class="params">(User user)</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Query</span>(<span class="string">"SELECT * FROM user WHERE id = :userId"</span>)</span><br><span class="line">    <span class="function">LiveData&lt;User&gt; <span class="title">load</span><span class="params">(String userId)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后在 database 类中引用 DAO。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Database</span>(entities = &#123;User.class&#125;, version = <span class="number">1</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">MyDatabase</span> <span class="keyword">extends</span> <span class="title">RoomDatabase</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> UserDao <span class="title">userDao</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>load()</code>方法返回的<code>LiveData&lt;User&gt;</code>可以方便的通知observers数据发生了变动。</p>
+<p><strong>Note:</strong> Room还处于 alpha 1 release, 由于 Room 是基于数据库的修改来检查脏数据，所以它有可能会误报.</p>
+<p><code>UserRepository</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Singleton</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserRepository</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Webservice webservice;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> UserDao userDao;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Executor executor;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Inject</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">UserRepository</span><span class="params">(Webservice webservice, UserDao userDao, Executor executor)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.webservice = webservice;</span><br><span class="line">        <span class="keyword">this</span>.userDao = userDao;</span><br><span class="line">        <span class="keyword">this</span>.executor = executor;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> LiveData&lt;User&gt; <span class="title">getUser</span><span class="params">(String userId)</span> </span>&#123;</span><br><span class="line">        refreshUser(userId);</span><br><span class="line">        <span class="comment">// return a LiveData directly from the database.</span></span><br><span class="line">        <span class="keyword">return</span> userDao.load(userId);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">refreshUser</span><span class="params">(<span class="keyword">final</span> String userId)</span> </span>&#123;</span><br><span class="line">        executor.execute(() -&gt; &#123;</span><br><span class="line">            <span class="comment">// running in a background thread</span></span><br><span class="line">            <span class="comment">// check if user was fetched recently</span></span><br><span class="line">            <span class="keyword">boolean</span> userExists = userDao.hasUser(FRESH_TIMEOUT);</span><br><span class="line">            <span class="keyword">if</span> (!userExists) &#123;</span><br><span class="line">                <span class="comment">// refresh the data</span></span><br><span class="line">                Response response = webservice.getUser(userId).execute();</span><br><span class="line">                <span class="comment">// TODO check for error etc.</span></span><br><span class="line">                <span class="comment">// Update the database.The LiveData will automatically refresh so</span></span><br><span class="line">                <span class="comment">// we don't need to do anything else here besides updating the database</span></span><br><span class="line">                userDao.save(response.body());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由于<code>Repository</code>的抽象，你不需要更改<code>UserProfileViewModel</code>的实现，而且在测试<code>UserProfileViewModel</code>时，你可以提供一个<code>FakeUserRepository</code>。</p>
+<p>到此代码就完成了。</p>
+<h4 id="single-source-of-truth">Single source of truth</h4>
+<p>确保App内部的数据来源是统一的，避免数据冲突</p>
+<h3 id="6-如何测试">6. 如何测试</h3>
+<p>如何分别测试各个Module（略）</p>
+<h3 id="7-最终架构图">7. 最终架构图</h3>
+<p><img src="/media/final-architecture.png" alt=""></p>
+<h2 id="guiding-principles">Guiding principles</h2>
+<hr>
+<p>这里是 google 官方总结的一些建议</p>
+<ul>
+<li>manifest 里定义的入口 - activities, services, broadcast receivers, etc. - 不应该保存数据源. 他们的角色应该是一个协调者，这些组件生命周期随着用户交互可能很短。</li>
+<li>定义各个modules的职责时一定不要仁慈。不要在一个类里面做过多的事。</li>
+<li>module之间尽可能少的暴露，不要为了一时的方便暴露内部实现细节，最终一切技术债都会加倍的偿还的。</li>
+<li>在设计modules之间的交互时，考虑下如何让modules可以方便的隔离、测试.</li>
+<li>一个App的核心竞争力是它与众不同的地方，不要试图重新发明轮子，不要写重复的代码。集中精力让app变得唯一。剩下的交给现成的框架、轮子。</li>
+<li>尽可能的持久化数据，保证离线可用，考虑下低网速的用户体验。</li>
+<li>repository 应该总是使用唯一的数据来更新。</li>
+</ul>
+<h2 id="附录-exposing-network-status">附录: exposing network status</h2>
+<hr>
+<p>这一章讨论如何处理network status</p>
+<p><code>Resource</code> 封装了data和state。</p>
+<p>Below is a sample implementation:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//a generic class that describes a data with a status</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Resource</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@NonNull</span> <span class="keyword">public</span> <span class="keyword">final</span> Status status;</span><br><span class="line">    <span class="meta">@Nullable</span> <span class="keyword">public</span> <span class="keyword">final</span> T data;</span><br><span class="line">    <span class="meta">@Nullable</span> <span class="keyword">public</span> <span class="keyword">final</span> String message;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Resource</span><span class="params">(@NonNull Status status, @Nullable T data, @Nullable String message)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.status = status;</span><br><span class="line">        <span class="keyword">this</span>.data = data;</span><br><span class="line">        <span class="keyword">this</span>.message = message;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">Resource&lt;T&gt; <span class="title">success</span><span class="params">(@NonNull T data)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Resource&lt;&gt;(SUCCESS, data, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">Resource&lt;T&gt; <span class="title">error</span><span class="params">(String msg, @Nullable T data)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Resource&lt;&gt;(ERROR, data, msg);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">Resource&lt;T&gt; <span class="title">loading</span><span class="params">(@Nullable T data)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Resource&lt;&gt;(LOADING, data, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>NetworkBoundResource</code>是一个Helper类。负责决策数据来源于disk还是network。</p>
+<p><img src="/media/network-bound-resource.png" alt=""></p>
+<ol>
+<li>
+<p>观察database的数据变动，并判断数据库的数据是否足够好来决定dispatch数据、以及fetch from network。</p>
+</li>
+<li>
+<p>如果network返回数据成功，首先将数据存储到database，然后重新初始化stream，重新开始读取流程。如果网络失败，直接dispatch 失败。</p>
+</li>
+</ol>
+<p><code>NetworkBoundResource</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// ResultType: Type for the Resource data</span></span><br><span class="line"><span class="comment">// RequestType: Type for the API response</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">NetworkBoundResource</span>&lt;<span class="title">ResultType</span>, <span class="title">RequestType</span>&gt; </span>&#123;</span><br><span class="line">    <span class="comment">// Called to save the result of the API response into the database</span></span><br><span class="line">    <span class="meta">@WorkerThread</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">saveCallResult</span><span class="params">(@NonNull RequestType item)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Called with the data in the database to decide whether it should be</span></span><br><span class="line">    <span class="comment">// fetched from the network.</span></span><br><span class="line">    <span class="meta">@MainThread</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> <span class="keyword">boolean</span> <span class="title">shouldFetch</span><span class="params">(@Nullable ResultType data)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Called to get the cached data from the database</span></span><br><span class="line">    <span class="meta">@NonNull</span> <span class="meta">@MainThread</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> LiveData&lt;ResultType&gt; <span class="title">loadFromDb</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Called to create the API call.</span></span><br><span class="line">    <span class="meta">@NonNull</span> <span class="meta">@MainThread</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">abstract</span> LiveData&lt;ApiResponse&lt;RequestType&gt;&gt; createCall();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Called when the fetch fails. The child class may want to reset components</span></span><br><span class="line">    <span class="comment">// like rate limiter.</span></span><br><span class="line">    <span class="meta">@MainThread</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onFetchFailed</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// returns a LiveData that represents the resource</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> LiveData&lt;Resource&lt;ResultType&gt;&gt; getAsLiveData() &#123;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意:</p>
+<ol>
+<li><code>ResultType</code>和<code>RequestType</code>全部泛型化，是为了灵活的处理Api返回的数据类型和本地的数据类型</li>
+<li><code>ApiResponse</code>只是<code>Retrofit2.Call</code>的简单封装，用来将response转化为LiveData</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">NetworkBoundResource</span>&lt;<span class="title">ResultType</span>, <span class="title">RequestType</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> MediatorLiveData&lt;Resource&lt;ResultType&gt;&gt; result = <span class="keyword">new</span> MediatorLiveData&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@MainThread</span></span><br><span class="line">    NetworkBoundResource() &#123;</span><br><span class="line">        result.setValue(Resource.loading(<span class="keyword">null</span>));</span><br><span class="line">        LiveData&lt;ResultType&gt; dbSource = loadFromDb();</span><br><span class="line">        result.addSource(dbSource, data -&gt; &#123;</span><br><span class="line">            result.removeSource(dbSource);</span><br><span class="line">            <span class="keyword">if</span> (shouldFetch(data)) &#123;</span><br><span class="line">                fetchFromNetwork(dbSource);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                result.addSource(dbSource,</span><br><span class="line">                        newData -&gt; result.setValue(Resource.success(newData)));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">fetchFromNetwork</span><span class="params">(<span class="keyword">final</span> LiveData&lt;ResultType&gt; dbSource)</span> </span>&#123;</span><br><span class="line">        LiveData&lt;ApiResponse&lt;RequestType&gt;&gt; apiResponse = createCall();</span><br><span class="line">        <span class="comment">// we re-attach dbSource as a new source,</span></span><br><span class="line">        <span class="comment">// it will dispatch its latest value quickly</span></span><br><span class="line">        result.addSource(dbSource,</span><br><span class="line">                newData -&gt; result.setValue(Resource.loading(newData)));</span><br><span class="line">        result.addSource(apiResponse, response -&gt; &#123;</span><br><span class="line">            result.removeSource(apiResponse);</span><br><span class="line">            result.removeSource(dbSource);</span><br><span class="line">            <span class="comment">//noinspection ConstantConditions</span></span><br><span class="line">            <span class="keyword">if</span> (response.isSuccessful()) &#123;</span><br><span class="line">                saveResultAndReInit(response);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                onFetchFailed();</span><br><span class="line">                result.addSource(dbSource,</span><br><span class="line">                        newData -&gt; result.setValue(</span><br><span class="line">                                Resource.error(response.errorMessage, newData)));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@MainThread</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">saveResultAndReInit</span><span class="params">(ApiResponse&lt;RequestType&gt; response)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> AsyncTask&lt;Void, Void, Void&gt;() &#123;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">protected</span> Void <span class="title">doInBackground</span><span class="params">(Void... voids)</span> </span>&#123;</span><br><span class="line">                saveCallResult(response.body);</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPostExecute</span><span class="params">(Void aVoid)</span> </span>&#123;</span><br><span class="line">                <span class="comment">// we specially request a new live data,</span></span><br><span class="line">                <span class="comment">// otherwise we will get immediately last cached value,</span></span><br><span class="line">                <span class="comment">// which may not be updated with latest results received from network.</span></span><br><span class="line">                result.addSource(loadFromDb(),</span><br><span class="line">                        newData -&gt; result.setValue(Resource.success(newData)));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;.execute();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后，在<code>UserRepository</code>中使用<code>NetworkBoundResource</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class UserRepository &#123;</span><br><span class="line">    Webservice webservice;</span><br><span class="line">    UserDao userDao;</span><br><span class="line"></span><br><span class="line">    public LiveData&lt;Resource&lt;User&gt;&gt; loadUser(final String userId) &#123;</span><br><span class="line">        return new NetworkBoundResource&lt;User,User&gt;() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            protected void saveCallResult(@NonNull User item) &#123;</span><br><span class="line">                userDao.insert(item);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            protected boolean shouldFetch(@Nullable User data) &#123;</span><br><span class="line">                return rateLimiter.canFetch(userId) &amp;&amp; (data == null || !isFresh(data));</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @NonNull @Override</span><br><span class="line">            protected LiveData&lt;User&gt; loadFromDb() &#123;</span><br><span class="line">                return userDao.load(userId);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @NonNull @Override</span><br><span class="line">            protected LiveData&lt;ApiResponse&lt;User&gt;&gt; createCall() &#123;</span><br><span class="line">                return webservice.getUser(userId);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;.getAsLiveData();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://deskid.github.io">deskid</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://deskid.github.io/2017/05/27/Guide-to-App-Architecture/">https://deskid.github.io/2017/05/27/Guide-to-App-Architecture/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/Android/">Android</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/05/31/Guide-to-App-Architecture-2/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">[简译]Google 官方 App 架构 Guide(2)</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/05/26/EventBus不是银弹/">
+        <span class="next-text nav-default">该不该使用EventBus</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:deskidzhou@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/deskid" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2018
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">deskid</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://deskid.github.io/2017/05/27/Guide-to-App-Architecture/';
+        this.page.identifier = '2017/05/27/Guide-to-App-Architecture/';
+        this.page.title = '[简译]Google 官方 App 架构 Guide';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//deskid.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

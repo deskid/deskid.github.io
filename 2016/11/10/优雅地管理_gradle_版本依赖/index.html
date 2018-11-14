@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="优雅地管理 gradle 版本依赖">
+
+
+
+
+  <meta name="keywords" content="Android, gradle, Deskid's Blog">
+
+
+
+
+
+  <meta name="google-site-verification" content="UA-110544275-1">
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Deskid's Blog">
+
+
+
+
+
+
+<link rel="canonical" href="https://deskid.github.io/2016/11/10/优雅地管理_gradle_版本依赖/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 优雅地管理 gradle 版本依赖 - Deskid's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Deskid's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            Categories
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Deskid's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              Categories
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          优雅地管理 gradle 版本依赖
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016-11-10
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/Android/">Android</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#如果project中有多个module怎么办？"><span class="toc-text">如果project中有多个module怎么办？</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>通常Android studio生成的gradle 项目都会有一个项目级别的<code>build.gradle</code>文件、以及若干个module级别的 <code>build.gradle</code>文件。</p>
+<p>在app module的<code>build.gradle</code>文件中我们可以使用如下的语句引入依赖</p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">apply <span class="string">plugin:</span> <span class="string">'com.android.application'</span></span><br><span class="line">    android &#123;</span><br><span class="line">        …</span><br><span class="line">    &#125; ...</span><br><span class="line">    dependencies &#123;</span><br><span class="line">        <span class="comment">// support libraries</span></span><br><span class="line">        compile <span class="string">'com.android.support:appcompat-v7:23.4.0'</span></span><br><span class="line">        compile <span class="string">'com.android.support:design:23.4.0'</span></span><br><span class="line">        compile <span class="string">'com.android.support:percent:23.4.0'</span></span><br><span class="line">        compile <span class="string">'com.android.support:cardview-v7:23.4.0'</span></span><br><span class="line">        compile <span class="string">'com.android.support:gridlayout-v7:23.4.0'</span></span><br><span class="line">    </span><br><span class="line">        <span class="comment">//play services</span></span><br><span class="line">        compile <span class="string">'com.google.android.gms:play-services-location:9.2.1'</span></span><br><span class="line">        compile <span class="string">'com.google.android.gms:play-services-gcm:9.2.1'</span></span><br><span class="line">    </span><br><span class="line">        <span class="comment">// other dependencies</span></span><br><span class="line">        ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>痛点在于多次重复出现的版本号<code>23.4.0</code>，<code>9.2.1</code>，如果有多个module同时依赖了这些lib，<br>
+这个buidl version还将出现多次。</p>
+<p><strong>解决方案</strong></p>
+<p>通过如下的方法可以稍微改进一下</p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">apply <span class="string">plugin:</span> <span class="string">'com.android.application'</span></span><br><span class="line">    android &#123;</span><br><span class="line">    ...</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    ext &#123;</span><br><span class="line">        supportLibraryVersion = <span class="string">'23.4.0'</span></span><br><span class="line">        playServicesVersion = <span class="string">'9.2.1'</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    dependencies &#123;</span><br><span class="line">        <span class="comment">// support libraries</span></span><br><span class="line">        compile <span class="string">"com.android.support:appcompat-v7:$supportLibraryVersion"</span></span><br><span class="line">        compile <span class="string">"com.android.support:design:$supportLibraryVersion"</span></span><br><span class="line">        compile <span class="string">"com.android.support:percent:$supportLibraryVersion"</span></span><br><span class="line">        compile <span class="string">"com.android.support:cardview-v7:$supportLibraryVersion"</span></span><br><span class="line">        compile <span class="string">"com.android.support:gridlayout-v7:$supportLibraryVersion"</span></span><br><span class="line">    </span><br><span class="line">        <span class="comment">//play services</span></span><br><span class="line">        compile <span class="string">"com.google.android.gms:play-services-location:$playServicesVersion"</span></span><br><span class="line">        compile <span class="string">"com.google.android.gms:play-services-gcm:$playServicesVersion"</span></span><br><span class="line">    </span><br><span class="line">        <span class="comment">// other dependencies</span></span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>值得注意的地方有两点：</p>
+<ol>
+<li>单引号<code>''</code>变成了<code>&quot;&quot;</code></li>
+<li>通过<code>$</code>来引用属性值</li>
+</ol>
+<blockquote>
+<p>groovy String参考链接 <a href="http://docs.groovy-lang.org/latest/html/documentation/index.html#_string_interpolation" target="_blank" rel="noopener">string interpolation</a></p>
+</blockquote>
+<h3 id="如果project中有多个module怎么办？">如果project中有多个module怎么办？</h3>
+<p>把<code>ext</code>代码块移动到项目的<code>build.gradle</code> 中即可</p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">buildscript &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">allprojects &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">ext &#123;</span><br><span class="line">    <span class="comment">// sdk and tools</span></span><br><span class="line">    minSdkVersion = <span class="number">14</span></span><br><span class="line">    targetSdkVersion = <span class="number">23</span></span><br><span class="line">    compileSdkVersion = <span class="number">23</span></span><br><span class="line">    buildToolsVersion = <span class="string">'23.0.2'</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// dependencies versions</span></span><br><span class="line">    supportLibraryVersion = <span class="string">'23.4.0'</span></span><br><span class="line">    playServicesVersion = <span class="string">'9.2.1'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>module中的<code>build.gradle</code>如下</p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">apply <span class="string">plugin:</span> <span class="string">'com.android.application'</span></span><br><span class="line">android &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">    <span class="comment">// support libraries</span></span><br><span class="line">    compile <span class="string">"com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"</span></span><br><span class="line">    compile <span class="string">"com.android.support:design:$rootProject.supportLibraryVersion"</span></span><br><span class="line">    compile <span class="string">"com.android.support:percent:$rootProject.supportLibraryVersion"</span></span><br><span class="line">    compile <span class="string">"com.android.support:cardview-v7:$rootProject.supportLibraryVersion"</span></span><br><span class="line">    compile <span class="string">"com.android.support:gridlayout-v7:$rootProject.supportLibraryVersion"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//play services</span></span><br><span class="line">    compile <span class="string">"com.google.android.gms:play-services-location:$rootProject.playServicesVersion"</span></span><br><span class="line">    compile <span class="string">"com.google.android.gms:play-services-gcm:$rootProject.playServicesVersion"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// other dependencies</span></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意一点就好 ：用<code>$rootProject.propority</code>来引用</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://deskid.github.io">deskid</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://deskid.github.io/2016/11/10/优雅地管理_gradle_版本依赖/">https://deskid.github.io/2016/11/10/优雅地管理_gradle_版本依赖/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/Android/">Android</a>
+            
+              <a href="/tags/gradle/">gradle</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/05/26/EventBus不是银弹/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">该不该使用EventBus</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2016/11/03/res_file_not_found_crash /">
+        <span class="next-text nav-default">Resource not found crash 总结</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:deskidzhou@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/deskid" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2018
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">deskid</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://deskid.github.io/2016/11/10/优雅地管理_gradle_版本依赖/';
+        this.page.identifier = '2016/11/10/优雅地管理_gradle_版本依赖/';
+        this.page.title = '优雅地管理 gradle 版本依赖';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//deskid.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

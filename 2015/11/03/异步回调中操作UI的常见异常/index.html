@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="异步回调中操作UI的常见异常">
+
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="UA-110544275-1">
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Deskid's Blog">
+
+
+
+
+
+
+<link rel="canonical" href="https://deskid.github.io/2015/11/03/异步回调中操作UI的常见异常/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 异步回调中操作UI的常见异常 - Deskid's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Deskid's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            Categories
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Deskid's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              Categories
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          异步回调中操作UI的常见异常
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2015-11-03
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/Android/">Android</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#异步回调中操作ui的参见异常"><span class="toc-text">异步回调中操作UI的参见异常</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-unable-to-add-window-token-null-is-not-valid-is-your-activity-running"><span class="toc-text">1. Unable to add window – token null is not valid; is your activity running?</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-can-not-perform-this-action-after-onsaveinstancestate"><span class="toc-text">2. Can not perform this action after onSaveInstanceState</span></a></li></ol></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <h3 id="异步回调中操作ui的参见异常">异步回调中操作UI的参见异常</h3>
+<blockquote>
+<p>在异步回调中操作UI时一定要检查回调时的页面状态，比如用 Activity.isFinishing 检测 Activity 的生命周期是否已经 destory; 用 Fragment.isAdded 检查是否还绑定在Activity；在涉及到fragment的操作时还需要注意Activity state loss的问题。</p>
+</blockquote>
+<h4 id="1-unable-to-add-window-token-null-is-not-valid-is-your-activity-running">1. Unable to add window – token null is not valid; is your activity running?</h4>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">android.view.WindowManager$BadTokenException: Unable to add window -- token <span class="keyword">null</span> is not valid; is your activity running?</span><br><span class="line">   at android.view.ViewRootImpl.setView(ViewRootImpl.java:<span class="number">580</span>)</span><br><span class="line">   at android.view.WindowManagerGlobal.addView(WindowManagerGlobal.java:<span class="number">259</span>)</span><br><span class="line">   at android.view.WindowManagerImpl.addView(WindowManagerImpl.java:<span class="number">69</span>)</span><br><span class="line">   at android.widget.PopupWindow.invokePopup(PopupWindow.java:<span class="number">1019</span>)</span><br><span class="line">   at android.widget.PopupWindow.showAtLocation(PopupWindow.java:<span class="number">850</span>)</span><br><span class="line">   at android.widget.PopupWindow.showAtLocation(PopupWindow.java:<span class="number">814</span>)</span><br></pre></td></tr></table></figure>
+<p>这个exception经常出现在异步回调中显示Dialog，PopupWindow时，原因就是在长时间的异步回调操作结束后，Activity已经退出生命周期了。</p>
+<a id="more"></a>
+<p>对应相关的生命周期有两个相关方法可以判断：</p>
+<blockquote>
+<p><strong>isDestroyed()</strong><br>
+Returns true if the final onDestroy() call has been made on the Activity, so this instance is now dead.<br>
+<strong>isFinishing()</strong><br>
+Check to see whether this activity is in the process of finishing, either because you called finish() on it or someone else has requested that it finished.</p>
+</blockquote>
+<p>回忆一下Activity的生命周期：用户点击back或Activity显式的调用finish()，这个时候Activity的生命周期：onPause()-&gt;onStop()-&gt; onDestroy()，一系列调用完毕后Activity instance就不再可用。</p>
+<p>另外当系统旋转屏幕时，Activity也会Destroy，但是此时会自动重建。</p>
+<p>这两者的区别在于前一种情况isFinishing()返回true，而后一种情况返回false。</p>
+<p>Google 自家应用的incallui.InCallPresenter source code中封装一个方法isActivityStarted。（大部分时候仅仅使用isFinishing()判断就足够了）</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isActivityStarted</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   <span class="keyword">return</span> (mInCallActivity != <span class="keyword">null</span> &amp;&amp;</span><br><span class="line">            !mInCallActivity.isDestroyed() &amp;&amp;</span><br><span class="line">            !mInCallActivity.isFinishing());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>拿过来直接用的话，可以考虑先判断<code>isActivityStarted</code>再去弹出Dialog、PopupWindow。</p>
+<p>需要注意的是，isDestoryed()必须在api level 17以上才能用，Override一下做一下版本兼容。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isDestroyed</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.JELLY_BEAN_MR1) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">super</span>.isDestroyed();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> mIsDestoryed;<span class="comment">// 在onDestroy中设置true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2-can-not-perform-this-action-after-onsaveinstancestate">2. Can not perform this action after onSaveInstanceState</h4>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Fatal Exception: java.lang.IllegalStateException: Can not perform <span class="keyword">this</span> action after onSaveInstanceState</span><br><span class="line">       at android.app.FragmentManagerImpl.checkStateLoss(FragmentManager.java)</span><br><span class="line">       at android.app.FragmentManagerImpl.popBackStackImmediate(FragmentManager.java)</span><br><span class="line">	   ......</span><br><span class="line">	   ......</span><br><span class="line">	   $FrameDisplayEventReceiver.run(Choreographer.java)</span><br><span class="line">       at android.os.Handler.handleCallback(Handler.java)</span><br><span class="line">       at android.os.Handler.dispatchMessage(Handler.java)</span><br><span class="line">       at android.os.Looper.loop(Looper.java)</span><br><span class="line">       at android.app.ActivityThread.main(ActivityThread.java)</span><br><span class="line">       at java.lang.reflect.Method.invokeNative(Method.java)</span><br><span class="line">       at java.lang.reflect.Method.invoke(Method.java)</span><br><span class="line">       at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java)</span><br><span class="line">       at com.android.internal.os.ZygoteInit.main(ZygoteInit.java)</span><br><span class="line">       at dalvik.system.NativeStart.main(NativeStart.java)</span><br></pre></td></tr></table></figure>
+<p>这个异常常发生于在Activity已经调用了onSaveInstanceState后，又尝试提交<code>FragmentTransaction.commit()</code>。</p>
+<p>那为啥这个时候会抛异常呢？</p>
+<p>先了解下<code>onSaveInstanceState()</code>的调用。framework调用该函数时，会对当前的Activity存一个快照，并把Dialog、fragment、和view的状态存储到一个<code>Bundle</code> object，并通过Binder interface传到系统层，系统负责持久化保存起来；当Activity重建时，<code>Bundle</code>又会被重新取出来用于还原之前的状态。</p>
+<p>那么在Activity 调用了onSaveInstanceState后，如果又提交了transaction，用户就会发现这次transaction的状态没有被记录下来。这个现象也称为Activity state loss。为了防止这种情况发生，Android就简单的抛了这个<br>
+<code>IllegalStateException</code>异常。</p>
+<p>在Android 系统版本3.0（Honeycomb）之前，系统保证在onPause return之前不会强制kill进程，onSaveInstanceState会被保证在onPause之前调用。然而在3.0之后，系统保证在onStop return之前不会kill进程，onSaveInstanceState会被保证在onStop之前调用。</p>
+<p>这样导致的一个结果就是在老的手机上，如果每次onPause之后的commit就抛一个exception，就会太过严格了。作为妥协，Android决定<code>onPause()</code> and <code>onStop()</code>之间的commit出现的 state loss 是可接受的。然而在3.0之后的系统上，如果你在save state之后commit，就一定会抛出异常。</p>
+<table>
+<thead>
+<tr>
+<th>OP</th>
+<th>pre-Honeycomb</th>
+<th>post-Honeycomb</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>commit()</code> before <code>onPause()</code></td>
+<td>OK</td>
+<td>OK</td>
+</tr>
+<tr>
+<td><code>commit()</code> between <code>onPause()</code> and <code>onStop()</code></td>
+<td>STATE LOSS</td>
+<td>OK</td>
+</tr>
+<tr>
+<td><code>commit()</code> after <code>onStop()</code></td>
+<td>EXCEPTION</td>
+<td>EXCEPTION</td>
+</tr>
+</tbody>
+</table>
+<p>接下来看看具体的代码,这个异常抛出的地方。</p>
+<p>在FragmentManager的实现类<br>
+FragmentManagerImpl.java 里面</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">checkStateLoss</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (mStateSaved) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(</span><br><span class="line">                    <span class="string">"Can not perform this action after onSaveInstanceState"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (mNoTransactionsBecause != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(</span><br><span class="line">                    <span class="string">"Can not perform this action inside of "</span> + mNoTransactionsBecause);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>checkStateLoss又是在哪里调用的呢？<br>
+还是在FragmentManagerImpl.java中，有两个地方调用了checkStateLoss。<strong>popBackStackImmediate</strong>、<strong>enqueueAction</strong>。先看popBackStackImmediate：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">popBackStackImmediate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      checkStateLoss();</span><br><span class="line">      executePendingTransactions();</span><br><span class="line">      <span class="keyword">return</span> popBackStackState(mActivity.mHandler, <span class="keyword">null</span>, -<span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">popBackStack</span><span class="params">(<span class="keyword">final</span> String name, <span class="keyword">final</span> <span class="keyword">int</span> flags)</span> </span>&#123;</span><br><span class="line">      enqueueAction(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">          <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">              popBackStackState(mActivity.mHandler, name, -<span class="number">1</span>, flags);</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;, <span class="keyword">false</span>);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>顺藤摸瓜</p>
+<p>找到 Activity.java，在 onBackPressed 中调用了popBackStackImmediate。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onBackPressed</span><span class="params">()</span> </span>&#123;</span><br><span class="line">     <span class="keyword">if</span> (mActionBar != <span class="keyword">null</span> &amp;&amp; mActionBar.collapseActionView()) &#123;</span><br><span class="line">         <span class="keyword">return</span>;</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     <span class="keyword">if</span> (!mFragments.popBackStackImmediate()) &#123;</span><br><span class="line">         finishAfterTransition();</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>这里似乎没有什么可以做的</p>
+<p>接下来看FragmentManagerImpl#enqueueAction，</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">   </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">enqueueAction</span><span class="params">(Runnable action, <span class="keyword">boolean</span> allowStateLoss)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span> (!allowStateLoss) &#123;</span><br><span class="line">           checkStateLoss();</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">           <span class="keyword">if</span> (mDestroyed || mActivity == <span class="keyword">null</span>) &#123;</span><br><span class="line">               <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Activity has been destroyed"</span>);</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">if</span> (mPendingActions == <span class="keyword">null</span>) &#123;</span><br><span class="line">               mPendingActions = <span class="keyword">new</span> ArrayList&lt;Runnable&gt;();</span><br><span class="line">           &#125;</span><br><span class="line">           mPendingActions.add(action);</span><br><span class="line">           <span class="keyword">if</span> (mPendingActions.size() == <span class="number">1</span>) &#123;</span><br><span class="line">               mActivity.mHandler.removeCallbacks(mExecCommit);</span><br><span class="line">               mActivity.mHandler.post(mExecCommit);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>enqueueAction又是什么时候调用呢？</p>
+<p>FragmentTransaction的实现类 BackStackRecord中有</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">commit</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="keyword">return</span> commitInternal(<span class="keyword">false</span>);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">commitAllowingStateLoss</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="keyword">return</span> commitInternal(<span class="keyword">true</span>);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">int</span> <span class="title">commitInternal</span><span class="params">(<span class="keyword">boolean</span> allowStateLoss)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span> (mCommitted) &#123;</span><br><span class="line">           <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"commit already called"</span>);</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">if</span> (FragmentManagerImpl.DEBUG) &#123;</span><br><span class="line">           Log.v(TAG, <span class="string">"Commit: "</span> + <span class="keyword">this</span>);</span><br><span class="line">           LogWriter logw = <span class="keyword">new</span> LogWriter(Log.VERBOSE, TAG);</span><br><span class="line">           PrintWriter pw = <span class="keyword">new</span> FastPrintWriter(logw, <span class="keyword">false</span>, <span class="number">1024</span>);</span><br><span class="line">           dump(<span class="string">"  "</span>, <span class="keyword">null</span>, pw, <span class="keyword">null</span>);</span><br><span class="line">           pw.flush();</span><br><span class="line">       &#125;</span><br><span class="line">       mCommitted = <span class="keyword">true</span>;</span><br><span class="line">       <span class="keyword">if</span> (mAddToBackStack) &#123;</span><br><span class="line">           mIndex = mManager.allocBackStackIndex(<span class="keyword">this</span>);</span><br><span class="line">       &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">           mIndex = -<span class="number">1</span>;</span><br><span class="line">       &#125;</span><br><span class="line">       mManager.enqueueAction(<span class="keyword">this</span>, allowStateLoss);</span><br><span class="line">       <span class="keyword">return</span> mIndex;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到使用<code>transaction.commitAllowingStateLoss();</code>可以解决在commit时抛出的异常。</p>
+<p>网上许多文章都说<code>transaction.commitAllowingStateLoss();</code>可以解决这类异常，实际上这个只覆盖了enqueueAction的那一部分。onBackPressed 那里还是会有exception的可能。从上面贴的stack trace 可以看到异常就是从<code>popBackStackImmediate();</code>抛出的，所以实际并没有完全解决问题。</p>
+<p>其实出现这个问题大部分还是使用姿势错误，正确的使用方式如下：</p>
+<ol>
+<li>
+<p>不要在<code>onActivityResult()</code>, <code>onStart()</code>, and <code>onResume()</code>里面commit(), 而是在 <code>FragmentActivity#onResumeFragments()</code> or <code>Activity#onPostResume()</code>，后两个回调接口会保证在restore了state之后调用。</p>
+</li>
+<li>
+<p>不要在异步回调里commit transactions，可能onStop调用之后，回调才开始commit。</p>
+</li>
+<li>
+<p>使用commitAllowingStateLoss 作为最后的选择。</p>
+</li>
+</ol>
+<p>介绍个一种暴力的解决方法，后果自己负责：<br>
+注意到checkStateLoss 会去检查一个mStateSaved的类变量。<br>
+对于popBackStackImmediate 抛出的异常，可以在onBackPressed()里通过反射修改<code>mStateSaved = false;</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Class clazz = getSupportFragmentManager().getClass();</span><br><span class="line">Field field = clazz.getDeclaredField(<span class="string">"mStateSaved"</span>);</span><br><span class="line"><span class="keyword">if</span>(!field.isAccessible()) &#123;</span><br><span class="line">   field.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">  &#125;</span><br><span class="line">field.set(getSupportFragmentManager(), <span class="keyword">false</span>);`</span><br></pre></td></tr></table></figure>
+<p>或者反射调用noteStateNotSaved</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">noteStateNotSaved</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        mStateSaved = <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>对于enqueueAction抛出的异常，老老实实使用commitAllowingStateLoss吧，先保证引用不挂，才能考虑用户体验吧。</p>
+<p>参考文档：</p>
+<p><a href="http://developer.android.com/reference/android/app/Activity.html" target="_blank" rel="noopener">Activity官方文档</a><br>
+<a href="http://ogrelab.ikratko.com/activity-lifecycle-explained-in-details/" target="_blank" rel="noopener">Activity lifecycle explained in details</a><br>
+<a href="http://www.androiddesignpatterns.com/2013/08/fragment-transaction-commit-state-loss.html" target="_blank" rel="noopener">fragment-transaction-commit-state-loss</a><br>
+<a href="http://developer.android.com/reference/android/support/v4/app/FragmentActivity.html#onResume" target="_blank" rel="noopener">FragmentActivity官方文档</a></p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://deskid.github.io">deskid</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://deskid.github.io/2015/11/03/异步回调中操作UI的常见异常/">https://deskid.github.io/2015/11/03/异步回调中操作UI的常见异常/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2016/04/21/《必然》读书笔记/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">《必然》读书笔记</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2015/10/31/Activity_context_vs_Application_context/">
+        <span class="next-text nav-default">关于context</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:deskidzhou@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/deskid" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2018
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">deskid</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://deskid.github.io/2015/11/03/异步回调中操作UI的常见异常/';
+        this.page.identifier = '2015/11/03/异步回调中操作UI的常见异常/';
+        this.page.title = '异步回调中操作UI的常见异常';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//deskid.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

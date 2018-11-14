@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="debug log 工具类增强">
+
+
+
+
+  <meta name="keywords" content="Android, Deskid's Blog">
+
+
+
+
+
+  <meta name="google-site-verification" content="UA-110544275-1">
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Deskid's Blog">
+
+
+
+
+
+
+<link rel="canonical" href="https://deskid.github.io/2016/10/08/debug_工具改造/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> debug log 工具类增强 - Deskid's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Deskid's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            Categories
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Deskid's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              Categories
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          debug log 工具类增强
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016-10-08
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/Android/">Android</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#不足："><span class="toc-text">不足：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#改进："><span class="toc-text">改进：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#可能的缺陷："><span class="toc-text">可能的缺陷：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#改进方案-2-："><span class="toc-text">改进方案 2 ：</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#log-的小改造-对性能有影响"><span class="toc-text">Log 的小改造（对性能有影响）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#优化"><span class="toc-text">优化:</span></a></li></ol>
+    </li></div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>BuildConfig.DEBUG v.s. android:debuggable<br>
+BuildConfig是由IDE自动生成的，其值取决于 build variants。android:debuggable 也是IDE自动生成的，通常不需要人工去设置。不同之处在于，android:debuggable是在编译过程中在AndroidManifest.xml中插入的，而BuildConfig.java是编译过程中generate的。</p>
+<a id="more"></a>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">application</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:name</span>=<span class="string">".ProxyApplication"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:allowBackup</span>=<span class="string">"false"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:debuggable</span>=<span class="string">"true"</span>&gt;</span></span><br><span class="line">        ...</span><br><span class="line"><span class="tag">&lt;/<span class="name">application</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>使用方法都很简单：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(BuildConfig.DEBUG)&#123;</span><br><span class="line">    Log.d(TAG,<span class="string">""</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">int</span> flags = getApplicationInfo.flags; </span><br><span class="line"><span class="keyword">if</span> ((flags &amp; ApplicationInfo.FLAG_DEBUGGABLE) != <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="comment">// development mode</span></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// release mode</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然而，当这两个都被设置时，哪个会生效呢？见下表：</p>
+<table>
+<thead>
+<tr>
+<th>application element</th>
+<th>Released APK</th>
+<th>In IDE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No android:debuggable</td>
+<td>FLAG_DEBUGGABLE bit is 0 and BuildConfig.DEBUG is false</td>
+<td>FLAG_DEBUGGABLE bit is 1 and BuildConfig.DEBUG is true</td>
+</tr>
+<tr>
+<td>android:debuggable=”true”</td>
+<td>FLAG_DEBUGGABLE bit is 1 and BuildConfig.DEBUG is true</td>
+<td>FLAG_DEBUGGABLE bit is 1 and BuildConfig.DEBUG is true</td>
+</tr>
+<tr>
+<td>android:debuggable=”false”</td>
+<td>FLAG_DEBUGGABLE bit is 0 and BuildConfig.DEBUG is false</td>
+<td>FLAG_DEBUGGABLE bit is 0 and BuildConfig.DEBUG is true</td>
+</tr>
+</tbody>
+</table>
+<p>一句话总结上表：只有当<code>android:debuggable=”false”</code>时，<code>BuildConfig.DEBUG</code>才会按照预期的去指示debug，否则一切以<code>android:debuggable</code>为准。</p>
+<h3 id="不足：">不足：</h3>
+<p>在library project中，当发布aar包到maven库时，BuildConfig.DEBUG总是被设置为release，而无视了宿主 App project的IDE编译坏境</p>
+<h3 id="改进：">改进：</h3>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DebugUtils</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Boolean sDebug;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> boolean</span></span><br><span class="line"><span class="comment">     * BuildConfig.DEBUG will always return false in library projects</span></span><br><span class="line"><span class="comment">     * see https://code.google.com/p/android/issues/detail?id=52962</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isDebug</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (sDebug == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">final</span> String packageName = ApplicationContextGetter.instance().get().getPackageName();</span><br><span class="line">                <span class="keyword">final</span> Class&lt;?&gt; buildConfig = Class.forName(packageName + <span class="string">".BuildConfig"</span>);</span><br><span class="line">                <span class="keyword">final</span> Field DEBUG = buildConfig.getField(<span class="string">"DEBUG"</span>);</span><br><span class="line">                DEBUG.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">                sDebug = DEBUG.getBoolean(<span class="keyword">null</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (<span class="keyword">final</span> Throwable t) &#123;</span><br><span class="line">                sDebug = <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sDebug;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中<code>ApplicationContextGetter</code>如下：（或者传入Context）</p>
+<script src="//gist.github.com/c8efca9a04765bc11ec4.js?file=ApplicationContextProvider.java"></script>
+<h3 id="可能的缺陷：">可能的缺陷：</h3>
+<p>原来的字段是个static final 常亮，在编译时可以被inline优化，从而屏蔽了debug 的相关代码语句。现在由于需要在运行期动态的读取BuildConfig.DEBUG 的值，编译器就不会优化了。</p>
+<h3 id="改进方案-2-：">改进方案 2 ：</h3>
+<p><code>build.gradle</code></p>
+<p>自己玩自己的，不用IDE生成的那一套</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">buildTypes &#123;</span><br><span class="line">    debug &#123;</span><br><span class="line">        buildConfigField &quot;Boolean&quot;, &quot;DEBUG_MODE&quot;, &quot;true&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    release &#123;</span><br><span class="line">        buildConfigField &quot;Boolean&quot;, &quot;DEBUG_MODE&quot;, &quot;false&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译后会生成 如下字段<code>BuildConfig.java</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">BuildConfig</span> </span>&#123;</span><br><span class="line">  <span class="comment">// Fields from build type: debug</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Boolean DEBUG_MODE = <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用方法如下</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (BuildConfig.DEBUG_MODE) &#123;</span><br><span class="line">    <span class="comment">// do something</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当然不一定非得是 boolean ，如果开发环境比较复杂，还可以用 String来判断。比如 “PreRelease” ，“Daily” ， “Release”，这种方式比较灵活，但是 aar 在上传时会自动变为 release 的问题还是没法解决。</p>
+<h2 id="log-的小改造-对性能有影响">Log 的小改造（对性能有影响）</h2>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LogUtils</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"PFCommon"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">LogUtils</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> String <span class="title">logWithMethodAndLine</span><span class="params">(String log, StackTraceElement sElements)</span> </span>&#123;</span><br><span class="line">        String className = sElements.getFileName();</span><br><span class="line">        String methodName = sElements.getMethodName();</span><br><span class="line">        <span class="keyword">int</span> lineNumber = sElements.getLineNumber();</span><br><span class="line">        String fileName = sElements.getFileName();</span><br><span class="line"></span><br><span class="line">        StringBuilder stringBuilder = <span class="keyword">new</span> StringBuilder(log);</span><br><span class="line">        stringBuilder.append(<span class="string">" at "</span>)</span><br><span class="line">                .append(className)</span><br><span class="line">                .append(<span class="string">"."</span>)</span><br><span class="line">                .append(methodName)</span><br><span class="line">                .append(<span class="string">" ("</span>)</span><br><span class="line">                .append(fileName)</span><br><span class="line">                .append(<span class="string">":"</span>)</span><br><span class="line">                .append(lineNumber)</span><br><span class="line">                .append(<span class="string">")  "</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> stringBuilder.toString();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">d</span><span class="params">(String tag, String msg)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (DebugUtils.isDebug()) &#123;</span><br><span class="line">            Log.d(tag, logWithMethodAndLine(msg, <span class="keyword">new</span> Throwable().getStackTrace()[<span class="number">2</span>]));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">d</span><span class="params">(String msg)</span> </span>&#123;</span><br><span class="line">        d(TAG, msg);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">e</span><span class="params">(String tag, String msg)</span> </span>&#123;</span><br><span class="line">        Log.e(tag, logWithMethodAndLine(msg, <span class="keyword">new</span> Throwable().getStackTrace()[<span class="number">2</span>]));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">e</span><span class="params">(String tag, String msg, Throwable tr)</span> </span>&#123;</span><br><span class="line">        Log.e(tag, logWithMethodAndLine(msg, <span class="keyword">new</span> Throwable().getStackTrace()[<span class="number">2</span>]), tr);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">e</span><span class="params">(String msg)</span> </span>&#123;</span><br><span class="line">        e(TAG, msg);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">e</span><span class="params">(String msg, Throwable tr)</span> </span>&#123;</span><br><span class="line">        e(TAG, msg, tr);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">logStackTrace</span><span class="params">(Throwable throwable)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (DebugUtils.isDebug() &amp;&amp; throwable != <span class="keyword">null</span>) &#123;</span><br><span class="line">            throwable.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>new Throwable().getStackTrace()[2])</code>这行语句中取的是第二层函数调用栈，这个根据实际情况可以自行调整</p>
+<h3 id="优化">优化:</h3>
+<p><code>proguard-project.txt</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># Remove debug logs</span><br><span class="line">-assumenosideeffects class android.util.Log &#123;</span><br><span class="line">    public static *** d(...);</span><br><span class="line">    public static *** v(...);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述配置会自动删掉log的相关代码<br>
+避免了上面的log代码在 release 中带来的额外开销。</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://deskid.github.io">deskid</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://deskid.github.io/2016/10/08/debug_工具改造/">https://deskid.github.io/2016/10/08/debug_工具改造/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/Android/">Android</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2016/11/03/res_file_not_found_crash /">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Resource not found crash 总结</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2016/09/14/Android_studio_template_开发/">
+        <span class="next-text nav-default">Android studio 模板开发</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:deskidzhou@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/deskid" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2018
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">deskid</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://deskid.github.io/2016/10/08/debug_工具改造/';
+        this.page.identifier = '2016/10/08/debug_工具改造/';
+        this.page.title = 'debug log 工具类增强';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//deskid.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

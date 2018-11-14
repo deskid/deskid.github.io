@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="Android studio 模板开发">
+
+
+
+
+  <meta name="keywords" content="Android, Deskid's Blog">
+
+
+
+
+
+  <meta name="google-site-verification" content="UA-110544275-1">
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Deskid's Blog">
+
+
+
+
+
+
+<link rel="canonical" href="https://deskid.github.io/2016/09/14/Android_studio_template_开发/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> Android studio 模板开发 - Deskid's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Deskid's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            Categories
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Deskid's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              Categories
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Android studio 模板开发
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016-09-14
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/Android/">Android</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#live-template"><span class="toc-text">live template</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#file-template"><span class="toc-text">file template</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#project-template-module-template"><span class="toc-text">project template &amp; module template</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一-freemarker-简介"><span class="toc-text">一、freeMarker 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基本语法"><span class="toc-text">基本语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实战"><span class="toc-text">实战</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二-分析android-studio中的自带模板"><span class="toc-text">二、 分析Android studio中的自带模板</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#template-xml-分析"><span class="toc-text">&lt;template.xml&gt;分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#parameter"><span class="toc-text">&lt;parameter&gt;</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#category"><span class="toc-text">&lt;category&gt;</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#globals-execute"><span class="toc-text">&lt;globals&gt;、&lt;execute&gt;</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#globals-xml-ftl-分析"><span class="toc-text">&lt;globals.xml.ftl&gt;分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#recipe-xml-ftl-分析"><span class="toc-text">&lt;recipe.xml.ftl&gt;分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#dependency"><span class="toc-text">&lt;dependency&gt;</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#copy"><span class="toc-text">&lt;copy&gt;</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#instantiate"><span class="toc-text">&lt;instantiate&gt;</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#merge"><span class="toc-text">&lt;merge&gt;</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#open"><span class="toc-text">&lt;open&gt;</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#root目录"><span class="toc-text">root目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#idea-内建函数"><span class="toc-text">IDEA 内建函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三-android-studio如何处理freemarked文件呢"><span class="toc-text">三、 Android studio如何处理Freemarked文件呢</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#templatehandler-java"><span class="toc-text">TemplateHandler.java</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#模板实例化过程"><span class="toc-text">模板实例化过程</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#四-当我们新建一个工程时-android-studio为我们干了啥"><span class="toc-text">四、当我们新建一个工程时，Android studio为我们干了啥</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#newandroidproject"><span class="toc-text">NewAndroidProject</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#newandroidmodule"><span class="toc-text">NewAndroidModule</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#五-build-gradle-合并问题"><span class="toc-text">五、 build.gradle 合并问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#apply-合并失败"><span class="toc-text">apply 合并失败</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#只支持compile命令的build-gradle合并"><span class="toc-text">只支持compile命令的build.gradle合并</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#tools-命名空间合并后消失问题"><span class="toc-text">tools 命名空间合并后消失问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#六-壳工程template"><span class="toc-text">六、壳工程template</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#七-参考资料"><span class="toc-text">七、参考资料</span></a></li></ol></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>本文主要介绍了Android studio中的模板开发技术，其中live和file template比较简单，不详细介绍，主要篇幅集中在Android studio的project 模板和module模板介绍上。</p>
+<a id="more"></a>
+<h2 id="live-template"><strong>live template</strong></h2>
+<ol>
+<li>psfi</li>
+<li>null</li>
+<li>nn</li>
+<li>logt, logm, logr</li>
+<li>自定义</li>
+<li>provider</li>
+<li>addTest</li>
+<li>addDemo</li>
+</ol>
+<h2 id="file-template"><strong>file template</strong></h2>
+<ol>
+<li>单例模板 Singleton</li>
+<li>自定义测试 TestActivity TestView</li>
+<li>自定义 dagger 模板</li>
+<li>自定义 MVP 模板</li>
+<li>快速生成 file template</li>
+</ol>
+<h2 id="project-template-module-template"><strong>project template &amp; module template</strong></h2>
+<h2 id="一-freemarker-简介">一、freeMarker 简介</h2>
+<ul>
+<li>文件名后缀 <code>*.ftl</code></li>
+<li>模板引擎</li>
+<li>官网 <a href="http://freemarker.org/docs/index.html" target="_blank" rel="noopener">Apache FreeMarker Manual</a></li>
+</ul>
+<h3 id="基本语法">基本语法</h3>
+<ul>
+<li>
+<p>String <a href="http://freemarker.org/docs/ref_builtins_string.html" target="_blank" rel="noopener">Built-ins for strings</a></p>
+</li>
+<li>
+<p>${value} ${function(value)} 计算并输出value值</p>
+</li>
+<li>
+<p>流程判断 &lt;#if&gt;、&lt;#elseif&gt;、&lt;#else&gt;、&lt;/#if&gt;</p>
+ <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">#if</span> <span class="attr">condition</span>&gt;</span></span><br><span class="line">    ...</span><br><span class="line"><span class="tag">&lt;<span class="name">#elseif</span> <span class="attr">condition2</span>&gt;</span></span><br><span class="line">    ...</span><br><span class="line"><span class="tag">&lt;<span class="name">#elseif</span> <span class="attr">condition3</span>&gt;</span></span><br><span class="line">    ...</span><br><span class="line"><span class="tag">&lt;<span class="name">#else</span>&gt;</span></span><br><span class="line">    ...</span><br><span class="line"><span class="tag">&lt;/<span class="name">#if</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li>
+<p>list 遍历</p>
+ <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">#list</span> <span class="attr">sequence</span> <span class="attr">as</span> <span class="attr">item</span>&gt;</span></span><br><span class="line">    Part repeated for each item</span><br><span class="line"><span class="tag">&lt;/<span class="name">#list</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li>
+<p>赋值 &lt;#assign&gt;</p>
+<p><code>&lt;#assign themeName=theme.name!'AppTheme'&gt;</code></p>
+</li>
+</ul>
+<h3 id="实战">实战</h3>
+<p>看一个来自于<code>NewAndroidProject</code>中的<code>AndroidManifest.xml.ftl</code>模板</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">manifest</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">application</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">activity</span> <span class="attr">android:name</span>=<span class="string">".$&#123;activityClass&#125;"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:label</span>=<span class="string">"@string/title_$&#123;activityToLayout(activityClass)&#125;"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">#if</span> <span class="attr">parentActivityClass</span> != <span class="string">""</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">meta-data</span> <span class="attr">android:name</span>=<span class="string">"android.support.PARENT_ACTIVITY"</span></span></span><br><span class="line"><span class="tag">                <span class="attr">android:value</span>=<span class="string">"$&#123;parentActivityClass&#125;"</span> /&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">#if</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">#if</span> <span class="attr">isLauncher</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">intent-filter</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"android.intent.action.MAIN"</span> /&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">category</span> <span class="attr">android:name</span>=<span class="string">"android.intent.category.LAUNCHER"</span> /&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">intent-filter</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">#if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">activity</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">application</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">manifest</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在这个模板中可以看到基本的语法使用，对freemarker的语法了解到这个程度就够用了。</p>
+<table>
+<thead>
+<tr>
+<th>param</th>
+<th>function</th>
+<th>directive</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>${activityClass}</code></td>
+<td><code>activityToLayout()</code></td>
+<td><code>&lt;#if isLauncher&gt;</code></td>
+</tr>
+<tr>
+<td><code>${parentActivityClass}</code></td>
+<td></td>
+<td><code>&lt;/#if&gt;</code></td>
+</tr>
+<tr>
+<td><code>isLauncher</code></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<pre><code>*activityToLayout 是内建于Android studio idea中的函数，还有其他有用的内建函数将在后面介绍。
+</code></pre>
+<h2 id="二-分析android-studio中的自带模板">二、 分析Android studio中的自带模板</h2>
+<p><code>/Applications/Android Studio.app/Contents/plugins/android/lib/templates</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">➜  templates ls -la</span><br><span class="line">-rw-r--r--@  1 zhou  admin  10695 Sep 16 13:49 NOTICE</span><br><span class="line">drwxr-xr-x@ 18 zhou  admin    612 Sep 16 13:49 activities  &lt;-重点</span><br><span class="line">-rw-r--r--@  1 zhou  admin    310 Sep 16 13:49 build.gradle</span><br><span class="line">drwxr-xr-x@  6 zhou  admin    204 Sep 16 13:49 eclipse</span><br><span class="line">drwxr-xr-x@  3 zhou  admin    102 Sep 16 13:49 gradle</span><br><span class="line">drwxr-xr-x@ 10 zhou  admin    340 Sep 16 13:49 gradle-projects  &lt;-重点</span><br><span class="line">drwxr-xr-x@ 28 zhou  admin    952 Sep 16 13:49 other</span><br></pre></td></tr></table></figure>
+<p>先看一个简单的module模板 EmptyActivity</p>
+<p><code>/Applications/Android Studio.app/Contents/plugins/android/lib/templates/activities</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">➜  activities ls -la</span><br><span class="line">....</span><br><span class="line">drwxr-xr-x@  9 zhou  admin  306 Sep 16 13:49 BasicActivity</span><br><span class="line">drwxr-xr-x@  7 zhou  admin  238 Sep 16 13:49 EmptyActivity</span><br><span class="line">drwxr-xr-x@  7 zhou  admin  238 Sep 16 13:49 FullscreenActivity</span><br><span class="line"></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">➜  tree EmptyActivity</span><br><span class="line">.</span><br><span class="line">├── globals.xml.ftl</span><br><span class="line">├── recipe.xml.ftl</span><br><span class="line">├── root</span><br><span class="line">│   └── src</span><br><span class="line">│       └── app_package</span><br><span class="line">│           └── SimpleActivity.java.ftl</span><br><span class="line">├── template.xml</span><br><span class="line">└── template_blank_activity.png</span><br></pre></td></tr></table></figure>
+<h3 id="template-xml-分析">&lt;template.xml&gt;分析</h3>
+<p><code>template.xml</code>是一个模板的 Metadata文件，维护了模板的输入参数、模板名称、thumbs图标等信息<br>
+<img src="/media/14787729389526.jpg" alt=""></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span></span></span><br><span class="line"><span class="tag">    <span class="attr">format</span>=<span class="string">"5"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">revision</span>=<span class="string">"5"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">name</span>=<span class="string">"Empty Activity"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">minApi</span>=<span class="string">"7"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">minBuildApi</span>=<span class="string">"14"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">description</span>=<span class="string">"Creates a new empty activity"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">category</span> <span class="attr">value</span>=<span class="string">"Activity"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">formfactor</span> <span class="attr">value</span>=<span class="string">"Mobile"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">parameter</span></span></span><br><span class="line"><span class="tag">        <span class="attr">id</span>=<span class="string">"activityClass"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">name</span>=<span class="string">"Activity Name"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">type</span>=<span class="string">"string"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">constraints</span>=<span class="string">"class|unique|nonempty"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">suggest</span>=<span class="string">"$&#123;layoutToActivity(layoutName)&#125;"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">default</span>=<span class="string">"MainActivity"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">help</span>=<span class="string">"The name of the activity class to create"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">parameter</span></span></span><br><span class="line"><span class="tag">        <span class="attr">id</span>=<span class="string">"generateLayout"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">name</span>=<span class="string">"Generate Layout File"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">type</span>=<span class="string">"boolean"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">default</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">help</span>=<span class="string">"If true, a layout file will be generated"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">parameter</span></span></span><br><span class="line"><span class="tag">        <span class="attr">id</span>=<span class="string">"layoutName"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">name</span>=<span class="string">"Layout Name"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">type</span>=<span class="string">"string"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">constraints</span>=<span class="string">"layout|unique|nonempty"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">suggest</span>=<span class="string">"$&#123;activityToLayout(activityClass)&#125;"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">default</span>=<span class="string">"activity_main"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">visibility</span>=<span class="string">"generateLayout"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">help</span>=<span class="string">"The name of the layout to create for the activity"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">parameter</span></span></span><br><span class="line"><span class="tag">        <span class="attr">id</span>=<span class="string">"isLauncher"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">name</span>=<span class="string">"Launcher Activity"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">type</span>=<span class="string">"boolean"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">default</span>=<span class="string">"false"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">help</span>=<span class="string">"If true, this activity will have a CATEGORY_LAUNCHER intent filter, making it visible in the launcher"</span> /&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">parameter</span></span></span><br><span class="line"><span class="tag">        <span class="attr">id</span>=<span class="string">"packageName"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">name</span>=<span class="string">"Package name"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">type</span>=<span class="string">"string"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">constraints</span>=<span class="string">"package"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">default</span>=<span class="string">"com.mycompany.myapp"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- 128x128 thumbnails relative to template.xml --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">thumbs</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- default thumbnail is required --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">thumb</span>&gt;</span>template_blank_activity.png<span class="tag">&lt;/<span class="name">thumb</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">thumbs</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">globals</span> <span class="attr">file</span>=<span class="string">"globals.xml.ftl"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">execute</span> <span class="attr">file</span>=<span class="string">"recipe.xml.ftl"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="parameter">&lt;parameter&gt;</h4>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">parameter</span></span></span><br><span class="line"><span class="tag">        <span class="attr">id</span>=<span class="string">"activityClass"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">name</span>=<span class="string">"Activity Name"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">type</span>=<span class="string">"string"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">constraints</span>=<span class="string">"class|unique|nonempty"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">suggest</span>=<span class="string">"$&#123;layoutToActivity(layoutName)&#125;"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">default</span>=<span class="string">"MainActivity"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">help</span>=<span class="string">"The name of the activity class to create"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong><code>type</code></strong> : string、enum、boolean、separator</p>
+<p><strong><code>constraints</code></strong> : 参数校验</p>
+<table>
+<thead>
+<tr>
+<th>constraints</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nonempty</td>
+<td>非空</td>
+</tr>
+<tr>
+<td>apilevel</td>
+<td>最小支持API</td>
+</tr>
+<tr>
+<td>package</td>
+<td>合法的java包名</td>
+</tr>
+<tr>
+<td>class</td>
+<td>合法的class名</td>
+</tr>
+<tr>
+<td>activity</td>
+<td>合法的fully-qualified activity名(com.example.myapp.MyActivity)</td>
+</tr>
+<tr>
+<td>layout、string、drawable、 id</td>
+<td>资源名合法[a-z][_]</td>
+</tr>
+<tr>
+<td>unique</td>
+<td>唯一</td>
+</tr>
+<tr>
+<td>exists</td>
+<td>必须存在</td>
+</tr>
+</tbody>
+</table>
+<p>parameter对应创建工程模板时的form</p>
+<h4 id="category">&lt;category&gt;</h4>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">category</span> <span class="attr">value</span>=<span class="string">"Activity"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>Applications</li>
+<li>Activities</li>
+<li>UI Components</li>
+</ul>
+<h4 id="globals-execute">&lt;globals&gt;、&lt;execute&gt;</h4>
+<ul>
+<li>globals 指定全局属性定义文件</li>
+<li>execute 指定指令文件<br>
+后面会详细介绍</li>
+</ul>
+<h3 id="globals-xml-ftl-分析">&lt;globals.xml.ftl&gt;分析</h3>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">globals</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">global</span> <span class="attr">id</span>=<span class="string">"hasNoActionBar"</span> <span class="attr">type</span>=<span class="string">"boolean"</span> <span class="attr">value</span>=<span class="string">"false"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">global</span> <span class="attr">id</span>=<span class="string">"parentActivityClass"</span> <span class="attr">value</span>=<span class="string">""</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">global</span> <span class="attr">id</span>=<span class="string">"simpleLayoutName"</span> <span class="attr">value</span>=<span class="string">"$&#123;layoutName&#125;"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">global</span> <span class="attr">id</span>=<span class="string">"excludeMenu"</span> <span class="attr">type</span>=<span class="string">"boolean"</span> <span class="attr">value</span>=<span class="string">"true"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">global</span> <span class="attr">id</span>=<span class="string">"generateActivityTitle"</span> <span class="attr">type</span>=<span class="string">"boolean"</span> <span class="attr">value</span>=<span class="string">"false"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">#include</span> "<span class="attr">..</span>/<span class="attr">common</span>/<span class="attr">common_globals.xml.ftl</span>" /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">globals</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这里include了 common_globals.xml.ftl</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">globals</span>&gt;</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="tag">&lt;<span class="name">#assign</span> <span class="attr">themeName</span>=<span class="string">theme.name!</span>'<span class="attr">AppTheme</span>'&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">#assign</span> <span class="attr">themeNameNoActionBar</span>=<span class="string">theme.nameNoActionBar!</span>'<span class="attr">AppTheme.NoActionBar</span>'&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">#assign</span> <span class="attr">appCompat</span>=<span class="string">backwardsCompatibility!(theme.isAppCompat)!false</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">#assign</span> <span class="attr">appCompatActivity</span>=<span class="string">appCompat</span> &amp;&amp; (<span class="attr">buildApi</span> <span class="attr">gte</span> <span class="attr">22</span>)&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">global</span> <span class="attr">id</span>=<span class="string">"themeName"</span> <span class="attr">type</span>=<span class="string">"string"</span> <span class="attr">value</span>=<span class="string">"$&#123;themeName&#125;"</span> /&gt;</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="tag">&lt;<span class="name">global</span> <span class="attr">id</span>=<span class="string">"appCompat"</span> <span class="attr">type</span>=<span class="string">"boolean"</span> <span class="attr">value</span>=<span class="string">"$&#123;appCompat?string&#125;"</span> /&gt;</span></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">global</span> <span class="attr">id</span>=<span class="string">"manifestOut"</span> <span class="attr">value</span>=<span class="string">"$&#123;manifestDir&#125;"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">global</span> <span class="attr">id</span>=<span class="string">"buildVersion"</span> <span class="attr">value</span>=<span class="string">"$&#123;buildApi&#125;"</span> /&gt;</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="tag">&lt;<span class="name">global</span> <span class="attr">id</span>=<span class="string">"srcOut"</span> <span class="attr">value</span>=<span class="string">"$&#123;srcDir&#125;/$&#123;slashedPackageName(packageName)&#125;"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">global</span> <span class="attr">id</span>=<span class="string">"resOut"</span> <span class="attr">value</span>=<span class="string">"$&#123;resDir&#125;"</span> /&gt;</span></span><br><span class="line">    ...</span><br><span class="line"><span class="tag">&lt;/<span class="name">globals</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>可以看到这个文件很简单定义了一些在freemarker处理过程中需要用到的全局变量。</p>
+<h3 id="recipe-xml-ftl-分析">&lt;recipe.xml.ftl&gt;分析</h3>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">recipe</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">merge</span> <span class="attr">from</span>=<span class="string">"root/AndroidManifest.xml.ftl"</span></span></span><br><span class="line"><span class="tag">             <span class="attr">to</span>=<span class="string">"$&#123;escapeXmlAttribute(manifestOut)&#125;/AndroidManifest.xml"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">merge</span> <span class="attr">from</span>=<span class="string">"root/res/values/manifest_strings.xml.ftl"</span></span></span><br><span class="line"><span class="tag">             <span class="attr">to</span>=<span class="string">"$&#123;escapeXmlAttribute(resOut)&#125;/values/strings.xml"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">#if</span> <span class="attr">generateLayout</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">#if</span> <span class="attr">appCompat</span> &amp;&amp; !(<span class="attr">hasDependency</span>('<span class="attr">com.android.support:appcompat-v7</span>'))&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">dependency</span> <span class="attr">mavenUrl</span>=<span class="string">"com.android.support:appcompat-v7:$&#123;buildApi&#125;.+"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">#if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">instantiate</span> <span class="attr">from</span>=<span class="string">"root/res/layout/simple.xml.ftl"</span></span></span><br><span class="line"><span class="tag">                 <span class="attr">to</span>=<span class="string">"$&#123;escapeXmlAttribute(resOut)&#125;/layout/$&#123;simpleLayoutName&#125;.xml"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">#if</span> (<span class="attr">isNewProject</span>!<span class="attr">false</span>) &amp;&amp; !(<span class="attr">excludeMenu</span>!<span class="attr">false</span>)&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">#include</span> "<span class="attr">recipe_simple_menu.xml.ftl</span>" /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">#if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">#include</span> "<span class="attr">recipe_simple_dimens.xml</span>" /&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">open</span> <span class="attr">file</span>=<span class="string">"$&#123;escapeXmlAttribute(resOut)&#125;/layout/$&#123;layoutName&#125;.xml"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">#if</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">instantiate</span> <span class="attr">from</span>=<span class="string">"root/src/app_package/SimpleActivity.java.ftl"</span></span></span><br><span class="line"><span class="tag">                   <span class="attr">to</span>=<span class="string">"$&#123;escapeXmlAttribute(srcOut)&#125;/$&#123;activityClass&#125;.java"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">open</span> <span class="attr">file</span>=<span class="string">"$&#123;escapeXmlAttribute(srcOut)&#125;/$&#123;activityClass&#125;.java"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">recipe</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="dependency">&lt;dependency&gt;</h4>
+<p><code>&lt;dependency mavenUrl=&quot;com.android.support:appcompat-v7:${buildApi}.+&quot;/&gt;</code><br>
+添加dependency 到 module build.gradle文件中，这种方法适合添加少量的依赖。</p>
+<h4 id="copy">&lt;copy&gt;</h4>
+<p><code>&lt;copy from=&quot;{src}&quot; to=&quot;{dest}&quot; /&gt;</code><br>
+将文件从src复制到dest，如果目标目录不存在则会自动创建目录。</p>
+<h4 id="instantiate">&lt;instantiate&gt;</h4>
+<p><code>&lt;instantiate from=&quot;{src}&quot; to=&quot;{dest}&quot; /&gt;</code><br>
+同copy，不同的是，instantiate 会转义模板中的${value}</p>
+<h4 id="merge">&lt;merge&gt;</h4>
+<p><code>&lt;merge from=&quot;{src}&quot; to=&quot;{dest}&quot; /&gt;</code><br>
+源文件于目标文件合并（只支持xml和build.gradle文件）</p>
+<h4 id="open">&lt;open&gt;</h4>
+<p><code>&lt;open file=&quot;{dest}&quot; /&gt;</code><br>
+在IDE中打开目标文件</p>
+<h3 id="root目录">root目录</h3>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">├── root</span><br><span class="line">│   └── src</span><br><span class="line">│       └── app_package</span><br><span class="line">│           └── SimpleActivity.java.ftl</span><br></pre></td></tr></table></figure>
+<p>这里的 app_package 等价于<br>
+<code>app_package = src/com/mogujie/....</code><br>
+这个目录下存储了模板源文件（*.ftl）</p>
+<h3 id="idea-内建函数">IDEA 内建函数</h3>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>activityToLayout</td>
+<td>FooActivity =&gt; activity_foo</td>
+</tr>
+<tr>
+<td>layoutToActivity</td>
+<td>activity_foo =&gt; FooActivity</td>
+</tr>
+<tr>
+<td>camelCaseToUnderscore</td>
+<td>FooBar =&gt; foo_bar</td>
+</tr>
+<tr>
+<td>underscoreToCamelCase</td>
+<td>foo_bar =&gt; FooBar</td>
+</tr>
+<tr>
+<td>escapeXmlAttribute</td>
+<td>“&lt;,&gt;” =&gt; encode(&quot;&lt;,&gt;&quot;)</td>
+</tr>
+<tr>
+<td>slashedPackageName</td>
+<td>com.example.foo =&gt;  com/example/foo</td>
+</tr>
+</tbody>
+</table>
+<h3 id="三-android-studio如何处理freemarked文件呢">三、 Android studio如何处理Freemarked文件呢</h3>
+<p>上述4个命令不是Freemarker的内建命令标签，Android studio通过一个叫做TemplateHandler的类另外处理模板。</p>
+<h4 id="templatehandler-java">TemplateHandler.java</h4>
+<p><a href="https://searchcode.com/codesearch/view/51105999/" target="_blank" rel="noopener">TemplateHandler.java</a></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/** Executes the given recipe file: copying, merging, instantiating, opening files etc */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">            <span class="keyword">final</span> Configuration freemarker,</span></span></span><br><span class="line"><span class="function"><span class="params">            String file,</span></span></span><br><span class="line"><span class="function"><span class="params">            <span class="keyword">final</span> Map&lt;String, Object&gt; paramMap)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            mLoader.setTemplateFile(<span class="keyword">new</span> File(mRootPath, file));</span><br><span class="line">            Template freemarkerTemplate = freemarker.getTemplate(file);</span><br><span class="line"></span><br><span class="line">            StringWriter out = <span class="keyword">new</span> StringWriter();</span><br><span class="line">            freemarkerTemplate.process(paramMap, out);</span><br><span class="line">            out.flush();</span><br><span class="line">            String xml = out.toString();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Parse and execute the resulting instruction list.</span></span><br><span class="line">            SAXParserFactory factory = SAXParserFactory.newInstance();</span><br><span class="line">            SAXParser saxParser = factory.newSAXParser();</span><br><span class="line"></span><br><span class="line">            saxParser.parse(<span class="keyword">new</span> ByteArrayInputStream(xml.getBytes()),</span><br><span class="line">                    <span class="keyword">new</span> DefaultHandler() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startElement</span><span class="params">(String uri, String localName, String name,</span></span></span><br><span class="line"><span class="function"><span class="params">                        Attributes attributes)</span></span></span><br><span class="line"><span class="function">                        <span class="keyword">throws</span> SAXException </span>&#123;</span><br><span class="line">                    <span class="keyword">if</span> (mNoToAll) &#123;</span><br><span class="line">                        <span class="keyword">return</span>;</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        <span class="keyword">boolean</span> instantiate = TAG_INSTANTIATE.equals(name);</span><br><span class="line">                        <span class="keyword">if</span> (TAG_COPY.equals(name) || instantiate) &#123;</span><br><span class="line">                            String fromPath = attributes.getValue(ATTR_FROM);</span><br><span class="line">                            String toPath = attributes.getValue(ATTR_TO);</span><br><span class="line">                            <span class="keyword">if</span> (toPath == <span class="keyword">null</span> || toPath.isEmpty()) &#123;</span><br><span class="line">                                toPath = attributes.getValue(ATTR_FROM);</span><br><span class="line">                                toPath = AdtUtils.stripSuffix(toPath, DOT_FTL);</span><br><span class="line">                            &#125;</span><br><span class="line">                            IPath to = getTargetPath(toPath);</span><br><span class="line">                            <span class="keyword">if</span> (instantiate) &#123;</span><br><span class="line">                                instantiate(freemarker, paramMap, fromPath, to);</span><br><span class="line">                            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                                copyTemplateResource(fromPath, to);</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (TAG_MERGE.equals(name)) &#123;</span><br><span class="line">                            String fromPath = attributes.getValue(ATTR_FROM);</span><br><span class="line">                            String toPath = attributes.getValue(ATTR_TO);</span><br><span class="line">                            <span class="keyword">if</span> (toPath == <span class="keyword">null</span> || toPath.isEmpty()) &#123;</span><br><span class="line">                                toPath = attributes.getValue(ATTR_FROM);</span><br><span class="line">                                toPath = AdtUtils.stripSuffix(toPath, DOT_FTL);</span><br><span class="line">                            &#125;</span><br><span class="line">                            <span class="comment">// Resources in template.xml are located within root/</span></span><br><span class="line">                            IPath to = getTargetPath(toPath);</span><br><span class="line">                            merge(freemarker, paramMap, fromPath, to);</span><br><span class="line">                        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (name.equals(TAG_OPEN)) &#123;</span><br><span class="line">                            <span class="comment">// The relative path here is within the output directory:</span></span><br><span class="line">                            String relativePath = attributes.getValue(ATTR_FILE);</span><br><span class="line">                            <span class="keyword">if</span> (relativePath != <span class="keyword">null</span> &amp;&amp; !relativePath.isEmpty()) &#123;</span><br><span class="line">                                mOpen.add(relativePath);</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!name.equals(<span class="string">"recipe"</span>)) &#123; <span class="comment">//$NON-NLS-1$</span></span><br><span class="line">                            System.err.println(<span class="string">"WARNING: Unknown template directive "</span> + name);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                        sMostRecentException = e;</span><br><span class="line">                        AdtPlugin.log(e, <span class="keyword">null</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            sMostRecentException = e;</span><br><span class="line">            AdtPlugin.log(e, <span class="keyword">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>全部的代码在这里可以查看，这里不详细描述。<br>
+<a href="https://android.googlesource.com/platform/tools/adt/idea/+/master/android/src/com/android/tools/idea/templates" target="_blank" rel="noopener">android/src/com/android/tools/idea/templates</a></p>
+<h4 id="模板实例化过程">模板实例化过程</h4>
+<p><img src="http://robusttechhouse.com/wp-content/uploads/2015/06/Code-Generation-Process.jpg" alt=""></p>
+<h3 id="四-当我们新建一个工程时-android-studio为我们干了啥">四、当我们新建一个工程时，Android studio为我们干了啥</h3>
+<h4 id="newandroidproject">NewAndroidProject</h4>
+<p><code>/Applications/Android Studio.app/Contents/plugins/android/lib/templates/gradle-projects/NewAndroidProject</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">├── globals.xml.ftl</span><br><span class="line">├── recipe.xml.ftl</span><br><span class="line">├── root</span><br><span class="line">│   ├── build.gradle.ftl</span><br><span class="line">│   ├── gradle.properties.ftl</span><br><span class="line">│   ├── local.properties.ftl</span><br><span class="line">│   ├── project_ignore</span><br><span class="line">│   └── settings.gradle.ftl</span><br><span class="line">├── template.xml</span><br><span class="line">└── template_new_project.png</span><br></pre></td></tr></table></figure>
+<p><code>cat recipe.xml</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot;?&gt;</span><br><span class="line">&lt;recipe&gt;</span><br><span class="line">    &lt;instantiate from=&quot;root/build.gradle.ftl&quot;</span><br><span class="line">                   to=&quot;$&#123;escapeXmlAttribute(topOut)&#125;/build.gradle&quot; /&gt;</span><br><span class="line"></span><br><span class="line">&lt;#if makeIgnore&gt;</span><br><span class="line">    &lt;copy from=&quot;root/project_ignore&quot;</span><br><span class="line">            to=&quot;$&#123;escapeXmlAttribute(topOut)&#125;/.gitignore&quot; /&gt;</span><br><span class="line">&lt;/#if&gt;</span><br><span class="line"></span><br><span class="line">    &lt;instantiate from=&quot;root/settings.gradle.ftl&quot;</span><br><span class="line">                   to=&quot;$&#123;escapeXmlAttribute(topOut)&#125;/settings.gradle&quot; /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;instantiate from=&quot;root/gradle.properties.ftl&quot;</span><br><span class="line">                   to=&quot;$&#123;escapeXmlAttribute(topOut)&#125;/gradle.properties&quot; /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;copy from=&quot;../../gradle/wrapper&quot;</span><br><span class="line">        to=&quot;$&#123;escapeXmlAttribute(topOut)&#125;/&quot; /&gt;</span><br><span class="line"></span><br><span class="line">&lt;#if sdkDir??&gt;</span><br><span class="line">  &lt;instantiate from=&quot;root/local.properties.ftl&quot;</span><br><span class="line">           to=&quot;$&#123;escapeXmlAttribute(topOut)&#125;/local.properties&quot; /&gt;</span><br><span class="line">&lt;/#if&gt;</span><br><span class="line">&lt;/recipe&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="newandroidmodule">NewAndroidModule</h4>
+<p><code>/Applications/Android Studio.app/Contents/plugins/android/lib/templates/gradle-projects/NewAndroidModule</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">├── globals.xml.ftl</span><br><span class="line">├── recipe.xml.ftl</span><br><span class="line">├── root</span><br><span class="line">│   ├── AndroidManifest.xml.ftl</span><br><span class="line">│   ├── build.gradle.ftl</span><br><span class="line">│   ├── module_ignore</span><br><span class="line">│   ├── proguard-rules.txt.ftl</span><br><span class="line">│   ├── res</span><br><span class="line">│   │   ├── mipmap-anydpi</span><br><span class="line">│   │   ├── mipmap-hdpi</span><br><span class="line">│   │   ├── mipmap-mdpi</span><br><span class="line">│   │   ├── mipmap-xhdpi</span><br><span class="line">│   │   ├── mipmap-xxhdpi</span><br><span class="line">│   │   ├── mipmap-xxxhdpi</span><br><span class="line">│   │   └── values</span><br><span class="line">│   │       ├── colors.xml</span><br><span class="line">│   │       ├── strings.xml.ftl</span><br><span class="line">│   │       └── styles.xml.ftl</span><br><span class="line">│   ├── settings.gradle.ftl</span><br><span class="line">│   └── test</span><br><span class="line">│       └── app_package</span><br><span class="line">│           ├── ApplicationTest.java.ftl</span><br><span class="line">│           └── ExampleUnitTest.java.ftl</span><br><span class="line">├── template.xml</span><br><span class="line">└── template_new_project.png</span><br></pre></td></tr></table></figure>
+<p><code>cat recipe.xml</code></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">recipe</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">#if</span> <span class="attr">backwardsCompatibility</span>!<span class="attr">true</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span> <span class="attr">mavenUrl</span>=<span class="string">"com.android.support:appcompat-v7:$&#123;buildApi&#125;.+"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">#if</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">#if</span> <span class="attr">unitTestsSupported</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span> <span class="attr">mavenUrl</span>=<span class="string">"junit:junit:4.12"</span> <span class="attr">gradleConfiguration</span>=<span class="string">"testCompile"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">#if</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">#if</span> !<span class="attr">createActivity</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">mkdir</span> <span class="attr">at</span>=<span class="string">"$&#123;escapeXmlAttribute(srcOut)&#125;"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">#if</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">mkdir</span> <span class="attr">at</span>=<span class="string">"$&#123;escapeXmlAttribute(projectOut)&#125;/libs"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">merge</span> <span class="attr">from</span>=<span class="string">"root/settings.gradle.ftl"</span></span></span><br><span class="line"><span class="tag">             <span class="attr">to</span>=<span class="string">"$&#123;escapeXmlAttribute(topOut)&#125;/settings.gradle"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">instantiate</span> <span class="attr">from</span>=<span class="string">"root/build.gradle.ftl"</span></span></span><br><span class="line"><span class="tag">                   <span class="attr">to</span>=<span class="string">"$&#123;escapeXmlAttribute(projectOut)&#125;/build.gradle"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">instantiate</span> <span class="attr">from</span>=<span class="string">"root/AndroidManifest.xml.ftl"</span></span></span><br><span class="line"><span class="tag">                   <span class="attr">to</span>=<span class="string">"$&#123;escapeXmlAttribute(manifestOut)&#125;/AndroidManifest.xml"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">mkdir</span> <span class="attr">at</span>=<span class="string">"$&#123;escapeXmlAttribute(resOut)&#125;/drawable"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">#if</span> <span class="attr">copyIcons</span> &amp;&amp; !<span class="attr">isLibraryProject</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">copy</span> <span class="attr">from</span>=<span class="string">"root/res/mipmap-hdpi"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">to</span>=<span class="string">"$&#123;escapeXmlAttribute(resOut)&#125;/mipmap-hdpi"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">copy</span> <span class="attr">from</span>=<span class="string">"root/res/mipmap-mdpi"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">to</span>=<span class="string">"$&#123;escapeXmlAttribute(resOut)&#125;/mipmap-mdpi"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">copy</span> <span class="attr">from</span>=<span class="string">"root/res/mipmap-xhdpi"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">to</span>=<span class="string">"$&#123;escapeXmlAttribute(resOut)&#125;/mipmap-xhdpi"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">copy</span> <span class="attr">from</span>=<span class="string">"root/res/mipmap-xxhdpi"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">to</span>=<span class="string">"$&#123;escapeXmlAttribute(resOut)&#125;/mipmap-xxhdpi"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">copy</span> <span class="attr">from</span>=<span class="string">"root/res/mipmap-xxxhdpi"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">to</span>=<span class="string">"$&#123;escapeXmlAttribute(resOut)&#125;/mipmap-xxxhdpi"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">#if</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">#if</span> <span class="attr">makeIgnore</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">copy</span> <span class="attr">from</span>=<span class="string">"root/module_ignore"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">to</span>=<span class="string">"$&#123;escapeXmlAttribute(projectOut)&#125;/.gitignore"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">#if</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">#if</span> <span class="attr">enableProGuard</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">instantiate</span> <span class="attr">from</span>=<span class="string">"root/proguard-rules.txt.ftl"</span></span></span><br><span class="line"><span class="tag">                   <span class="attr">to</span>=<span class="string">"$&#123;escapeXmlAttribute(projectOut)&#125;/proguard-rules.pro"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">#if</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">#if</span> !(<span class="attr">isLibraryProject</span>??) || !<span class="attr">isLibraryProject</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">instantiate</span> <span class="attr">from</span>=<span class="string">"root/res/values/styles.xml.ftl"</span></span></span><br><span class="line"><span class="tag">                   <span class="attr">to</span>=<span class="string">"$&#123;escapeXmlAttribute(resOut)&#125;/values/styles.xml"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">#if</span> <span class="attr">buildApi</span> <span class="attr">gte</span> <span class="attr">22</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">copy</span> <span class="attr">from</span>=<span class="string">"root/res/values/colors.xml"</span></span></span><br><span class="line"><span class="tag">          <span class="attr">to</span>=<span class="string">"$&#123;escapeXmlAttribute(resOut)&#125;/values/colors.xml"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">#if</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">#if</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">instantiate</span> <span class="attr">from</span>=<span class="string">"root/res/values/strings.xml.ftl"</span></span></span><br><span class="line"><span class="tag">                   <span class="attr">to</span>=<span class="string">"$&#123;escapeXmlAttribute(resOut)&#125;/values/strings.xml"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">instantiate</span> <span class="attr">from</span>=<span class="string">"root/test/app_package/ExampleInstrumentedTest.java.ftl"</span></span></span><br><span class="line"><span class="tag">                   <span class="attr">to</span>=<span class="string">"$&#123;escapeXmlAttribute(testOut)&#125;/ExampleInstrumentedTest.java"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">#if</span> <span class="attr">unitTestsSupported</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">instantiate</span> <span class="attr">from</span>=<span class="string">"root/test/app_package/ExampleUnitTest.java.ftl"</span></span></span><br><span class="line"><span class="tag">                   <span class="attr">to</span>=<span class="string">"$&#123;escapeXmlAttribute(unitTestOut)&#125;/ExampleUnitTest.java"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">#if</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">#if</span> <span class="attr">includeCppSupport</span>!<span class="attr">false</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">instantiate</span> <span class="attr">from</span>=<span class="string">"root/CMakeLists.txt.ftl"</span></span></span><br><span class="line"><span class="tag">                   <span class="attr">to</span>=<span class="string">"$&#123;escapeXmlAttribute(projectOut)&#125;/CMakeLists.txt"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">mkdir</span> <span class="attr">at</span>=<span class="string">"$&#123;nativeSrcOut&#125;"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">instantiate</span> <span class="attr">from</span>=<span class="string">"root/native-lib.cpp.ftl"</span> <span class="attr">to</span>=<span class="string">"$&#123;nativeSrcOut&#125;/native-lib.cpp"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">#if</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">recipe</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="五-build-gradle-合并问题">五、 build.gradle 合并问题</h3>
+<h4 id="apply-合并失败">apply 合并失败</h4>
+<p>期望结果</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">apply plugin: &apos;com.android.application&apos;</span><br><span class="line">apply plugin: &apos;com.neenbedankt.android-apt&apos;</span><br></pre></td></tr></table></figure>
+<p>实际结果</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">apply plugin: &apos;com.neenbedankt.android-apt&apos; plugin: &apos;com.android.application&apos;</span><br></pre></td></tr></table></figure>
+<h4 id="只支持compile命令的build-gradle合并">只支持compile命令的build.gradle合并</h4>
+<ul>
+<li>dependencies 中，apt 引用代码消失</li>
+<li>provide 不支持 merge</li>
+</ul>
+<h4 id="tools-命名空间合并后消失问题">tools 命名空间合并后消失问题</h4>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">manifest</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></span><br><span class="line"><span class="tag">      <span class="attr">xmlns:tools</span>=<span class="string">"http://schemas.android.com/tools"</span></span></span><br><span class="line">      &lt;!--合并时被吞掉--&gt;</span><br><span class="line">      package="com.mogujie.myapplication"&gt;</span><br><span class="line">    ...</span><br><span class="line"><span class="tag">&lt;/<span class="name">manifest</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="六-壳工程template">六、壳工程template</h3>
+<p>to be continue</p>
+<h3 id="七-参考资料">七、参考资料</h3>
+<ul>
+<li>
+<p><a href="http://robusttechhouse.com/tutorial-how-to-create-custom-android-code-templates/" target="_blank" rel="noopener">Tutorial How To Create Custom Android Code Templates</a></p>
+</li>
+<li>
+<p><a href="http://www.i-programmer.info/professional-programmer/resources-and-tools/6845-android-adt-template-format-document.html" target="_blank" rel="noopener">Android ADT Template Format</a></p>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://deskid.github.io">deskid</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://deskid.github.io/2016/09/14/Android_studio_template_开发/">https://deskid.github.io/2016/09/14/Android_studio_template_开发/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/Android/">Android</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2016/10/08/debug_工具改造/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">debug log 工具类增强</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2016/04/21/《必然》读书笔记/">
+        <span class="next-text nav-default">《必然》读书笔记</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:deskidzhou@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/deskid" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2018
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">deskid</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://deskid.github.io/2016/09/14/Android_studio_template_开发/';
+        this.page.identifier = '2016/09/14/Android_studio_template_开发/';
+        this.page.title = 'Android studio 模板开发';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//deskid.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

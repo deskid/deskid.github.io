@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="iOS 和 Android 真机调试">
+
+
+
+
+  <meta name="keywords" content="javascript, Deskid's Blog">
+
+
+
+
+
+  <meta name="google-site-verification" content="UA-110544275-1">
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Deskid's Blog">
+
+
+
+
+
+
+<link rel="canonical" href="https://deskid.github.io/2018/04/02/h5-debug/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> iOS 和 Android 真机调试 - Deskid's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Deskid's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            Categories
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Deskid's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              Categories
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          iOS 和 Android 真机调试
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-04-02
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/Web前端/">Web前端</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#ios-模拟器调试"><span class="toc-text">iOS 模拟器调试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#android-真机调试"><span class="toc-text">Android 真机调试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#利用-alfred-快捷打开-simulator"><span class="toc-text">利用 Alfred 快捷打开 Simulator</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>本文记录了如何在 iOS Simulator 和 Android 设备上调试 h5 页面，并在提供了 Alfred 脚本来便捷地管理 Simulator。</p>
+<a id="more"></a>
+<h2 id="ios-模拟器调试">iOS 模拟器调试</h2>
+<p>1.启动<code>Simulator.app</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">open -a /Applications/Xcode.app/Contents/Developer/Applications/Simulator.app</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>tips：<code>xcode-select -p</code> 会打印当前 xcode developer 目录：</p>
+</blockquote>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">/Applications/Xcode.app/Contents/Developer</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p>上述命令可以写为</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">open -a `xcode-select -p`/Applications/Simulator.app</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>2.模拟器上打开要调试的页面</p>
+<p>2.1 在 Safari 中打开</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">xcrun simctl openurl booted https://www.baidu.com</span><br></pre></td></tr></table></figure>
+<p><code>xcrun</code> 会自动在 xcode developer 目录下查找<code>simctl</code>命令，而<code>simctl</code> 是操作<code>Simulator.app</code>的命令。</p>
+<p>参数 <code>booted</code> 将操作目标指向当前启动的模拟器。</p>
+<p>2.2 在 app 中打开</p>
+<p>模拟器安装 app</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">xcrun simctl install booted youriPhone.app</span><br></pre></td></tr></table></figure>
+<p>在 app 上打开网页</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">xcrun simctl openurl booted APP_SCHEME:URL</span><br></pre></td></tr></table></figure>
+<p><code>APP_SCHEME</code> 及后面的路径根据自己 app 注册的去更改。</p>
+<p>3.打开 mac 上的Safari</p>
+<p><code>Menu -&gt; Develop -&gt; Simulator</code>，选择打开的网址即可调试了。</p>
+<h2 id="android-真机调试">Android 真机调试</h2>
+<ol>
+<li>usb 链接 Android 设备到 mac</li>
+<li>打开开发者选项模式，开启 usb debug</li>
+<li>Chrome 浏览器打开 <code>chrome://inspect/#devices</code></li>
+<li>如果该页面没有显示设备，全局翻墙或者重新拔插 usb 后刷新页面重试。</li>
+</ol>
+<p>有的 app 使用的是手Q X5 内核，在 app 中打开<code>http://debugx5.qq.com</code></p>
+<ol>
+<li>
+<p>在 “X5调试页面” 上，点击进入 “信息” Tab。</p>
+</li>
+<li>
+<p>找到TBS settings栏目，勾选&quot;是否打开TBS内核Inspector调试功能&quot;，然后点击确认，进程自动退出。</p>
+</li>
+<li>
+<p>重新打开Web页面，使用Inspector页面调试功能。</p>
+</li>
+</ol>
+<p>（有时候，为了确认是 X5内核引起的兼容性问题，还可以打开<code>http://debugtbs.qq.com</code>，选择使用系统自带内核。）</p>
+<!-- more -->
+<h2 id="利用-alfred-快捷打开-simulator">利用 Alfred 快捷打开 Simulator</h2>
+<p>利用 xcode command 提供的命令，可以在 Alfred 中快速打开 Simulator 并导航到待调试页面。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># coding=utf-8</span></span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> workflow <span class="keyword">import</span> Workflow3</span><br><span class="line"></span><br><span class="line">APP_NAME = <span class="string">'Mogujie4iPhone.10.4.0.app'</span></span><br><span class="line">APP_SCHEME = <span class="string">'mogujie://open?url='</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">luanch</span><span class="params">()</span>:</span></span><br><span class="line">    cmd = <span class="string">'open -a `xcode-select -p`/Applications/Simulator.app'</span></span><br><span class="line">    <span class="keyword">return</span> subprocess.check_call(cmd, shell=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">install</span><span class="params">(json_str=<span class="string">''</span>)</span>:</span></span><br><span class="line">    option = json.loads(json_str)</span><br><span class="line">    <span class="comment"># no booted devices found</span></span><br><span class="line">    <span class="keyword">if</span> option[<span class="string">'identifier'</span>] == <span class="string">''</span>:</span><br><span class="line">        luanch()</span><br><span class="line">        cmd = <span class="string">'xcrun simctl install booted ~/.ios-simulator/'</span> + APP_NAME</span><br><span class="line">        <span class="keyword">return</span> subprocess.check_call(cmd, shell=<span class="keyword">True</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        cmd = <span class="string">'xcrun simctl install &#123;identifier&#125; ~/.ios-simulator/'</span> + APP_NAME</span><br><span class="line">        cmd = cmd.format(identifier=option[<span class="string">'identifier'</span>])</span><br><span class="line">        <span class="keyword">return</span> subprocess.check_call(cmd, shell=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">open</span><span class="params">(json_str=<span class="string">''</span>)</span>:</span></span><br><span class="line">    option = json.loads(json_str)</span><br><span class="line"></span><br><span class="line">    url = APP_SCHEME + urllib.pathname2url(option[<span class="string">'url'</span>])</span><br><span class="line">    cmd = <span class="string">'xcrun simctl openurl &#123;identifier&#125; &#123;url&#125;'</span></span><br><span class="line">    cmd = cmd.format(identifier=option[<span class="string">'identifier'</span>], url=url)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> subprocess.check_call(cmd, shell=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_booted</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># get booted list</span></span><br><span class="line">    cmd = <span class="string">'xcrun simctl list | grep Booted'</span></span><br><span class="line">    <span class="comment"># iPhone X (3D62292C-C2C4-4DE5-B2E0-EDA1AC846115) (Booted)</span></span><br><span class="line">    <span class="keyword">return</span> subprocess.check_output(cmd, shell=<span class="keyword">True</span>).splitlines()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">(wf)</span>:</span></span><br><span class="line">    args = wf.args</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        booted_list = get_booted()</span><br><span class="line">        items = []</span><br><span class="line">        <span class="keyword">for</span> booted <span class="keyword">in</span> booted_list:</span><br><span class="line">            match = re.search(<span class="string">r'\((.*?)\)'</span>, booted)</span><br><span class="line">            <span class="keyword">if</span> match:</span><br><span class="line">                identifier = match.group(<span class="number">1</span>)</span><br><span class="line">                items.append(&#123;</span><br><span class="line">                    <span class="string">'title'</span>: booted.strip(),</span><br><span class="line">                    <span class="string">'subtitle'</span>: identifier,</span><br><span class="line">                    <span class="string">'identifier'</span>: identifier,</span><br><span class="line">                &#125;)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> item <span class="keyword">in</span> items:</span><br><span class="line">            <span class="keyword">if</span> len(args) &gt; <span class="number">0</span>:</span><br><span class="line">                url = args[<span class="number">0</span>]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                url = <span class="string">''</span></span><br><span class="line">            <span class="comment"># pass the url args down use json str</span></span><br><span class="line">            arg = json.dumps(&#123;<span class="string">'url'</span>: url, <span class="string">'identifier'</span>: item[<span class="string">'identifier'</span>]&#125;)</span><br><span class="line">            wf.add_item(title=item[<span class="string">'title'</span>],</span><br><span class="line">                        subtitle=item[<span class="string">'subtitle'</span>],</span><br><span class="line">                        arg=arg,</span><br><span class="line">                        valid=<span class="keyword">True</span>)</span><br><span class="line">    <span class="keyword">except</span> subprocess.CalledProcessError:</span><br><span class="line">        luanch()</span><br><span class="line"></span><br><span class="line">    wf.send_feedback()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    wf = Workflow3()</span><br><span class="line">    sys.exit(wf.run(main))</span><br></pre></td></tr></table></figure>
+<p>注意更改代码中的 <code>APP_NAME</code> 和 <code>APP_SCHEME</code></p>
+<p>可以使用下面快捷命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 启动模拟器</span></span><br><span class="line">is luanch </span><br><span class="line"><span class="comment"># 在模拟器中安装 ~/.iso-simulator 目录下的 app</span></span><br><span class="line">is install </span><br><span class="line"><span class="comment"># 在模拟器中打开h5地址</span></span><br><span class="line">is open http://xxxx.com</span><br></pre></td></tr></table></figure>
+<p>最终效果如图</p>
+<p><img src="/media/15226270595220.jpg" alt=""></p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://deskid.github.io">deskid</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://deskid.github.io/2018/04/02/h5-debug/">https://deskid.github.io/2018/04/02/h5-debug/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/javascript/">javascript</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018/04/12/vue-router/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">vue router 源码通读</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2018/02/02/2018-02-02-1/">
+        <span class="next-text nav-default">vue router 与微信分享失败</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:deskidzhou@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/deskid" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2018
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">deskid</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://deskid.github.io/2018/04/02/h5-debug/';
+        this.page.identifier = '2018/04/02/h5-debug/';
+        this.page.title = 'iOS 和 Android 真机调试';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//deskid.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

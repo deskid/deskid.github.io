@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="[简译]Google 官方 App 架构 Guide(6)">
+
+
+
+
+  <meta name="keywords" content="Android, Deskid's Blog">
+
+
+
+
+
+  <meta name="google-site-verification" content="UA-110544275-1">
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Deskid's Blog">
+
+
+
+
+
+
+<link rel="canonical" href="https://deskid.github.io/2017/06/20/Guide-to-App-Architecture-6/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> [简译]Google 官方 App 架构 Guide(6) - Deskid's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Deskid's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            Categories
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Deskid's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              Categories
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          [简译]Google 官方 App 架构 Guide(6)
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-06-20
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/Android/">Android</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#room-persistence-library"><span class="toc-text">Room Persistence Library</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#entities"><span class="toc-text">Entities</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#primarykey"><span class="toc-text">@PrimaryKey</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#索引-和-唯一性约束"><span class="toc-text">索引 和 唯一性约束</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#关系"><span class="toc-text">关系</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#嵌套的objects"><span class="toc-text">嵌套的objects</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#data-access-objects-daos"><span class="toc-text">Data Access Objects (DAOs)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#一些基于约定的查询"><span class="toc-text">一些基于约定的查询</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#insert"><span class="toc-text">Insert</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#update"><span class="toc-text">Update</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#delete"><span class="toc-text">Delete</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#methods-using-query"><span class="toc-text">Methods using @Query</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#简单的-queries"><span class="toc-text">简单的 queries</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#带参数的-query"><span class="toc-text">带参数的 query</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#返回结构集映射"><span class="toc-text">返回结构集映射</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#passing-a-collection-of-arguments"><span class="toc-text">Passing a collection of arguments</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#observable-queries"><span class="toc-text">Observable queries</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#rxjava"><span class="toc-text">RxJava</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#直接返回-cursor"><span class="toc-text">直接返回 cursor</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#跨表查询"><span class="toc-text">跨表查询</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#关于类型转换"><span class="toc-text">关于类型转换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#database-migration"><span class="toc-text">Database migration</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#测试-migrations"><span class="toc-text">测试 migrations</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#exporting-schemas"><span class="toc-text">Exporting schemas</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试你的-database"><span class="toc-text">测试你的 database</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#开发机上测试"><span class="toc-text">开发机上测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#android-真机测试"><span class="toc-text">Android 真机测试</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#附录-为什么不支持-entities-之间引用"><span class="toc-text">附录: 为什么不支持 entities 之间引用</span></a></li></ol></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>本文将介绍Architecture Components中的Room组件</p>
+<a id="more"></a>
+<h2 id="room-persistence-library">Room Persistence Library</h2>
+<p>Room 在 SQLite 的基础上提供了一个抽象层（可以理解为官方的ORM）。</p>
+<p>尽管Android系统内建支持了功能强大的裸SQL查询语句，但是这些API太底层了，使用起来总是需要各种封装。</p>
+<ul>
+<li>裸SQL语句没有编译期检查，重构数据库底层后，更新数据查询语句既耗时又很容易出错。</li>
+<li>在SQL查询结果和Java Object之间转化需要写一堆胶水代码。</li>
+</ul>
+<p>Room 分为三大部分：</p>
+<ul>
+<li><strong>@Database:</strong> database holder，定义了数据库的DAO，同时也是数据库连接的主入口。被<code>Database</code>标注的类需要为继承<code>RoomDatabase</code>的抽象类。运行时通过<code>Room.databaseBuilder()</code> or <code>Room.inMemoryDatabaseBuilder()</code>获取实例</li>
+<li><strong>Entity:</strong> 数据库表行数据结构。每个entity对应一个表。通过<code>Database</code>的<code>entities()</code>来获取entity引用。</li>
+<li><strong>DAO:</strong> Data Access Object (DAO). DAO定义了获取数据的方法。<code>Database</code>中必须包含返回<code>@Dao</code>类的无参抽象方法。在编译期间Room会自动生成相应实现代码。</li>
+</ul>
+<!-- more -->
+<p><img src="/media/room_architecture.png" alt=""></p>
+<p><strong>Figure 1.</strong> Room architecture diagram</p>
+<p>App通过Room database来获取DAO，然后通过DAO获取数据库中的entities，对entities的修改会同步到数据库。</p>
+<p>show me the code</p>
+<p>User.java</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="meta">@PrimaryKey</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> uid;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@ColumnInfo</span>(name = <span class="string">"first_name"</span>)</span><br><span class="line">    <span class="keyword">private</span> String firstName;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@ColumnInfo</span>(name = <span class="string">"last_name"</span>)</span><br><span class="line">    <span class="keyword">private</span> String lastName;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Getters and setters are ignored for brevity,</span></span><br><span class="line">    <span class="comment">// but they're required for Room to work.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>UserDao.java</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Dao</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserDao</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Query</span>(<span class="string">"SELECT * FROM user"</span>)</span><br><span class="line">    <span class="function">List&lt;User&gt; <span class="title">getAll</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Query</span>(<span class="string">"SELECT * FROM user WHERE uid IN (:userIds)"</span>)</span><br><span class="line">    <span class="function">List&lt;User&gt; <span class="title">loadAllByIds</span><span class="params">(<span class="keyword">int</span>[] userIds)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Query</span>(<span class="string">"SELECT * FROM user WHERE first_name LIKE :first AND "</span></span><br><span class="line">           + <span class="string">"last_name LIKE :last LIMIT 1"</span>)</span><br><span class="line">    <span class="function">User <span class="title">findByName</span><span class="params">(String first, String last)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Insert</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">insertAll</span><span class="params">(User... users)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Delete</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">delete</span><span class="params">(User user)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>AppDatabase.java</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Database</span>(entities = &#123;User.class&#125;, version = <span class="number">1</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AppDatabase</span> <span class="keyword">extends</span> <span class="title">RoomDatabase</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> UserDao <span class="title">userDao</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在APP中获取database引用:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">AppDatabase db = Room.databaseBuilder(getApplicationContext(),</span><br><span class="line">        AppDatabase.class, <span class="string">"database-name"</span>).build();</span><br></pre></td></tr></table></figure>
+<p><strong>注意:</strong> 这里尽可能使用单例设计模式，<code>RoomDatabase</code>实例开销很大.</p>
+<h3 id="entities">Entities</h3>
+<p>所有在注解<code>@Database</code>的<code>entities</code>属性中引用到的<code>@Entity</code>类，Room都会创建一个对应的数据库表。<br>
+默认，<code>@Entity</code>类的所有<code>field</code>对应一个数据库的column，除非被用<code>@Ignore</code>修饰。</p>
+<figure class="highlight diff"><table><tr><td class="code"><pre><span class="line">@Entity</span><br><span class="line">class User &#123;</span><br><span class="line">    @PrimaryKey</span><br><span class="line">    public int id;</span><br><span class="line"></span><br><span class="line">    public String firstName;</span><br><span class="line">    public String lastName;</span><br><span class="line"></span><br><span class="line"><span class="addition">+    @Ignore</span></span><br><span class="line"><span class="addition">+    Bitmap picture;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>无论是public可见，还是提供setter、getter，被持久化的field必须是可以被accessed的。</p>
+<h4 id="primarykey">@PrimaryKey</h4>
+<ul>
+<li>
+<p>每个Entity必须至少有一个primary key（即使Entity只有一个field）。</p>
+</li>
+<li>
+<p>自增ID：使用<code>@PrimaryKey</code>的<code>autoGenerate</code> 属性</p>
+</li>
+<li>
+<p>组合主键：使用<code>@Entity</code>的<code>primaryKeys</code> 属性</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Entity</span>(primaryKeys = &#123;<span class="string">"firstName"</span>, <span class="string">"lastName"</span>&#125;)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> String firstName;</span><br><span class="line">    <span class="keyword">public</span> String lastName;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Ignore</span></span><br><span class="line">    Bitmap picture;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>数据库表名：<br>
+Room默认使用类名作为数据库表名，自定义表名可以使用<code>@Entity</code>的<code>tableName</code>属性</li>
+</ul>
+<figure class="highlight diff"><table><tr><td class="code"><pre><span class="line"><span class="addition">+ @Entity(tableName = "users")</span></span><br><span class="line">class User &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>注意:</strong> SQLite表名是大小写敏感的</p>
+<ul>
+<li>数据库字段名：<br>
+Room 默认使用 field 名作为字段名，自定义字段名可以使用<code>@ColumnInfo</code> 注解</li>
+</ul>
+<figure class="highlight diff"><table><tr><td class="code"><pre><span class="line">@Entity(tableName = "users")</span><br><span class="line">class User &#123;</span><br><span class="line">    @PrimaryKey</span><br><span class="line">    public int id;</span><br><span class="line"></span><br><span class="line"><span class="addition">+   @ColumnInfo(name = "first_name")</span></span><br><span class="line">    public String firstName;</span><br><span class="line"></span><br><span class="line">    @ColumnInfo(name = "last_name")</span><br><span class="line">    public String lastName;</span><br><span class="line"></span><br><span class="line">    @Ignore</span><br><span class="line">    Bitmap picture;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="索引-和-唯一性约束">索引 和 唯一性约束</h4>
+<ul>
+<li>索引： <code>@Entity</code>标注的<code>indices</code>属性。</li>
+</ul>
+<figure class="highlight diff"><table><tr><td class="code"><pre><span class="line"><span class="addition">+ @Entity(indices = &#123;@Index("name"), @Index("last_name", "address")&#125;)</span></span><br><span class="line">class User &#123;</span><br><span class="line">    @PrimaryKey</span><br><span class="line">    public int id;</span><br><span class="line"></span><br><span class="line">    public String firstName;</span><br><span class="line">    public String address;</span><br><span class="line"></span><br><span class="line">    @ColumnInfo(name = "last_name")</span><br><span class="line">    public String lastName;</span><br><span class="line"></span><br><span class="line">    @Ignore</span><br><span class="line">    Bitmap picture;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>唯一性约束：设置<code>@Index</code>注解的<code>unique</code>属性为<code>true</code>。</li>
+</ul>
+<figure class="highlight diff"><table><tr><td class="code"><pre><span class="line">@Entity(indices = &#123;@Index(value = &#123;"first_name", "last_name"&#125;,</span><br><span class="line"><span class="addition">+        unique = true)&#125;)</span></span><br><span class="line">class User &#123;</span><br><span class="line">    @PrimaryKey</span><br><span class="line">    public int id;</span><br><span class="line"></span><br><span class="line">    @ColumnInfo(name = "first_name")</span><br><span class="line">    public String firstName;</span><br><span class="line"></span><br><span class="line">    @ColumnInfo(name = "last_name")</span><br><span class="line">    public String lastName;</span><br><span class="line"></span><br><span class="line">    @Ignore</span><br><span class="line">    Bitmap picture;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="关系">关系</h4>
+<p>大多数ORM允许Entity之间互相引用，Room却明确的禁止。</p>
+<p>Room使用外链约束<code>@ForeignKey</code>来定义Entity之间的关系。</p>
+<p>举个例子，<code>Book</code> 和 <code>User</code> 之间的关系。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Entity</span>(foreignKeys = <span class="meta">@ForeignKey</span>(entity = User.class,</span><br><span class="line">                                  parentColumns = <span class="string">"id"</span>,</span><br><span class="line">                                  childColumns = <span class="string">"user_id"</span>))</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Book</span> </span>&#123;</span><br><span class="line">    <span class="meta">@PrimaryKey</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> bookId;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String title;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@ColumnInfo</span>(name = <span class="string">"user_id"</span>)</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> userId;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>外链虽然提供了强大的关系约束，但是使用不当也容易造成冲突。为了避免冲突，往往需要添加额外的信息，比如<code>@ForeignKey</code>的<code>onDelete=CASCADE</code>可以级联删除。要注意的是<code>@Insert(OnConflict=REPLACE)</code>做了remove、update一系列操作，而不是简单的update，可能会破坏外链约束。</p>
+<h4 id="嵌套的objects">嵌套的objects</h4>
+<p>有时，我们会想用一个 entity 或者来 pojo object来表示数据库的逻辑结构，即使这个object中往往有多个field。</p>
+<p>举例 ：<code>User</code> 包含了<code>Address</code> field，而<code>Address</code>是一个复合类，又包含了<code>street</code>，<code>city</code>， <code>state</code>， 和 <code>postCode</code><br>
+。</p>
+<p>这时，可以用<br>
+<code>@Embedded</code>修饰一个subfields，来表明在数据库的同一行中分解这个subfields。</p>
+<p>这里要想把<code>Address</code>字段在数据库表中分开, 只需要在<code>User</code>类中包含<code>@Embedded</code>修饰的 <code>Address</code> field 。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Address</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> String street;</span><br><span class="line">    <span class="keyword">public</span> String state;</span><br><span class="line">    <span class="keyword">public</span> String city;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@ColumnInfo</span>(name = <span class="string">"post_code"</span>)</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> postCode;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="meta">@PrimaryKey</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> id;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String firstName;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Embedded</span></span><br><span class="line">    <span class="keyword">public</span> Address address;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>生成的table长这个样</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>firstName</th>
+<th>street</th>
+<th>state</th>
+<th>city</th>
+<th>post_code</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>**</td>
+<td>**</td>
+<td>**</td>
+<td>**</td>
+<td>**</td>
+<td>**</td>
+</tr>
+</tbody>
+</table>
+<p><strong>注意:</strong> 嵌套可以包含其他嵌套类，为了避免嵌套类的命名冲突，可以设置<code>@Embedded</code>的 <code>prefix</code>属性。</p>
+<h3 id="data-access-objects-daos">Data Access Objects (DAOs)</h3>
+<p>Room 的主要组件是<code>Dao</code>，DAOs抽象了一系列访问数据库的方法。</p>
+<p><strong>注意:</strong> Room 默认不允许在main thread访问数据库，除非调用了<code>builder.allowMainThreadQueries()</code> 。但是异步查询(返回<code>LiveData</code>或者 RxJava <code>Flowable</code>的查询)例外。</p>
+<h4 id="一些基于约定的查询">一些基于约定的查询</h4>
+<p>有些查询仅仅用DAO类注解就能实现。</p>
+<h5 id="insert">Insert</h5>
+<ul>
+<li><code>@Insert</code><br>
+Room 自动生成实现，所有的参数在一个transition内被提交并插入到数据库.</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Dao</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MyDao</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Insert</span>(onConflict = OnConflictStrategy.REPLACE)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insertUsers</span><span class="params">(User... users)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Insert</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insertBothUsers</span><span class="params">(User user1, User user2)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Insert</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insertUsersAndFriends</span><span class="params">(User user, List&lt;User&gt; friends)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>@Insert</code>方法根据参数个数返回对应的<code>long、long[]、List&lt;Long&gt;</code>类型的<code>rowId</code></p>
+<h5 id="update">Update</h5>
+<ul>
+<li><code>Update</code> 使用参数中的 primary key 更新数据</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Dao</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MyDao</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Update</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">updateUsers</span><span class="params">(User... users)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可选让方法返回<code>int</code>表示 rows updated。</p>
+<h5 id="delete">Delete</h5>
+<ul>
+<li><code>Delete</code> 使用参数中的 primary key删除数据</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Dao</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MyDao</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Delete</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deleteUsers</span><span class="params">(User... users)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可选让方法返回<code>int</code>表示 rows removed。</p>
+<h5 id="methods-using-query">Methods using @Query</h5>
+<p><code>@Query</code> 可以读写数据库， <code>@Query</code>方法会在编译期验证查询语法，同时，Room也会验证返回值的字段名是否和查询字段名一致。</p>
+<ul>
+<li>只有部分字段名匹配，验证抛出warning.</li>
+<li>没有任何字段名匹配，验证抛出error</li>
+</ul>
+<h6 id="简单的-queries">简单的 queries</h6>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Dao</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MyDao</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Query</span>(<span class="string">"SELECT * FROM user"</span>)</span><br><span class="line">    <span class="keyword">public</span> User[] loadAllUsers();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译期，Room 就已经知道查询user 数据表的所有字段了。如果查询语句有语法错误、或者user表不存在，Room 都会在编译期显示错误信息。</p>
+<h6 id="带参数的-query">带参数的 query</h6>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Dao</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MyDao</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Query</span>(<span class="string">"SELECT * FROM user WHERE age &gt; :minAge"</span>)</span><br><span class="line">    <span class="keyword">public</span> User[] loadAllUsersOlderThan(<span class="keyword">int</span> minAge);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译期, Room会依据参数名字进行绑定，比如 <code>:minAge</code> 会和 <code>minAge</code>参数绑定。绑定失败，编译期就会报错。</p>
+<p>多个参数</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Dao</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MyDao</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Query</span>(<span class="string">"SELECT * FROM user WHERE age BETWEEN :minAge AND :maxAge"</span>)</span><br><span class="line">    <span class="keyword">public</span> User[] loadAllUsersBetweenAges(<span class="keyword">int</span> minAge, <span class="keyword">int</span> maxAge);</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Query</span>(<span class="string">"SELECT * FROM user WHERE first_name LIKE :search "</span></span><br><span class="line">           + <span class="string">"OR last_name LIKE :search"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;User&gt; <span class="title">findUserWithName</span><span class="params">(String search)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h6 id="返回结构集映射">返回结构集映射</h6>
+<p>Room 通过定义所需的pojo来支持select<br>
+映射。</p>
+<p>比如</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NameTuple</span> </span>&#123;</span><br><span class="line">    <span class="meta">@ColumnInfo</span>(name=<span class="string">"first_name"</span>)</span><br><span class="line">    <span class="keyword">public</span> String firstName;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@ColumnInfo</span>(name=<span class="string">"last_name"</span>)</span><br><span class="line">    <span class="keyword">public</span> String lastName;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Now, you can use this POJO in your query method:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Dao</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MyDao</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Query</span>(<span class="string">"SELECT first_name, last_name FROM user"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;NameTuple&gt; <span class="title">loadFullName</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>**注意:**这些 POJOs 同样可以使用<code>@Embedded</code> annotation。</p>
+<h6 id="passing-a-collection-of-arguments">Passing a collection of arguments</h6>
+<p>某些查询需要传入个数可变的参数，比如具体数量直到运行期才确定的。 当参数为一个集合时，Room会在运行期自动将其展开为个数确定的参数集。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Dao</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MyDao</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Query</span>(<span class="string">"SELECT first_name, last_name FROM user WHERE region IN (:regions)"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;NameTuple&gt; <span class="title">loadUsersFromRegions</span><span class="params">(List&lt;String&gt; regions)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h6 id="observable-queries">Observable queries</h6>
+<p>使用LiveData作为查询函数的返回值可以在查询数据更新时，自动通知UI。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Dao</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MyDao</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Query</span>(<span class="string">"SELECT first_name, last_name FROM user WHERE region IN (:regions)"</span>)</span><br><span class="line">    <span class="keyword">public</span> LiveData&lt;List&lt;User&gt;&gt; loadUsersFromRegionsSync(List&lt;String&gt; regions);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h6 id="rxjava">RxJava</h6>
+<p>Room也可以和RxJava2配合使用，使用<code>Publisher</code>或者 <code>Flowable</code>作为查询函数的返回值即可。</p>
+<p><code>build.gradle</code></p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">compile <span class="string">'android.arch.persistence.room:rxjava2:1.0.0-alpha1'</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Dao</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MyDao</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Query</span>(<span class="string">"SELECT * from user where id = :id LIMIT 1"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Flowable&lt;User&gt; <span class="title">loadUserById</span><span class="params">(<span class="keyword">int</span> id)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h6 id="直接返回-cursor">直接返回 cursor</h6>
+<p>Room也可以直接返回 <code>Cursor</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Dao</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MyDao</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Query</span>(<span class="string">"SELECT * FROM user WHERE age &gt; :minAge LIMIT 5"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Cursor <span class="title">loadRawUsersOlderThan</span><span class="params">(<span class="keyword">int</span> minAge)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>注意:</strong> 原则上不鼓励使用Cursor API，因为它既不保证row查询结果存在，也不保证row保存的数据是否和查询数据一致。</p>
+<h6 id="跨表查询">跨表查询</h6>
+<p>可以直接在Query中使用join，如果查询方法的返回数据类型是<code>Flowable</code> 或者<code>LiveData</code>，Room 会检查所有的涉及到的表。</p>
+<p>下面的代码表示查询某个用户借的书籍，<code>user</code> 表 join <code>loan</code>表 join <code>book</code>表</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Dao</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MyDao</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Query</span>(<span class="string">"SELECT * FROM book "</span></span><br><span class="line">           + <span class="string">"INNER JOIN loan ON loan.book_id = book.id "</span></span><br><span class="line">           + <span class="string">"INNER JOIN user ON user.id = loan.user_id "</span></span><br><span class="line">           + <span class="string">"WHERE user.name LIKE :userName"</span>)</span><br><span class="line">   <span class="function"><span class="keyword">public</span> List&lt;Book&gt; <span class="title">findBooksBorrowedByNameSync</span><span class="params">(String userName)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>也可以直接返回POJOs，比如下面返回user的宠物的名字。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Dao</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MyDao</span> </span>&#123;</span><br><span class="line">   <span class="meta">@Query</span>(<span class="string">"SELECT user.name AS userName, pet.name AS petName "</span></span><br><span class="line">          + <span class="string">"FROM user, pet "</span></span><br><span class="line">          + <span class="string">"WHERE user.id = pet.user_id"</span>)</span><br><span class="line">   <span class="keyword">public</span> LiveData&lt;List&lt;UserPet&gt;&gt; loadUserAndPetNames();</span><br><span class="line"></span><br><span class="line">   <span class="comment">// You can also define this class in a separate file, as long as you add the</span></span><br><span class="line">   <span class="comment">// "public" access modifier.</span></span><br><span class="line">   <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">UserPet</span> </span>&#123;</span><br><span class="line">       <span class="keyword">public</span> String userName;</span><br><span class="line">       <span class="keyword">public</span> String petName;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="关于类型转换">关于类型转换</h3>
+<p>Room 提供了内建的基础数据类型和封装类型的自动转换。有时，为了在数据库的某个字段中存储自定义的数据类型，你需要提供一个从自定义类到已知类型的<code>TypeConverter</code>转化器。</p>
+<p>比如，将<code>Date</code>数据类型转化为<code>Unix timestamp</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Converters</span> </span>&#123;</span><br><span class="line">    <span class="meta">@TypeConverter</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Date <span class="title">fromTimestamp</span><span class="params">(Long value)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> value == <span class="keyword">null</span> ? <span class="keyword">null</span> : <span class="keyword">new</span> Date(value);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@TypeConverter</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Long <span class="title">dateToTimestamp</span><span class="params">(Date date)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> date == <span class="keyword">null</span> ? <span class="keyword">null</span> : date.getTime();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接下来将<code>@TypeConverters</code>添加到<code>AppDatabase</code>类，让entity和DAO都可以使用这个converter</p>
+<p>AppDatabase.java</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Database</span>(entities = &#123;User.java&#125;, version = <span class="number">1</span>)</span><br><span class="line"><span class="meta">@TypeConverters</span>(&#123;Converter.class&#125;)</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AppDatabase</span> <span class="keyword">extends</span> <span class="title">RoomDatabase</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> UserDao <span class="title">userDao</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用converters后，在查询时也可以直接使用自定义类型。</p>
+<p>User.java</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">private</span> Date birthday;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>UserDao.java</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Dao</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserDao</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="meta">@Query</span>(<span class="string">"SELECT * FROM user WHERE birthday BETWEEN :from AND :to"</span>)</span><br><span class="line">    <span class="function">List&lt;User&gt; <span class="title">findUsersBornBetweenDates</span><span class="params">(Date from, Date to)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>除了在<code>AppDatabase</code>上应用 <code>@TypeConverters</code> ，还可以在entities、 DAOs、以及 DAO 方法上面应用。</p>
+<h3 id="database-migration">Database migration</h3>
+<p>数据库结构升级时，需要提供一个从低版本到高版本的迁移方法。在Room中，通过实现<code>Migration</code> 类来完成这个过程。每个<code>Migration</code>类都定义了 <code>startVersion</code> 和 <code>endVersion</code>。在运行期, Room 会调用每个<code>Migration</code> 的 <code>migrate()</code>方法 ，并用正确的顺序迁移数据库到最新的版本。</p>
+<p><strong>注意:</strong> 如果没有提供必须的migration, Room 会重建每个数据, 低版本的数据会丢失。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Room.databaseBuilder(getApplicationContext(), MyDb.class, <span class="string">"database-name"</span>)</span><br><span class="line">        .addMigrations(MIGRATION_1_2, MIGRATION_2_3).build();</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> Migration MIGRATION_1_2 = <span class="keyword">new</span> Migration(<span class="number">1</span>, <span class="number">2</span>) &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">migrate</span><span class="params">(SupportSQLiteDatabase database)</span> </span>&#123;</span><br><span class="line">        database.execSQL(<span class="string">"CREATE TABLE `Fruit` (`id` INTEGER, "</span></span><br><span class="line">                + <span class="string">"`name` TEXT, PRIMARY KEY(`id`))"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> Migration MIGRATION_2_3 = <span class="keyword">new</span> Migration(<span class="number">2</span>, <span class="number">3</span>) &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">migrate</span><span class="params">(SupportSQLiteDatabase database)</span> </span>&#123;</span><br><span class="line">        database.execSQL(<span class="string">"ALTER TABLE Book "</span></span><br><span class="line">                + <span class="string">" ADD COLUMN pub_year INTEGER"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><strong>注意:</strong> 为了维持migration的正常运作, 总是使用 full queries 而不是引用常量的queries.</p>
+<p>迁移结束后，Room 会验证表的元数据正确。如果验证失败就会抛出异常。</p>
+<h4 id="测试-migrations">测试 migrations</h4>
+<p>Room 提供了一个测试 migration 是否正常工作的库</p>
+<p>首先，需要导出数据库元数据</p>
+<h4 id="exporting-schemas">Exporting schemas</h4>
+<p>在<code>build.gradle</code>设置<code>room.schemaLocation</code>annotation processor 属性即可导出数据库元信息，导出的数据库信息存储在一个json文件中。</p>
+<p>build.gradle</p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">android &#123;</span><br><span class="line">    ...</span><br><span class="line">    defaultConfig &#123;</span><br><span class="line">        ...</span><br><span class="line">        javaCompileOptions &#123;</span><br><span class="line">            annotationProcessorOptions &#123;</span><br><span class="line">                arguments = [<span class="string">"room.schemaLocation"</span>:</span><br><span class="line">                             <span class="string">"$projectDir/schemas"</span>.toString()]</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>你应该把这个json文件添加到vcs中，Room会根据这个文件创建低版本的数据库方便测试。</p>
+<p>接下来继续修改<code>build.gradle</code></p>
+<p>添加测试依赖</p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">testCompile <span class="string">'android.arch.persistence.room:testing:***'</span></span><br></pre></td></tr></table></figure>
+<p>添加 schema 的 asset 文件位置</p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">android &#123;</span><br><span class="line">    ...</span><br><span class="line">    sourceSets &#123;</span><br><span class="line">        androidTest.assets.srcDirs += files(<span class="string">"$projectDir/schemas"</span>.toString())</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试库提供了一个<code>MigrationTestHelper</code> 类, 它可以读取 schema 文件. 同时这个Helper还是一个Junit4 <code>TestRule</code> 类, 它会自动管理创建的数据库。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RunWith</span>(AndroidJUnit4.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MigrationTest</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TEST_DB = <span class="string">"migration-test"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Rule</span></span><br><span class="line">    <span class="keyword">public</span> MigrationTestHelper helper;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MigrationTest</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        helper = <span class="keyword">new</span> MigrationTestHelper(InstrumentationRegistry.getInstrumentation(),</span><br><span class="line">                MigrationDb.class.getCanonicalName(),</span><br><span class="line">                <span class="keyword">new</span> FrameworkSQLiteOpenHelperFactory());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">migrate1To2</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        SupportSQLiteDatabase db = helper.createDatabase(TEST_DB, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// db has schema version 1. insert some data using SQL queries.</span></span><br><span class="line">        <span class="comment">// You cannot use DAO classes because they expect the latest schema.</span></span><br><span class="line">        db.execSQL(...);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Prepare for the next version.</span></span><br><span class="line">        db.close();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Re-open the database with version 2 and provide</span></span><br><span class="line">        <span class="comment">// MIGRATION_1_2 as the migration process.</span></span><br><span class="line">        db = helper.runMigrationsAndValidate(TEST_DB, <span class="number">2</span>, <span class="keyword">true</span>, MIGRATION_1_2);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// MigrationTestHelper automatically verifies the schema changes,</span></span><br><span class="line">        <span class="comment">// but you need to validate that the data was migrated properly.</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="测试你的-database">测试你的 database</h3>
+<p>测试应用时，我们没必要创建整个数据库，因为我们并不是要测试数据库底层。 Room 允许你在测试时mock一个数据获取层。 这套机制是基于DAOs和数据库实现细节清晰的划分实现的。当测试时，你应该 mock DAO 实例.</p>
+<p>2种测试思路:</p>
+<ul>
+<li>开发机上测试。</li>
+<li>真机测试。</li>
+</ul>
+<h4 id="开发机上测试">开发机上测试</h4>
+<p>Room 使用的 SQLite Support 库, 这个库是基于Android Framework实现的接口。为了测试，也可以使用一个实现了接口的自定义 support 库。</p>
+<p>这种做法优点是：测试运行速度快，缺点是：设备端的SQLite的版本可能和host机器上的不一致。</p>
+<h4 id="android-真机测试">Android 真机测试</h4>
+<p>这也是推荐的测试方式，在真机上跑Junit测试用例。由于节省了创建activity的开销，运行速度比那些UI测试快一点。</p>
+<p>创建测试时，需要生成一个基于内存的database，以免影响到外部数据。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RunWith</span>(AndroidJUnit4.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleEntityReadWriteTest</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> UserDao mUserDao;</span><br><span class="line">    <span class="keyword">private</span> TestDatabase mDb;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Before</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">createDb</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Context context = InstrumentationRegistry.getTargetContext();</span><br><span class="line">        mDb = Room.inMemoryDatabaseBuilder(context, TestDatabase.class).build();</span><br><span class="line">        mUserDao = mDb.getUserDao();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@After</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">closeDb</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        mDb.close();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">writeUserAndReadInList</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        User user = TestUtil.createUser(<span class="number">3</span>);</span><br><span class="line">        user.setName(<span class="string">"george"</span>);</span><br><span class="line">        mUserDao.insert(user);</span><br><span class="line">        List&lt;User&gt; byName = mUserDao.findUsersByName(<span class="string">"george"</span>);</span><br><span class="line">        assertThat(byName.get(<span class="number">0</span>), equalTo(user));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="附录-为什么不支持-entities-之间引用">附录: 为什么不支持 entities 之间引用</h3>
+<p>将数据库之间的关系映射到entities上，并延迟加载的做法，在服务端开发已经有很成熟的应用了。</p>
+<p>但是在客户端，延迟加载并不可行，因为延迟加载往往发生在UI线程，从而导致严格的性能问题，activity只有16ms来绘制UI界面，即使数据库查询只花了5ms，任然有很大可能绘制超时，导致界面卡顿。另外，如果并行的在数据库上执行多个查询，或者设备同时在执行一个重IO的任务，那么延迟加载会花费更多时间。而如果不使用延迟加载策略，应用往往会load比预期更多的数据，从而加重了内存负担。</p>
+<p>ORMs 经常将这种锅抛给程序员，让他们自己去选择。 不幸的是，在程序员往往在app和UI界面间共享 model。当UI发生变化，你很难去预测和调试遇到的种种问题。</p>
+<p>举例说明，有一个界面需要加载 <code>Book</code> 列表，每个<code>Book</code>都有<code>Author</code>字段，你决定采用延迟加载策略，<code>Book</code>通过调用<code>getAuthor()</code>时返回作者信息。第一次调用<code>getAuthor()</code>时才会去查询数据库。这时要在在UI上显示作者姓名，你可能会写下面的代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">authorNameTextView.setText(user.getAuthor().getName());</span><br></pre></td></tr></table></figure>
+<p>这时，<code>getAuthor()</code> 查询数据库的动作在main线程上运行。</p>
+<p>如果采用主动查询策略，当UI不再需要作者信息时，<code>Book</code>任然会加载对应的 <code>Author</code>信息。而且，如果<code>Author</code>又查询了另外一张表，比如<code>getBooks()</code>，情况变得更糟。</p>
+<p>基于以上原因，Room 不允许entity之间的互相引用，而且，你必须显式的申明请求所需的数据。</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://deskid.github.io">deskid</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://deskid.github.io/2017/06/20/Guide-to-App-Architecture-6/">https://deskid.github.io/2017/06/20/Guide-to-App-Architecture-6/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/Android/">Android</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/06/29/kotlin-learn-notes-1/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">kotlin 深入学习笔记(一)</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/06/19/Guide-to-App-Architecture-5/">
+        <span class="next-text nav-default">[简译]Google 官方 App 架构 Guide(5)</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:deskidzhou@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/deskid" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2018
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">deskid</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://deskid.github.io/2017/06/20/Guide-to-App-Architecture-6/';
+        this.page.identifier = '2017/06/20/Guide-to-App-Architecture-6/';
+        this.page.title = '[简译]Google 官方 App 架构 Guide(6)';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//deskid.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

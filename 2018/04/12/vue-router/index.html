@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="vue router 源码通读">
+
+
+
+
+  <meta name="keywords" content="javascript, vue, Deskid's Blog">
+
+
+
+
+
+  <meta name="google-site-verification" content="UA-110544275-1">
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Deskid's Blog">
+
+
+
+
+
+
+<link rel="canonical" href="https://deskid.github.io/2018/04/12/vue-router/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> vue router 源码通读 - Deskid's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Deskid's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            Categories
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Deskid's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              Categories
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          vue router 源码通读
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-04-12
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/Web前端/">Web前端</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-抽象数据结构"><span class="toc-text">1. 抽象数据结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-router"><span class="toc-text">1.1 Router</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-route"><span class="toc-text">1.2 Route</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-history"><span class="toc-text">1.3 History</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-component"><span class="toc-text">2. component</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-view-js"><span class="toc-text">2.1 view.js</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-link-js"><span class="toc-text">2.2 link.js</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-总结"><span class="toc-text">3. 总结</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>最近通读了一遍 vue-router 的源码，主要是想了解下面两个问题：</p>
+<ol>
+<li>路由信息发生变动时，router-view 如何动态渲染对应的 component</li>
+<li>router-link 点击事件触发时，如何引发路由变化</li>
+</ol>
+<a id="more"></a>
+<h2 id="1-抽象数据结构">1. 抽象数据结构</h2>
+<h3 id="1-1-router">1.1 Router</h3>
+<p><img src="/media/15235001906565.jpg" alt=""></p>
+<p>Router，也就是 VueRouter，在 Vue 根实例化时，将<code>VueRouter</code>作为<code>router</code>参数值传入 Vue 框架。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> router = <span class="keyword">new</span> VueRouter(&#123;</span><br><span class="line">  mode: <span class="string">'history'</span>,</span><br><span class="line">  routes: routes</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  el: <span class="string">'#app'</span>,</span><br><span class="line">  store,</span><br><span class="line">  router,</span><br><span class="line">  render: <span class="function"><span class="params">h</span> =&gt;</span> h(App)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>VueRouter 根据构造函数中传入的<code>option.mode</code> 来实例化不同的 history 对象。</p>
+<p>通过传入的<code>option.routes</code>(<code>RouteConfig</code> 数组)，建立了 path 和 Component 之间的对应关系，这个关系存储在 VueRouter 的 <code>Matcher</code> 中。</p>
+<p>在 <code>VueRouter.install()</code> 时，通过全局 mixin，hook 了 Vue 的生命周期 <code>beforeCreate</code>，并把这个<code>VueRouter</code>实例赋值给了<code>this._router</code>。</p>
+<figure class="highlight diff"><table><tr><td class="code"><pre><span class="line">Vue.mixin(&#123;</span><br><span class="line">    beforeCreate () &#123;</span><br><span class="line">      if (isDef(this.$options.router)) &#123;</span><br><span class="line">        this._routerRoot = this</span><br><span class="line"><span class="addition">+       this._router = this.$options.router</span></span><br><span class="line">        this._router.init(this)</span><br><span class="line">        //...</span><br><span class="line">      &#125; else &#123;</span><br><span class="line">        this._routerRoot = (this.$parent &amp;&amp; this.$parent._routerRoot) || this</span><br><span class="line">      &#125;</span><br><span class="line">    // ....</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br></pre></td></tr></table></figure>
+<p>接下来又在<code>Vue.prototype</code>上定义了<code>$router</code>属性，方便在各个 component 中通过 <code>this.$router</code> 引用到 VueRouter。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Object</span>.defineProperty(Vue.prototype, <span class="string">'$router'</span>, &#123;</span><br><span class="line">  get () &#123; <span class="keyword">return</span> <span class="keyword">this</span>._routerRoot._router &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>通过这个暴露出来的<code>this.$router</code>，可以实现“编程式导航”</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">this</span>.$router.push(&#123; <span class="attr">path</span>: <span class="string">'home'</span> &#125;)</span><br><span class="line"><span class="keyword">this</span>.$router.replace(&#123; <span class="attr">name</span>: <span class="string">'user'</span>, <span class="attr">params</span>: &#123; <span class="attr">userId</span>: <span class="number">123</span> &#125;&#125;)</span><br><span class="line"><span class="keyword">this</span>.$router.go(<span class="number">-1</span>)</span><br></pre></td></tr></table></figure>
+<p>在后面会了解到 <code>push</code> 、<code>replace</code>，<code>go</code> 方法只是在 <code>$router.history</code> 的方法上包了一层。</p>
+<h3 id="1-2-route">1.2 Route</h3>
+<p><img src="/media/15234379495016.jpg" alt=""></p>
+<p>Route，路由信息对象，记录了路由所需的元信息和 URL 匹配到的 RouteRecord。</p>
+<p>在 <code>VueRouter.install()</code> 时，Vue prototype 上注册了<code>$router</code>的同时，也注册了<code>$route</code>。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Object</span>.defineProperty(Vue.prototype, <span class="string">'$route'</span>, &#123;</span><br><span class="line">  get () &#123; <span class="keyword">return</span> <span class="keyword">this</span>._routerRoot._route &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>这里的 <code>$route</code> 就是 Route类型，它指向<code>this._routerRoot._route</code>，而<code>_route</code> 是通过<code>defineReactive</code>定义的响应式变量，其值双向绑定到了<code>this._router.history.current</code>。后者就是当前路由状态下激活的 Route 实例。</p>
+<figure class="highlight diff"><table><tr><td class="code"><pre><span class="line">  Vue.mixin(&#123;</span><br><span class="line">    beforeCreate () &#123;</span><br><span class="line">      if (isDef(this.$options.router)) &#123;</span><br><span class="line">        this._routerRoot = this</span><br><span class="line">        this._router = this.$options.router</span><br><span class="line">        this._router.init(this)</span><br><span class="line"><span class="addition">+       Vue.util.defineReactive(this, '_route', this._router.history.current)</span></span><br><span class="line">      &#125; else &#123;</span><br><span class="line">        //...</span><br><span class="line">      &#125;</span><br><span class="line">    //...</span><br><span class="line">  &#125;)</span><br></pre></td></tr></table></figure>
+<p>每当 <code>_route</code> 值被 set，Vue 就会通知所有依赖的监听者，比如<code>$route</code>。</p>
+<p>通过监听<code>$route</code> 就可以对路由的变化做出响应。在每个子组件中通过<code>this.$route</code> 可以直接取到 query、params 对象，非常实用。</p>
+<p>举个例子，当 path 变化时触发一个 page event，就可以这么写：</p>
+<p><img src="/media/15234387967416.jpg" alt=""></p>
+<p>Route 中的 matched 数组存储的是当前路由状态下匹配的 RouterRecord。RouterRecord 中记录了路由对应的 component。</p>
+<p>举个例子，某个 <code>vm.$route</code> 如下:<br>
+<img src="/media/15234378286511.jpg" alt=""></p>
+<p>直觉上一个路由状态匹配一个 Component 组件似乎很合理，那为什么这里<code>matched</code>是一个数组呢? 这个和 vue-router 支持路由嵌套有关，这里不深究。</p>
+<p>通过上面的分析可以总结 ：</p>
+<ol>
+<li>vue-router 在 <code>Vue.prototype</code> 上定义了两个属性 <code>$router</code>、<code>$route</code></li>
+<li><code>$router</code> 提供了 history 的几个关键方法：<code>push</code>、<code>replace</code>、<code>go</code></li>
+<li><code>$route</code> 提供了路由元数据及对应的 component</li>
+</ol>
+<h3 id="1-3-history">1.3 History</h3>
+<p>vue-router 中的 history 是根据 <code>mode</code> 初始化的。</p>
+<p><img src="/media/15235056976931.jpg" alt=""></p>
+<p><code>HTML5History</code>、<code>HashHistory</code>、<code>AbstractHistory</code> 都继承于 父类 <code>History</code>。</p>
+<ul>
+<li>
+<p><code>HTML5History</code> 基于 html5 的 history 模式，通过<code>history.pushState</code>实现url 跳转而无需重新加载。</p>
+</li>
+<li>
+<p><code>HashHistory</code> 利用 <code>#</code> 之后的部分路由，利用 <code>#</code> 改变不会触发页面请求的特性实现前端路由。</p>
+</li>
+<li>
+<p><code>AbstractHistory</code> 内存中维护了一个数组来模拟路由 stack。</p>
+</li>
+</ul>
+<p>回顾问题1</p>
+<blockquote>
+<ol>
+<li>路由发生变动时，router-view 如何渲染对应的 component</li>
+</ol>
+</blockquote>
+<p>上文说到 <code>$route.matched</code> 数组记录着路由对应的<code>component</code>，而且<code>$route</code>会实时随着 <code>_route</code> 变化而变化。所以问题1的答案，关键在于 <code>_route</code> 会怎样跟着路由变化。</p>
+<p>那么<code>_route</code>是怎么被 set 的呢？</p>
+<p>路由信息变动无非以下两种情况：</p>
+<ol>
+<li>函数式导航或者 RouterLink 组件，这两个本质都是调用 <code>router.push</code> 或者<code>router.replace</code></li>
+<li>浏览器回退按钮或者 <code>history.back()</code></li>
+</ol>
+<p>第一种情况，只需要在<code>push</code>、<code>replace</code>函数调用结束后，更新下<code>_route</code>就好了。<br>
+第二种情况，可以监听<code>popstate</code>、<code>hashchange</code>事件，在监听函数中更新<code>_route</code></p>
+<p>通过查看 History 的代码就知道 vue-router 也正是这么做的。</p>
+<ul>
+<li>第一种情况：调用 <code>router.push</code> 或者<code>router.replace</code></li>
+</ul>
+<p>在调用 <code>this.$router.push</code> 或者 <code>this.$router.replace</code> 时，其实是代理给了对应的 history 实例。</p>
+<p>history 对<code>_route</code>的更新，具体表现在 <code>VueRouter.init()</code> 时， <code>history.listen()</code> 注册的回调。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">history.listen(<span class="function"><span class="params">route</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">this</span>.apps.forEach(<span class="function">(<span class="params">app</span>) =&gt;</span> &#123;</span><br><span class="line">    app._route = route</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>这个回调函数作为 <code>listen()</code> 的参数传进来后被赋值给了 <code>history.cb</code>，那么 <code>history.cb</code> 在什么时候调用的呢？</p>
+<p>调用顺序如下：</p>
+<p><code>History.transitionTo()</code> =&gt;<br>
+<code>History.confirmTransition.onComplete()</code> =&gt;<br>
+<code>updateRoute()</code>=&gt;<br>
+<code>this.cb()</code></p>
+<p>部分相关代码也贴一下：</p>
+<figure class="highlight diff"><table><tr><td class="code"><pre><span class="line"> transitionTo (location: RawLocation, onComplete?: Function, onAbort?: Function) &#123;</span><br><span class="line">    const route = this.router.match(location, this.current)</span><br><span class="line"><span class="addition">+   this.confirmTransition(route, () =&gt; &#123;</span></span><br><span class="line"><span class="addition">+     this.updateRoute(route)</span></span><br><span class="line">      onComplete &amp;&amp; onComplete(route)</span><br><span class="line">      // ...</span><br><span class="line">    &#125;, err =&gt; &#123;</span><br><span class="line">      // ...</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line"> updateRoute (route: Route) &#123;</span><br><span class="line">    const prev = this.current</span><br><span class="line">    this.current = route</span><br><span class="line"><span class="addition">+   this.cb &amp;&amp; this.cb(route)</span></span><br><span class="line">    this.router.afterHooks.forEach(hook =&gt; &#123;</span><br><span class="line">      hook &amp;&amp; hook(route, prev)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>无论是调用 <code>this.$router.push</code> 还是 <code>this.$router.replace</code> ，最终都会走到<code>transitionTo()</code>，从而更新<code>_route</code></p>
+<ul>
+<li>第二种情况：浏览器回退按钮或者 <code>history.back()</code></li>
+</ul>
+<p>对于<code>HTML5History</code>，在构造函数中监听了<code>popstate</code>，并在回调中调用了<code>transitionTo</code>。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">constructor</span> (router: Router, base: ?string) &#123;</span><br><span class="line">    <span class="keyword">super</span>(router, base)</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="built_in">window</span>.addEventListener(<span class="string">'popstate'</span>, e =&gt; &#123;</span><br><span class="line">      <span class="comment">//...</span></span><br><span class="line">      <span class="keyword">this</span>.transitionTo(location, route =&gt; &#123;</span><br><span class="line">        <span class="comment">//....</span></span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>对于<code>HashHistory</code>，则是延迟了<code>hashchange</code>监听，在第一次<code>init()</code> <code>transitonTo</code> 成功后，调用<code>setupListeners</code>监听<code>popstate</code>,或者<code>hashchange</code></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// this is delayed until the app mounts</span></span><br><span class="line"><span class="comment">// to avoid the hashchange listener being fired too early</span></span><br><span class="line">setupListeners () &#123;</span><br><span class="line">  <span class="comment">// ....</span></span><br><span class="line"></span><br><span class="line">  <span class="built_in">window</span>.addEventListener(supportsPushState ? <span class="string">'popstate'</span> : <span class="string">'hashchange'</span>, () =&gt; &#123;</span><br><span class="line">    <span class="comment">// ....</span></span><br><span class="line">    <span class="keyword">this</span>.transitionTo(getHash(), route =&gt; &#123;</span><br><span class="line">      <span class="comment">// ....</span></span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-component">2. component</h2>
+<h3 id="2-1-view-js">2.1 view.js</h3>
+<p>RouterView是一个函数式组件，也就是说它本身没有上下文，也不管理或监听状态。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  name: <span class="string">'RouterView'</span>,</span><br><span class="line">  functional: <span class="literal">true</span>,</span><br><span class="line">  props: &#123;</span><br><span class="line">    name: &#123;</span><br><span class="line">      type: <span class="built_in">String</span>,</span><br><span class="line">      <span class="keyword">default</span>: <span class="string">'default'</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  render (_, &#123; props, children, parent, data &#125;) &#123;</span><br><span class="line">    <span class="comment">// ......</span></span><br><span class="line">    <span class="keyword">const</span> component = cache[name] = matched.components[name]</span><br><span class="line">    <span class="comment">// ......</span></span><br><span class="line">    <span class="keyword">return</span> h(component, data, children)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面介绍到了，监听 location 变化的关键是响应式变量<code>$route</code>， render 函数渲染的正是 <code>$route.matched</code> 中存储的 Component。</p>
+<p>第一个问题到这里就可以解答了。</p>
+<p>RouterView 中有不少的细节处理值得注意</p>
+<ul>
+<li>render 使用的是 parent createElement() ，这样被 routerView 渲染的组件就可以解析 named slots。</li>
+<li>利用 cache 来缓存 <code>keepalive</code>的 <code>inactive</code>状态下的的 component</li>
+<li>route 的 params 作为 component 的 props 传递（没被 component 注册的 props 会被当作 attribute 传递）</li>
+</ul>
+<h3 id="2-2-link-js">2.2 link.js</h3>
+<p>RouterLink 比较简单， 默认渲染为<code>&lt;a&gt;</code>节点，并设置该节点的 href 和事件。如果设置了 tag 名，则把 herf 和事件绑定到第一个<code>&lt;a&gt;</code>子节点, 如果没有<code>&lt;a&gt;</code>子节点则设置到它本身。</p>
+<p><code>href</code> 由 <code>router.resolve</code> 解析生成；事件回调函数里调用<code>router.push</code>或<code>router.replace</code>做跳转。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> handler = <span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (guardEvent(e)) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.replace) &#123;</span><br><span class="line">      router.replace(location)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      router.push(location)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>到此，router-link 点击事件触发时，如何引发路由变化，这第二个问题也解决了。</p>
+<h2 id="3-总结">3. 总结</h2>
+<p>vue-router 还有许多别的特点，比如</p>
+<ul>
+<li>支持面向路由 的“AOP编程”(<code>navigation-guards</code>)，</li>
+<li>支持路由嵌套</li>
+<li>滚动位置定位</li>
+</ul>
+<p>配合 webpack 的动态 import 还能无痛实现路由懒加载。</p>
+<p>如果用不到这些特性，同时希望能减少最终打包大小，经过上面的源码阅读，我们也完全有能力造一个符合自己需求的router轮子。</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://deskid.github.io">deskid</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://deskid.github.io/2018/04/12/vue-router/">https://deskid.github.io/2018/04/12/vue-router/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/javascript/">javascript</a>
+            
+              <a href="/tags/vue/">vue</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018/11/13/android-resource-hook/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Android 资源动态加载(一)</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2018/04/02/h5-debug/">
+        <span class="next-text nav-default">iOS 和 Android 真机调试</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:deskidzhou@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/deskid" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2018
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">deskid</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://deskid.github.io/2018/04/12/vue-router/';
+        this.page.identifier = '2018/04/12/vue-router/';
+        this.page.title = 'vue router 源码通读';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//deskid.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

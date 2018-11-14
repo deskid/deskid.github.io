@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="kotlin 深入学习笔记(一)">
+
+
+
+
+  <meta name="keywords" content="kotlin, Deskid's Blog">
+
+
+
+
+
+  <meta name="google-site-verification" content="UA-110544275-1">
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Deskid's Blog">
+
+
+
+
+
+
+<link rel="canonical" href="https://deskid.github.io/2017/06/29/kotlin-learn-notes-1/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> kotlin 深入学习笔记(一) - Deskid's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Deskid's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            Categories
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Deskid's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              Categories
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          kotlin 深入学习笔记(一)
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-06-29
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/Android/">Android</a>
+            
+              <a href="/categories/Android/kotlin/">kotlin</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-nullsafety"><span class="toc-text">1. nullsafety</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-没有primitive-数据类型"><span class="toc-text">2. 没有primitive 数据类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-first-class-method"><span class="toc-text">3. first-class method</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-扩展函数-属性"><span class="toc-text">4. 扩展函数、属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-to-be-continued"><span class="toc-text">5. to be continued…</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>本文主要介绍kotlin的特性如下：</p>
+<ul>
+<li>nullsafety</li>
+<li>primitive is Object too</li>
+<li>first-class method</li>
+<li>扩展函数、属性</li>
+</ul>
+<a id="more"></a>
+<blockquote>
+<p>在手里拿着铁锤的人看来，世界就像一颗钉子。</p>
+</blockquote>
+<p>多学一门语言, 可以开拓眼界，促使我们换一个角度去看问题。</p>
+<p>kotlin汲取了许多优秀的语言的设计经验，上手时满满的熟悉感，让kotlin几乎没有什么学习曲线。许多编程语言都是从实现业务逻辑、解决算法问题的角度去设计的，而kotlin考虑了程序员使用体验，站在了使用者的角度——一门好的编程语言，不应该让使用者去帮它解决设计缺陷，而应该致力于提高使用者的效率。</p>
+<p>举个例子，用Java实现读asset目录下的一个文件：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Utils</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">fileToString</span><span class="params">(AssetManager assetManager,String fileName)</span> </span>&#123;</span><br><span class="line">        InputStream is = assetManager.open(fileName);</span><br><span class="line">        <span class="keyword">final</span> String newline = System.lineSeparator();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            BufferedReader reader = <span class="keyword">new</span> BufferedReader(is);</span><br><span class="line">            StringBuffer sb = <span class="keyword">new</span> StringBuffer((<span class="keyword">int</span>) file.length() * <span class="number">2</span>);</span><br><span class="line">            String line;</span><br><span class="line">            <span class="keyword">while</span> ((line = reader.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">                sb.append(line + newline);</span><br><span class="line">            &#125;</span><br><span class="line">            reader.close();</span><br><span class="line">            <span class="keyword">return</span> sb.toString();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException ioe) &#123;</span><br><span class="line">            <span class="comment">//log the exception</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (reader != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    reader.close();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                    <span class="comment">//log the exception</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面一坨代码中，真正有用的代码只有两行。</p>
+<figure class="highlight diff"><table><tr><td class="code"><pre><span class="line">public class Utils &#123;</span><br><span class="line">    public static String fileToString(AssetManager assetManager,String fileName) &#123;</span><br><span class="line"><span class="addition">+        InputStream is = assetManager.open(fileName);</span></span><br><span class="line">        //....</span><br><span class="line">        try &#123;</span><br><span class="line">        	  //...</span><br><span class="line"><span class="addition">+            return sb.toString();</span></span><br><span class="line">        &#125; catch (IOException ioe) &#123;</span><br><span class="line">            //...</span><br><span class="line">        &#125; finally &#123;</span><br><span class="line">            //...  </span><br><span class="line">        &#125;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用kotlin实现一样的代码：</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> AssetManager.<span class="title">fileToString</span><span class="params">(filename: <span class="type">String</span>)</span></span>: String &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">open</span>(filename).use &#123;</span><br><span class="line">        it.readBytes().toString(Charset.defaultCharset())</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这就是代码的表现力。我想，除非公司根据代码行数给你支付工资，没人会想去写臃肿的Java代码版本。</p>
+<!-- more -->
+<p>本文是学习kotlin过程中，产生的一些笔记。</p>
+<h3 id="1-nullsafety">1. nullsafety</h3>
+<p>NPE 绝对是编程bug界的老大哥，毕竟上百万dollar的身价。</p>
+<p>Java 也提供了<code>@Nullable</code>和<code>@NonNull</code>的Lint检查，不过对程序员而言，这只是可选项，而且即使在所有的代码中加上了这两个注解，仅仅是会在IDE中产生一条warning。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">(@Nullable List list)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> list.size() == <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而 kotlin 把 null 当做了一种新的类型，从而可以用类似类型检查的方式，把NPE扼杀在摇篮中。</p>
+<p>nullsafety相关的基础语法：</p>
+<ul>
+<li>Type?</li>
+</ul>
+<figure class="highlight diff"><table><tr><td class="code"><pre><span class="line"><span class="addition">+ var a: Int? = null</span></span><br><span class="line"></span><br><span class="line"><span class="deletion">- var a: Int = null //not compile</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>安全访问操作符<code>?.</code></li>
+</ul>
+<p>这个二元操作符的意思是，在操作符左边的值不为null的情况下，访问右边的表达式并返回其值，否则返回null。</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="keyword">val</span> a: <span class="built_in">Int</span>? = <span class="literal">null</span></span><br><span class="line"><span class="comment">//....</span></span><br><span class="line">a?.toString()</span><br><span class="line">a?.let&#123; println(it) &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Elvis operator (<code>?:</code>)</li>
+</ul>
+<p>猫王 Elvis Presley (这脑洞不得不服) ?:<br>
+区别于Java中的三元操作符，这是个二元操作符。<br>
+如果左值非空，就返回左值，否则返回右值。</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="keyword">val</span> a:<span class="built_in">Int</span>? = <span class="literal">null</span></span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"><span class="keyword">val</span> mStr = a?.toString() ?: <span class="string">""</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//等价于</span></span><br><span class="line"><span class="keyword">val</span> mStr = <span class="keyword">if</span>(a!=<span class="literal">null</span>) a.toString() <span class="keyword">else</span> <span class="string">""</span></span><br></pre></td></tr></table></figure>
+<p>也可以在右边写 return、throw 语句，</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="keyword">val</span> mStr = a?.toString() ?: <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">val</span> mStr = a?.toString() ?: <span class="keyword">throw</span> IllegalStateException()</span><br></pre></td></tr></table></figure>
+<ul>
+<li>强制cast 为非null类型 <code>!!</code></li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="keyword">val</span> a : <span class="built_in">Int</span> ? = <span class="literal">null</span></span><br><span class="line">a!!.toString()</span><br></pre></td></tr></table></figure>
+<p>编译期不会检查null类型了。但是在运行期一样会抛出异常，所以这种写法是治标不治本。</p>
+<p>在Android studio中使用自动转化功能生成的kotlin代码，到处都是这种<code>!!</code></p>
+<p><img src="/media/14974529407822.jpg" alt=""></p>
+<p>去掉<code>!!</code>可以用以下几个策略：</p>
+<p>1.使用 val 代替 var</p>
+<p>强迫自己尽可能的使用不可变量。如果是可变变量，它在运行时有可能被赋值为null。</p>
+<p>2.使用 lateinit</p>
+<p>Android中许多变量需要在onCreate中初始化，这时可以使用 lateinit 修饰属性。</p>
+<p>访问未初始化的变量将抛出<code>UninitializedPropertyAccessException</code>。</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">lateinit</span> <span class="keyword">var</span> mAdapter: RecyclerAdapter&lt;Transaction&gt;</span><br><span class="line"></span><br><span class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onCreate</span><span class="params">(savedInstanceState: <span class="type">Bundle</span>?)</span></span> &#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState)</span><br><span class="line">    mAdapter = RecyclerAdapter(R.layout.item_transaction)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">updateTransactions</span><span class="params">()</span></span> &#123;</span><br><span class="line">    mAdapter.notifyDataSetChanged()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于基础数据类型Int、Double，lateinit 不能使用，可以用delegates</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">var</span> mNumber: <span class="built_in">Int</span> <span class="keyword">by</span> Delegates.notNull&lt;<span class="built_in">Int</span>&gt;()</span><br></pre></td></tr></table></figure>
+<p>3.使用 <code>let</code> function</p>
+<p><img src="/media/14974534516687.jpg" alt=""></p>
+<p>let是kotlin std中自带的几个顶层函数，经常和安全操作符<code>?.</code>配合使用。</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">var</span> mPhotoUrl: String? = <span class="literal">null</span></span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">uploadClicked</span><span class="params">()</span></span> &#123;</span><br><span class="line">    mPhotoUrl?.let &#123; uploadPhoto(it) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>4.自定义 <code>let</code> function</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (mUserName != <span class="literal">null</span> &amp;&amp; mPhotoUrl != <span class="literal">null</span>) &#123;</span><br><span class="line">   uploadPhoto(mUserName!!, mPhotoUrl!!)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以模仿let写一个函数ifNotNull，这个函数接收带有两个参数的lambda类型。</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="type">&lt;T1, T2&gt;</span> <span class="title">ifNotNull</span><span class="params">(value1: <span class="type">T1</span>?, value2: <span class="type">T2</span>?, bothNotNull: (<span class="type">T1</span>, T2)</span></span> -&gt; (<span class="built_in">Unit</span>)) &#123;</span><br><span class="line">   <span class="keyword">if</span> (value1 != <span class="literal">null</span> &amp;&amp; value2 != <span class="literal">null</span>) &#123;</span><br><span class="line">       bothNotNull(value1, value2)</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用如下</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">ifNotNull(mUserName, mPhotoUrl) &#123;</span><br><span class="line">   userName, photoUrl -&gt;</span><br><span class="line">   uploadPhoto(userName, photoUrl)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>5.使用 Elvis operator</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">getUserName</span><span class="params">()</span></span>: String &#123;</span><br><span class="line">   <span class="keyword">if</span> (mUserName != <span class="literal">null</span>) &#123;</span><br><span class="line">       <span class="keyword">return</span> mUserName!!</span><br><span class="line">   &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">       <span class="keyword">return</span> <span class="string">"Anonymous"</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>变成</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">getUserName</span><span class="params">()</span></span>: String &#123;</span><br><span class="line">   <span class="keyword">return</span> mUserName ?: <span class="string">"Anonymous"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>6.just crash</p>
+<p>有时候 crash 也是必需的，但是除了直接抛<code>KotlinNullPointerException</code>，还可以用<code>requireNotNull</code> 或者 <code>checkNotNull</code> 封装异常信息。比如：</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">uploadPhoto(intent.getStringExtra(<span class="string">"PHOTO_URL"</span>)!!)</span><br></pre></td></tr></table></figure>
+<p>去掉<code>!!</code>, 把Crash Exception封装下：</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">uploadPhoto(requireNotNull(intent.getStringExtra(<span class="string">"PHOTO_URL"</span>), &#123; <span class="string">"Activity parameter 'PHOTO_URL' is missing"</span> &#125;))</span><br></pre></td></tr></table></figure>
+<p>查看kotlin编译出来的bytecode 就可以知道，这个 null check的特性是付出了代价的。在每次调用有非空参数的函数时、或者返回非空值的return语句前，都插入了下面一条类似这样的命令<code>Intrinsics.checkXXXXIsNotNull</code>，自动帮我们check了一遍非空。</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">INVOKESTATIC kotlin/jvm/internal/Intrinsics.checkParameterIsNotNull (Ljava/lang/Object;Ljava/lang/String;)V</span><br></pre></td></tr></table></figure>
+<h3 id="2-没有primitive-数据类型">2. 没有primitive 数据类型</h3>
+<p>Java 认为万物都是对象，并创建了 Object 这个顶层类，但是primitive数据类型单独处理。</p>
+<blockquote>
+<p>“凡动物一律平等<br>
+但是有些动物比别的动物更加平等”<br>
+——From: 乔治·奥威尔(George Orwell). 《动物农场》.</p>
+</blockquote>
+<ul>
+<li>primitive 存储在local stack空间，Object存储在 heap 空间</li>
+<li>primitive 作为参数是传值，Object作为参数是传引用</li>
+</ul>
+<p>为了打通 primitive 数据类型和 Object，Java使用了一个包装类型作为bridge，使得这两个类型之间可以自动转化。</p>
+<p>kotlin 的类型系统直接舍弃了 primitive 数据类型，真正意义上的万物都是对象。</p>
+<p>在kotlin中可以直接在数据类型上调用、定义方法。</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">println(<span class="number">1498621482L</span>.toDateString())</span><br><span class="line"><span class="comment">//（`toDateString`是`Long`的自定义拓展方法）</span></span><br></pre></td></tr></table></figure>
+<p>除此之外 Int 到 Long 到 Double的转化必须显式调用<code>toXXXX()</code>。<br>
+kotlin的数据类型底层仍然是primitive数据：</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="keyword">val</span> a = <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> b = <span class="number">1L</span></span><br></pre></td></tr></table></figure>
+<p>反编译为Bytecode，再翻译为Java如下</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> a = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">long</span> b = <span class="number">1L</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getA</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">long</span> <span class="title">getB</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3-first-class-method">3. first-class method</h3>
+<p>在kotlin中，可以把函数作为参数、返回值，也就是说，我们可以在kotlin中写高阶函数了。为了实现这个特性，kotlin提出了函数类型 <code>() -&gt; Type</code> ，类似OC中的block。举例说明</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">trace</span><span class="params">(sectionName: <span class="type">String</span>, body: ()</span></span> -&gt; <span class="built_in">Unit</span>)&#123;</span><br><span class="line">    Trace.beginSection(sectionName)</span><br><span class="line">    body()</span><br><span class="line">    Trace.endSection()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里的<code>body</code>就是一个函数类型参数。</p>
+<p>另外kotlin可以像Java8中的一样将lambda表达式赋值给java版的SAM-interface，或者赋值给kotlin的函数类型变量。</p>
+<p>还是上面的例子，调用trace方法</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">trace(<span class="string">"render"</span>,&#123;</span><br><span class="line">  initView()</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>当lambda是最后（或唯一）一个参数时，可以把lambda大括号移到括号外面来。</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">trace(<span class="string">"render"</span>) &#123;</span><br><span class="line">  initView()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样简化有两个好处</p>
+<ol>
+<li>减少括号的层级。</li>
+<li>可以用kotlin直接写出类似DSL的声明式代码。例如，封装下okhttp，调用get时可以这样写：</li>
+</ol>
+<pre><code><figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="keyword">get</span> &#123;</span><br><span class="line">	onSuccess = ...</span><br><span class="line">	onError = ...</span><br><span class="line">	header = ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</code></pre>
+<h3 id="4-扩展函数-属性">4. 扩展函数、属性</h3>
+<p>OCP</p>
+<blockquote>
+<p>Software entities should be open for extension,but closed for modification<br>
+对扩展是开放的，对修改是关闭的</p>
+</blockquote>
+<p>大多数Java项目，一定有一个或多个Utils类，里面一堆静态方法。当不确定某个helper方法写到哪儿时,new 一个Utils类太有诱惑力了。大家理直气壮地说，JDK也是这么干的，你看java.utils.**包下的都是这样写的啊。</p>
+<p>Utils类为什么不好：</p>
+<ol>
+<li>不符合OOP</li>
+<li>不符合SOLID中的OCP、SRP原则</li>
+<li>静态方法对单元测试不友好</li>
+</ol>
+<p><img src="/media/14987391775306.jpg" alt=""></p>
+<p>不写Utils类，不用继承和组合，静态语言还能能像动态语言那样动态的扩展库函数吗？能。</p>
+<p>在Objective-C中可以通过category给一个类增加方法，甚至覆盖方法。在kotlin中的扩展和OC的类似，但又有点区别。</p>
+<ul>
+<li>扩展属性</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">var</span> TextView.text: CharSequence</span><br><span class="line">	<span class="keyword">get</span>() = getText()</span><br><span class="line">	<span class="keyword">set</span>(v) = setText(v)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>扩展函数</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="built_in">Long</span>.<span class="title">toDateString</span><span class="params">(dateFormat: <span class="type">Int</span> = DateFormat.MEDIUM)</span></span>: String &#123;</span><br><span class="line">    <span class="keyword">val</span> df = DateFormat.getDateInstance(dateFormat, Locale.getDefault())</span><br><span class="line">    <span class="keyword">return</span> df.format(<span class="keyword">this</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用代码</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">println(<span class="number">1498621482L</span>.toDateString())</span><br></pre></td></tr></table></figure>
+<p>不像OC修改了meta类的方法list，kotlin扩展特性的实现原理其实很简单。</p>
+<p>上面的<code>toDateString</code> “反编译”为Java代码后</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">ExtentionUtilsKt</span> </span>&#123;</span><br><span class="line">   <span class="meta">@NotNull</span></span><br><span class="line">   <span class="keyword">public</span> static <span class="keyword">final</span> String toDateString(long $receiver, int dateFormat) &#123;</span><br><span class="line">      DateFormat df = DateFormat.getDateInstance(dateFormat, Locale.getDefault());</span><br><span class="line">      String var10000 = df.format(<span class="built_in">Long</span>.valueOf($receiver));</span><br><span class="line">      Intrinsics.checkExpressionValueIsNotNull(var10000, <span class="string">"df.format(this)"</span>);</span><br><span class="line">      <span class="keyword">return</span> var10000;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其实和我们自己写Utils静态方法一模一样。可以看出，kotlin的扩展属性就是语法糖。<br>
+当然，这种实现可以理解的，毕竟Java本身都没法舍弃Utils。kotlin没有重新实现一个Java，它只是在bytecode的基础上，提供了新的语法糖。</p>
+<p>在了解实现细节后，显然，下面两个关于动态扩展的局限就很好理解了：</p>
+<ol>
+<li>当扩展函数和成员函数有相同的函数签名时（override），成员函数优先于扩展函数。</li>
+<li>扩展函数是静态分发的，总是使用函数的声明类型来决定调用哪个扩展函数</li>
+</ol>
+<p>第一条，我们没有修改扩展类receiver的类结构，在调用同签名函数时，编译期会先查找receiver自己的方法表，只有没找到时，才会调用成Utils的静态方法。</p>
+<p>第二条，看下面例子</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="keyword">open</span> <span class="class"><span class="keyword">class</span> <span class="title">C</span></span></span><br><span class="line">   </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">D</span>: <span class="type">C</span></span>()</span><br><span class="line">   </span><br><span class="line"><span class="function"><span class="keyword">fun</span> C.<span class="title">foo</span><span class="params">()</span></span> = <span class="string">"c"</span></span><br><span class="line">   </span><br><span class="line"><span class="function"><span class="keyword">fun</span> D.<span class="title">foo</span><span class="params">()</span></span> = <span class="string">"d"</span></span><br><span class="line">   </span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">printFoo</span><span class="params">(c: <span class="type">C</span>)</span></span> &#123;</span><br><span class="line">   println(c.foo())</span><br><span class="line">&#125;</span><br><span class="line">   </span><br><span class="line">printFoo(D()) <span class="comment">//c</span></span><br></pre></td></tr></table></figure>
+<p>输出c，为什么不是d，这里不是子类型多态吗，难道多态在kotlin中不生效了？<br>
+验证一下，复写<code>toString</code>方法</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="keyword">open</span> <span class="class"><span class="keyword">class</span> <span class="title">C</span> </span>&#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">toString</span><span class="params">()</span></span>: String &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"C"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">	</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">D</span> : <span class="type">C</span></span>() &#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">toString</span><span class="params">()</span></span>: String &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"D"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">	</span><br><span class="line"><span class="function"><span class="keyword">fun</span> C.<span class="title">foo</span><span class="params">()</span></span> = <span class="string">"c"</span></span><br><span class="line">   </span><br><span class="line"><span class="function"><span class="keyword">fun</span> D.<span class="title">foo</span><span class="params">()</span></span> = <span class="string">"d"</span></span><br><span class="line">   </span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">printFoo</span><span class="params">(c: <span class="type">C</span>)</span></span> &#123;</span><br><span class="line">   println(c.foo())</span><br><span class="line">   println(c)</span><br><span class="line">&#125;</span><br><span class="line">   </span><br><span class="line">printFoo(D()) </span><br><span class="line"><span class="comment">//c</span></span><br><span class="line"><span class="comment">//D</span></span><br></pre></td></tr></table></figure>
+<p><code>println(c)</code>输出了正确的结果。</p>
+<p>Java的多态是采用方法动态绑定的实现，在编译后，<code>toString</code>方法调用被编码成通过<code>invokevirtual</code>指令调用，<code>invokevirtual</code>会在运行时，去方法表里找对应的方法引用，而此时<code>c</code>中<code>toString</code>指向的是 D.toString 的实现，所以输出D不奇怪。</p>
+<p>同样可以解释为什么<code>foo</code>输出的却是<code>c</code>。kotlin中的扩展函数，最终还是变成了某个Utils类中的静态方法，而静态方法的调用是静态绑定的，具体实现是使用<code>invokestatic</code>指令，在编译期，该指令就知道调用方法的引用情况了，具体看下面的Java代码。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@NotNull</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String <span class="title">foo</span><span class="params">(@NotNull C $receiver)</span> </span>&#123;</span><br><span class="line">      Intrinsics.checkParameterIsNotNull($receiver, <span class="string">"$receiver"</span>);</span><br><span class="line">      <span class="keyword">return</span> <span class="string">"c"</span>;</span><br><span class="line">&#125;</span><br><span class="line">   </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">printFoo</span><span class="params">(@NotNull C c)</span> </span>&#123;</span><br><span class="line">      Intrinsics.checkParameterIsNotNull(c, <span class="string">"c"</span>);</span><br><span class="line">      String var1 = foo(c);</span><br><span class="line">      System.out.println(var1);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="5-to-be-continued">5. to be continued…</h3>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://deskid.github.io">deskid</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://deskid.github.io/2017/06/29/kotlin-learn-notes-1/">https://deskid.github.io/2017/06/29/kotlin-learn-notes-1/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/kotlin/">kotlin</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/07/06/kotlin-learn-notes-2/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">kotlin 深入学习笔记(二)</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/06/20/Guide-to-App-Architecture-6/">
+        <span class="next-text nav-default">[简译]Google 官方 App 架构 Guide(6)</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:deskidzhou@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/deskid" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2018
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">deskid</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://deskid.github.io/2017/06/29/kotlin-learn-notes-1/';
+        this.page.identifier = '2017/06/29/kotlin-learn-notes-1/';
+        this.page.title = 'kotlin 深入学习笔记(一)';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//deskid.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

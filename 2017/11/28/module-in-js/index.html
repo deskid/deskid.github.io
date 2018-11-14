@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="module in JavaScript">
+
+
+
+
+  <meta name="keywords" content="javascript, Deskid's Blog">
+
+
+
+
+
+  <meta name="google-site-verification" content="UA-110544275-1">
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Deskid's Blog">
+
+
+
+
+
+
+<link rel="canonical" href="https://deskid.github.io/2017/11/28/module-in-js/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> module in JavaScript - Deskid's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Deskid's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            Categories
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Deskid's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              Categories
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          module in JavaScript
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-11-28
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/Web前端/">Web前端</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#commonjs规范"><span class="toc-text">CommonJS规范</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#module定义"><span class="toc-text">module定义:</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#es6-规范"><span class="toc-text">ES6 规范</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#export命令"><span class="toc-text">export命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#import命令"><span class="toc-text">import命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#module命令"><span class="toc-text">module命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#export-default-命令"><span class="toc-text">export default 命令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#babel"><span class="toc-text">Babel</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-export-babel翻译："><span class="toc-text">1. export babel翻译：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-import-babel翻译："><span class="toc-text">2. import babel翻译：</span></a></li></ol></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>JavaScript 在ES6之前没有给出官方模块的定义，因此社区自己搞了两个模块加载方案：</p>
+<ul>
+<li>CommonJS (node)</li>
+<li>AMD (browser) 本文略</li>
+</ul>
+<a id="more"></a>
+<h3 id="commonjs规范">CommonJS规范</h3>
+<h4 id="module定义">module定义:</h4>
+<p>每个文件就是一个模块，文件有自己的私有内部作用域。<code>module</code>对象代表当前模块，<code>module.exports</code> 是对外暴露的接口。加载模块，实际上是加载 <code>module.exports</code>.</p>
+<p><code>exports</code> 是 <code>module.exports</code> 的引用，其实质是 node 提供的语法糖, 本质类似于每个模块开头都include了下面的代码。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> exports = <span class="built_in">module</span>.exports;</span><br></pre></td></tr></table></figure>
+<p>如修改<code>exports</code>对象的属性，等价于修改了<code>module.exports</code>。虽然这样提供了方便，但是直接改变<code>exports</code>对象的指向是个不好的实践。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">//utils.js</span></span><br><span class="line"><span class="keyword">let</span> a = <span class="number">100</span>;</span><br><span class="line"></span><br><span class="line">exports.a = <span class="number">200</span>;</span><br></pre></td></tr></table></figure>
+<p>引入的时候，<code>require</code> 导入的是 <code>module.exports</code> 指向的一个对象。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">//test.js</span></span><br><span class="line"><span class="keyword">var</span> a = <span class="built_in">require</span>(<span class="string">'/utils'</span>);</span><br><span class="line"><span class="comment">// var &#123;a&#125; = require('/utils'); //200</span></span><br><span class="line"><span class="built_in">console</span>.log(a) <span class="comment">// &#123;a : 200&#125;</span></span><br></pre></td></tr></table></figure>
+<h3 id="es6-规范">ES6 规范</h3>
+<h4 id="export命令">export命令</h4>
+<p><code>export</code> 命令定义了模块的输出、其值可以是 value，variable、function、class，</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">//profile.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">var</span> lastName = <span class="string">"xxx"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 或者</span></span><br><span class="line"><span class="keyword">var</span> firstName = <span class="string">"xxx"</span></span><br><span class="line"><span class="comment">//优先使用这种，便于统一一个地方export</span></span><br><span class="line"><span class="keyword">export</span> &#123;firstName&#125; </span><br><span class="line"></span><br><span class="line"><span class="comment">// export function</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">area</span>(<span class="params">radius</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Math</span>.PI * radius * radius;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">circumference</span>(<span class="params">radius</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">2</span> * <span class="built_in">Math</span>.PI * radius;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="import命令">import命令</h4>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;firstName, lastName&#125; <span class="keyword">from</span> <span class="string">'profile'</span>; <span class="comment">//变量</span></span><br><span class="line"><span class="keyword">import</span> &#123; area, circumference &#125; <span class="keyword">from</span> <span class="string">'circle'</span>; <span class="comment">//方法</span></span><br></pre></td></tr></table></figure>
+<p><code>import</code>大括号内的变量名必须与<code>export</code>一致。（在webstrom等IDE中会帮你静态检查的）</p>
+<!-- more -->
+<h4 id="module命令">module命令</h4>
+<p>module 是个语法糖。有时候，需要import所有的接口</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> circle <span class="keyword">from</span> <span class="string">'circle'</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"圆面积："</span> + circle.area(<span class="number">4</span>));</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"圆周长："</span> + circle.circumference(<span class="number">14</span>));</span><br></pre></td></tr></table></figure>
+<p>可以写成</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">module</span> circle <span class="keyword">from</span> <span class="string">'circle'</span></span><br></pre></td></tr></table></figure>
+<h4 id="export-default-命令">export default 命令</h4>
+<p>export default命令定义了模块导出的默认值，引入默认值时不用加大括号。这个命令其实也是语法糖：</p>
+<p>把导出值封装到了一个<code>default</code>对象，再在引入时解构这个<code>default</code>对象。因为有一个对象来承接中间的值，所以在<code>import</code>时可以用任意<code>key</code>指定被引入的值</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">export default class &#123; ... &#125;</span><br><span class="line"></span><br><span class="line">import MyClass from &apos;MyClass&apos;</span><br><span class="line">let o = new MyClass();</span><br></pre></td></tr></table></figure>
+<h3 id="babel">Babel</h3>
+<p>在ES6出来之前社区上已经有许多CommonJS的module，托Babel的福，可以直接使用ES6的新语法来引入这些只支持CommonJS标准的库。</p>
+<p>Babel 做了一层翻译，把ES6的import、export语法变成了兼容CommonJS规范的require、exports。</p>
+<h4 id="1-export-babel翻译：">1. export babel翻译：</h4>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> foo = <span class="number">42</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="number">21</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="meta">"use strict"</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(exports, <span class="string">"__esModule"</span>, &#123;</span><br><span class="line">  value: <span class="literal">true</span></span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">var</span> foo = exports.foo = <span class="number">42</span>;</span><br><span class="line">exports.default = <span class="number">21</span>;</span><br></pre></td></tr></table></figure>
+<p>上面可以看到export default 和普通的export foo一样，都是给exports对象添加属性。</p>
+<h4 id="2-import-babel翻译：">2. import babel翻译：</h4>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span></span><br></pre></td></tr></table></figure>
+<p>==========&gt;</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="meta">'use strict'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> _react = <span class="built_in">require</span>(<span class="string">'react'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> _react2 = _interopRequireDefault(_react);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">_interopRequireDefault</span>(<span class="params">obj</span>) </span>&#123; <span class="keyword">return</span> obj &amp;&amp; obj.__esModule ? obj : &#123; <span class="attr">default</span>: obj &#125;; &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//通过_react2.default引用</span></span><br></pre></td></tr></table></figure>
+<p>export default 和 import 的使用要结合一起看：</p>
+<p>上面的export default翻译为了<code>exports.default</code>；</p>
+<p>import命令则要先判断：对经过了 babel 翻译后export的module直接返回对象，否则先用对象包装一层，并把export值赋值给<code>default</code>属性；最终在代码中使用时，统一使用<code>moduleName.default</code> 引用。</p>
+<p>普通的非default import语法就简单了，和require一模一样，导入时需要添加<code>{}</code></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;Component&#125; <span class="keyword">from</span> <span class="string">'react'</span></span><br></pre></td></tr></table></figure>
+<p>===========&gt;</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="meta">'use strict'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> _react = <span class="built_in">require</span>(<span class="string">'react'</span>);</span><br><span class="line"><span class="comment">//通过_react.Component引用</span></span><br></pre></td></tr></table></figure>
+<p>参考</p>
+<ol>
+<li><a href="http://es6.ruanyifeng.com/#docs/module" target="_blank" rel="noopener">http://es6.ruanyifeng.com/#docs/module</a></li>
+<li><a href="http://babeljs.io/repl/" target="_blank" rel="noopener">http://babeljs.io/repl/</a></li>
+</ol>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://deskid.github.io">deskid</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://deskid.github.io/2017/11/28/module-in-js/">https://deskid.github.io/2017/11/28/module-in-js/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/javascript/">javascript</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/12/04/gradle-compile/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">gradle 新依赖函数 implementation api详解</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/11/27/JavaScript-代码优化/">
+        <span class="next-text nav-default">JavaScript 代码优化(译)</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:deskidzhou@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/deskid" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2018
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">deskid</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://deskid.github.io/2017/11/28/module-in-js/';
+        this.page.identifier = '2017/11/28/module-in-js/';
+        this.page.title = 'module in JavaScript';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//deskid.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

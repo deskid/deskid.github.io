@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="LiveData VS RxJava">
+
+
+
+
+  <meta name="keywords" content="Android, Deskid's Blog">
+
+
+
+
+
+  <meta name="google-site-verification" content="UA-110544275-1">
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Deskid's Blog">
+
+
+
+
+
+
+<link rel="canonical" href="https://deskid.github.io/2017/08/07/LiveData-vs-Rxjava/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> LiveData VS RxJava - Deskid's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Deskid's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            Categories
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Deskid's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              Categories
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          LiveData VS RxJava
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-08-07
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/Android/">Android</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+
+
+    <div class="post-content">
+      
+        <p>本文比较了<code>LiveData</code>和<code>RxJava</code>在概念上的不同。</p>
+<a id="more"></a>
+<p>在看<code>LiveData</code>官方文档时，我第一反应是——这是一个自带生命周期的类似RxJava的轮子。<br>
+<img src="/media/14985453596283.jpg" alt=""></p>
+<p>我一开始把它看做RxJava来用，在使用一段时间后，LiveData总是让我觉得别扭。</p>
+<p>问题就在于这两个概念实际上不太一样。</p>
+<!-- more -->
+<ol>
+<li>
+<p>LiveData 是一个 holder 而不是 steam。它存储的是最新一个value，当有观测者观测时总是会获得这个最新的数据。</p>
+<blockquote>
+<p>LiveData is essentially just like <code>BehaviorRelay</code>. It is a data holder that allows subscribers. But it also has an active/inactive state depending on number of current subscribers, so it’s kinda like <code>replay(1).publish().refCount()</code>. So, uh, <code>RxReplayingShare</code>.</p>
+</blockquote>
+</li>
+<li>
+<p>另外一个不一样的线程模型。RxJava提供了一套简洁的线程切换方法，而LiveData所有操作都运行于主线程。</p>
+</li>
+<li>
+<p>LiveData 会根据LifecycleOwner，自动管理subscriber的生命周期，RxJava则不会。</p>
+</li>
+<li>
+<p>LiveData 只提供了<code>Transformations.map</code>、<code>Transformations.switchMap</code>这两种操作符，远没有RxJava灵活。使用上也不支持链式调用。tips：可以使用Kotlin的扩展函数优化下</p>
+ <figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="type">&lt;X, Y&gt;</span> LiveData<span class="type">&lt;X&gt;</span>.<span class="title">map</span><span class="params">(transform: (<span class="type">x</span>: <span class="type">X</span>)</span></span> -&gt; Y): LiveData&lt;Y&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> Transformations.map(<span class="keyword">this</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span><span class="symbol">@map</span> transform(it)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="type">&lt;X, Y&gt;</span> LiveData<span class="type">&lt;X&gt;</span>.<span class="title">switchMap</span><span class="params">(transform: (<span class="type">x</span>: <span class="type">X</span>)</span></span> -&gt; LiveData&lt;Y&gt;): LiveData&lt;Y&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> Transformations.switchMap(<span class="keyword">this</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span><span class="symbol">@switchMap</span> transform(it)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>从学习曲线上来讲，LiveData对新人更友好（这里可能是先学习过RxJava，有了流式的思想基础后再来学习LiveData造成的错觉。）</p>
+</li>
+</ol>
+<p>在 Twitter 上看到 <a href="https://twitter.com/chrisbanes/status/893490549138784256" target="_blank" rel="noopener">@chrisbanes</a> 提供的一种 LiveData 实践思路。</p>
+<ol>
+<li>LiveData 作为 UI 前端的数据展示层</li>
+<li>RxJava 作为 后端的 network 请求层</li>
+</ol>
+<p><img src="/media/15020765905808.jpg" alt=""></p>
+<p>而 Google 官方提供的 Demo 中，是直接让Retrofit 网络请求返回 LiveData。</p>
+<p>两者相比，我觉得还是@chrisbanes的实践更合理。为什么这么说呢？</p>
+<ol>
+<li>
+<p>LiveData 不适合作为 network 请求的返回值。</p>
+<p><img src="/media/15020768865133.jpg" alt=""></p>
+<blockquote>
+<p>It’s weird to me to expose an HTTP request as live data because it really isn’t. I would think you would always have some intermediary class which allowed for things like refreshing the HTTP data and updating the existing <code>LiveData</code>.</p>
+</blockquote>
+<p>因为大部分的 network 请求都是一次性的(one-shot)，而使用 LiveData 给人的感觉是数据可能会在之后更新。那么更适合的场景其实是LiveData 和数据库(Room)配合</p>
+</li>
+<li>
+<p>利用 LiveData 的自动 clear 特性，管理RxJava 的 subscriptions，消除了RxJava 内存泄露的可能。</p>
+</li>
+<li>
+<p>能利用 RxJava 简洁的线程切换的能力。</p>
+</li>
+</ol>
+<p>至于 RxJava Stream 和 LiveData 之间的互相转换可以使用<a href="https://developer.android.com/reference/android/arch/lifecycle/LiveDataReactiveStreams.html" target="_blank" rel="noopener"><code>LiveDataReactiveStreams</code></a></p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://deskid.github.io">deskid</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://deskid.github.io/2017/08/07/LiveData-vs-Rxjava/">https://deskid.github.io/2017/08/07/LiveData-vs-Rxjava/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/Android/">Android</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/09/02/git多用户配置实践/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">git多用户配置实践</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/07/28/ViewModel/">
+        <span class="next-text nav-default">深入理解 ViewModel</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:deskidzhou@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/deskid" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2018
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">deskid</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://deskid.github.io/2017/08/07/LiveData-vs-Rxjava/';
+        this.page.identifier = '2017/08/07/LiveData-vs-Rxjava/';
+        this.page.title = 'LiveData VS RxJava';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//deskid.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>
