@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="Kotlin Coroutines Guide">
+
+
+
+
+  <meta name="keywords" content="kotlin, Deskid's Blog">
+
+
+
+
+
+  <meta name="google-site-verification" content="UA-110544275-1">
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Deskid's Blog">
+
+
+
+
+
+
+<link rel="canonical" href="https://deskid.github.io/2018/11/14/kotlin_coroutines_guide/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> Kotlin Coroutines Guide - Deskid's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Deskid's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            Categories
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Deskid's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              Categories
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Kotlin Coroutines Guide
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-11-14
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/Android/">Android</a>
+            
+              <a href="/categories/Android/kotlin/">kotlin</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#java-concurrency-vs-kotlin-coroutines"><span class="toc-text">Java Concurrency vs. Kotlin Coroutines</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#concurrent-programming-style"><span class="toc-text">Concurrent Programming Style</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#the-concept-of-kotlin-coroutines"><span class="toc-text">The Concept of Kotlin Coroutines</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getting-started-with-coroutines"><span class="toc-text">Getting Started with Coroutines</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#kotlin-coroutines-ingredients"><span class="toc-text">Kotlin Coroutines Ingredients</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#suspending-functions"><span class="toc-text">Suspending Functions</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#hands-on"><span class="toc-text">Hands-On</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#structured-concurrency"><span class="toc-text">Structured Concurrency</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#custom-scope"><span class="toc-text">Custom Scope</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#going-deeper"><span class="toc-text">Going deeper</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#the-async-coroutine-builder"><span class="toc-text">The async Coroutine Builder</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#shared-mutable-state"><span class="toc-text">Shared Mutable State</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#actors"><span class="toc-text">Actors</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#channels"><span class="toc-text">Channels</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#more-features-and-examples"><span class="toc-text">More Features and Examples</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#how-it-works-implementation-of-kotlin-coroutines"><span class="toc-text">How it works – Implementation of Kotlin Coroutines</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结论"><span class="toc-text">结论</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#perspective"><span class="toc-text">Perspective</span></a></li></ol></li>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>本文将从以下3个方面介绍 Kotlin Coroutines</p>
+<ul>
+<li>概念</li>
+<li>使用方法</li>
+<li>内部实现原理</li>
+</ul>
+<p>本文的实例代码基于Kotlin 1.3.0 和 kotlinx.coroutines 1.0.0。</p>
+<a id="more"></a>
+<blockquote>
+<p>众所周知，在高负荷下，阻塞和轮询是不好的。而且这个世界正在变得越来越依赖于push和异步。许多语言已经(starting with C# in 2012) 通过 async/await 关键字支持异步。 而在Kotlin, 我们抽象了这个概念，从而 一些库就可以实现各自的异步支持，所以 async 在kotlin中不再是关键字,而是一个function。</p>
+</blockquote>
+<blockquote>
+<p>这个设计是为了集成各种异步API: futures/promises, callback-passing, 等等。这个设计足够抽象，甚至可以表达 lazy generators (yield) 和其他用例。</p>
+</blockquote>
+<p>Kotlin 团队推出 coroutines 来提供一种简单的方式来编写 concurrent 编程。 也许我们中的大多数已经在用各种基于线程的并发工具，比如 Java’s concurrency API，这已经是一套很成熟的API了。</p>
+<h3 id="java-concurrency-vs-kotlin-coroutines">Java Concurrency vs. Kotlin Coroutines</h3>
+<blockquote>
+<p>如果你仍然对Java中的 <strong>threading</strong> 和 <strong>concurrency</strong> 感到困惑，我建议你阅读这本书<a href="https://www.amazon.com/gp/product/0321349601/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0321349601&amp;linkCode=as2&amp;tag=swirtzamzncom-20&amp;linkId=c0de3483e96ad786bfda5e66d0f25284" target="_blank" rel="noopener">《Java Concurrency in Practice》</a>。</p>
+</blockquote>
+<p>尽管 Java’s 并发工具已经工程化的很好了, 但还是很难用。另一个问题是Java 并不鼓励非阻塞编程，所以你总是发现自己在start一个线程后才发现引入了过度开销和阻塞计算 (due to locks, sleeps, waits, etc.)。 应用 <a href="http://tutorials.jenkov.com/java-concurrency/non-blocking-algorithms.html" target="_blank" rel="noopener">non-blocking patterns</a> 很难而且极易犯错。</p>
+<p>Kotlin 协程则相反, 背后帮程序员处理好了一堆复杂的事情，调用则显得简单，看起来像命令式编程，他们提供了不用阻塞线程就可以执行异步代码的一种方式, 对应用来说这又提供了一种新的可能。不是阻塞线程，而是<strong>suspended</strong>计算。</p>
+<p>许多别的文章将coroutines视为“light-weight threads”; 但是coroutines不是我们Java传统意义上的线程。与线程相比, 新建一个coroutines 的代价非常廉价。一个原因是coroutines没有被映射到native的线程。正如我们将会看到的, coroutines 实际上是是被库管理着在一个线程池里面执行的。<br>
+另外一个很重要的不同点在于“<strong>limitation”</strong>: 线程受限于可用的native threads, coroutines 则几乎没有限制, 即使是上千个协程也可以一下子开启。</p>
+<h3 id="concurrent-programming-style">Concurrent Programming Style</h3>
+<p>在不同的语言中asynchronous/concurrent的实现风格往往不同：</p>
+<ul>
+<li>Callback-based (JavaScript)</li>
+<li>Future/Promise-based (Java, JavaScript)</li>
+<li>Async/Await-based (C#) and more</li>
+</ul>
+<p>所有的这些概念都可以用coroutines实现，kotlin没有直接依赖任何实现风格，而且，额外的一个好处是，coroutines可以像命令式编程一样序列化编写代码，尽管运行时是并发的。</p>
+<h4 id="the-concept-of-kotlin-coroutines">The Concept of Kotlin Coroutines</h4>
+<p><a href="https://en.wikipedia.org/wiki/Coroutine" target="_blank" rel="noopener">“Coroutine”</a> 的概念并不是新鲜事物。根据wiki，早在1958就有人提出这个概念. 许多现代编程语言也提供了native支持: C#, Go, Python, Ruby, etc. 包括Kotlin coroutines的实现在内, 都是基于<a href="https://en.wikipedia.org/wiki/Continuation" target="_blank" rel="noopener">“Continuations”</a>, Continuations 是计算机程序的状态控制的一层抽象。</p>
+<h3 id="getting-started-with-coroutines">Getting Started with Coroutines</h3>
+<p><a href="https://github.com/Kotlin/kotlinx.coroutines#using-in-your-projects" target="_blank" rel="noopener">reference</a><br>
+<a href="https://github.com/s1monw1/Kotlin_Examples" target="_blank" rel="noopener">GitHub Kotlin_Examples</a></p>
+<h4 id="kotlin-coroutines-ingredients">Kotlin Coroutines Ingredients</h4>
+<p>正如我们提到的，kotlin提供了一套易于理解的高阶api，首先我们了解下一个新修饰符<code>suspend</code>，suspend表示一个方法是“suspending”的。</p>
+<h3 id="suspending-functions">Suspending Functions</h3>
+<p>在Coroutines中我们说一个方法是“suspending”的是指这个方法可能会在任何一行命令中挂起，被<code>suspend</code>修饰的方法只能在 coroutines 或者其他suspending functions中调用。</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="keyword">suspend</span> <span class="function"><span class="keyword">fun</span> <span class="title">myMethod</span><span class="params">(p: <span class="type">String</span>)</span></span>: <span class="built_in">Boolean</span> &#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以把<code>coroutine</code>看做一个序列的常规方法调用，只不过这个序列执行完成后会额外提供一个运行结果。</p>
+<h2 id="hands-on">Hands-On</h2>
+<p>现在来看一个实际的例子</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> = runBlocking &#123; <span class="comment">//(1)</span></span><br><span class="line">    <span class="keyword">val</span> job = GlobalScope.launch &#123; <span class="comment">//(2)</span></span><br><span class="line">        <span class="keyword">val</span> result = suspendingFunction() <span class="comment">//(3)</span></span><br><span class="line">        print(<span class="string">"<span class="variable">$result</span>"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    print(<span class="string">"The result: "</span>)</span><br><span class="line">    job.join() <span class="comment">//(4)</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// prints "The result: 5"</span></span><br></pre></td></tr></table></figure>
+<p>在这个例子中，有两个新方法**(1)** <code>runBlocking</code> 、 <strong>(2)</strong> <code>launch</code>，它们都是 <strong>coroutine builders</strong>。我们可以利用各种各样的builder来实现不同的业务需求：</p>
+<ul>
+<li><code>launch</code> (fire and forget, can also be canceled)</li>
+<li><code>async</code> (返回 promise)</li>
+<li><code>runBlocking</code> (阻塞线程)</li>
+<li>etc.</li>
+</ul>
+<p>我们可以在各种scopes中开启一个coroutines，在这个例子中，<code>GlobalScope</code> 被用来 <code>launch</code>一个和App拥有同样生命周期的 coroutine。这种方式仅仅用在文中的例子里，在实际应用中还是要看具体业务场合。 按照 <a href="https://medium.com/@elizarov/structured-concurrency-722d765aa952" target="_blank" rel="noopener">“structured concurrency”</a>的概念, 我们需要将coroutines限制在不同的scopes下面，从而更好的维护和管理.  <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.experimental/-coroutine-scope/index.html" target="_blank" rel="noopener">CoroutineScope</a>.</p>
+<p>接下来看这个代码做了什么：<br>
+由**(2)** <code>launch</code>开启的内部的coroutine是实际上干活的，我们调用**(3)** suspending function，然后coroutine打印出结果。在启动coroutine 后，主线程在coroutine结束前打印 <code>The result:</code>。 <strong>(2)</strong> <code>launch</code>返回的是一个<code>Job</code>，通过它可以取消或者**(4)** <code>join()</code>等待 coroutines 完成。由于 <code>join()</code> 可能会suspend， 所以我们需要将它包在另外一个coroutine——<code>runBlocking</code>中。<br>
+<code>runBlocking</code> coroutine builder 被设计用来将常规的阻塞代码桥接到suspending function。这个功能常常被用在main function和 test中。<a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.experimental/run-blocking.html" target="_blank" rel="noopener">API</a>。如果不调用join()，那么这个程序会在coroutine打印出结果前结束掉。</p>
+<p>在 <code>runBlocking</code> coroutine scope外 <code>launch</code>一个coroutine也是可以的。我们只需将<code>GlobalScope.launch</code> 改为 <code>launch</code>。同时，我们也可以去掉<code>join</code>因为<code>runBlocking</code>在所有的child coroutines完成前不会结束。这个例子也是 <strong>structured concurrency</strong>的一个例子, 接下来会详细介绍这个概念。</p>
+<h3 id="structured-concurrency">Structured Concurrency</h3>
+<p>正如之前提到的，我们可以按照某种层次结构组织管理coroutines。假设在UI界面的某一个特定事件上我们需要中断。如果我们在这个UI上开启一个 coroutines来处理某个任务, 而且当主界面中断时，这个任务也应该被中断。值得注意的是，每个coroutine都可以运行在不同的scope内。 我们可以将多个coroutines在同一个scope内管理，这样就可以同时取消。下面的例子复用了上一节的例子，只不过 <code>launch</code> coroutines 在 <code>runBlocking</code> 的scope 下。</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line">    runBlocking &#123;</span><br><span class="line">        launch &#123;</span><br><span class="line">            delay(<span class="number">500</span>)</span><br><span class="line">            println(<span class="string">"Hello from launch"</span>)</span><br><span class="line">        &#125;</span><br><span class="line">        println(<span class="string">"Hello from runBlocking after launch"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    println(<span class="string">"finished runBlocking"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出如下</p>
+<blockquote>
+<p>Hello from runBlocking after launch<br>
+Hello from launch<br>
+finished runBlocking</p>
+</blockquote>
+<p>从上面的输出可以看出<code>runBlocking</code> 会等待子coroutine<code>launch</code>完成。因此，我们可以利用这个结构来将coroutine的取消操作代理给子coroutines：</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line">    runBlocking &#123;</span><br><span class="line">        <span class="keyword">val</span> outerLaunch = launch &#123;</span><br><span class="line">            launch &#123;</span><br><span class="line">                <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">                    delay(<span class="number">300</span>)</span><br><span class="line">                    println(<span class="string">"Hello from first inner launch"</span>)</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            launch &#123;</span><br><span class="line">                <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">                    delay(<span class="number">300</span>)</span><br><span class="line">                    println(<span class="string">"Hello from second inner launch"</span>)</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        println(<span class="string">"Hello from runBlocking after outer launch"</span>)</span><br><span class="line">        delay(<span class="number">800</span>)</span><br><span class="line">        outerLaunch.cancel()</span><br><span class="line">    &#125;</span><br><span class="line">    println(<span class="string">"finished runBlocking"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出如下</p>
+<blockquote>
+<p>Hello from runBlocking after outer launch<br>
+Hello from first inner launch<br>
+Hello from second inner launch<br>
+Hello from first inner launch<br>
+Hello from second inner launch<br>
+finished runBlocking</p>
+</blockquote>
+<p>在这个例子中，可以看到在<code>runBlocking</code>这个scope下，<code>launch</code>先创建了一个outer coroutine，接着又创建了两个内部coroutines，当我们取消 outer coroutine时，会同时委托到inner coroutines进行cancel操作。这个机制同样适用于错误控制，如果有异常从inner coroutines内部抛出，那么同一个scope内的所有coroutines都会停止。</p>
+<h4 id="custom-scope">Custom Scope</h4>
+<p>这一节,我们将创建自己的<code>CoroutineScope</code>。在上个例子中我们为了简单起见，使用<code>runBlocking</code>scope，而在实际应用中创建自己管理的scope是有必要的。创建也很简单，使用 <code>coroutineScope</code> builder。文档如下:</p>
+<blockquote>
+<p>Creates new [CoroutineScope] and calls the specified suspend block with this scope. The provided scope inherits its [coroutineContext][CoroutineScope.coroutineContext] from the outer scope, but overrides context’s [Job]. This function is designed for a <em>parallel decomposition</em> of work. <strong>When any child coroutine in this scope fails, this scope fails, and all the rest of the children are canceled</strong> (for a different behavior see [supervisorScope]).</p>
+</blockquote>
+<blockquote>
+<p>创建一个新的[CoroutineScope]并且执行这个scope内指定的suspend block。 新scope会继承外部scope的[CoroutineScope.coroutineContext]，但是会覆盖context的[Job]对象。这个方法可以用来<em>parallel decomposition</em>业务。任何child coroutines 失败，整个scope失败，并且其他的子coroutines都会被取消（如果要自定义这个行为可以使用[supervisorScope]）。</p>
+</blockquote>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> = runBlocking &#123;</span><br><span class="line">    coroutineScope &#123;</span><br><span class="line">        <span class="keyword">val</span> outerLaunch = launch &#123;</span><br><span class="line">            launch &#123;</span><br><span class="line">                <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">                    delay(<span class="number">300</span>)</span><br><span class="line">                    println(<span class="string">"Hello from first inner launch"</span>)</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            launch &#123;</span><br><span class="line">                <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">                    delay(<span class="number">300</span>)</span><br><span class="line">                    println(<span class="string">"Hello from second inner launch"</span>)</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        println(<span class="string">"Hello from runBlocking after outer launch"</span>)</span><br><span class="line">        delay(<span class="number">800</span>)</span><br><span class="line">        outerLaunch.cancel()</span><br><span class="line">    &#125;</span><br><span class="line">    println(<span class="string">"finished coroutineScope"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个例子和我们之前看到的非常相似。只不过最外层的scope变成了我们自定义的scope。了解更多可以参考<a href="https://medium.com/@elizarov/structured-concurrency-722d765aa952" target="_blank" rel="noopener">this post on structured concurrency with coroutines</a>.</p>
+<h3 id="going-deeper">Going deeper</h3>
+<p>下面举一个更具体的例子，比如在应用中发送一封邮件。<br>
+请求接收者的地址和渲染消息内容是两个耗时的任务，而且互相独立。使用kotlin coroutines你可以同时执行这两个task：</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="keyword">suspend</span> <span class="function"><span class="keyword">fun</span> <span class="title">sendEmail</span><span class="params">(r: <span class="type">String</span>, msg: <span class="type">String</span>)</span></span>: <span class="built_in">Boolean</span> &#123; <span class="comment">//(6)</span></span><br><span class="line">    delay(<span class="number">2000</span>)</span><br><span class="line">    println(<span class="string">"Sent '<span class="variable">$msg</span>' to <span class="variable">$r</span>"</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">suspend</span> <span class="function"><span class="keyword">fun</span> <span class="title">getReceiverAddressFromDatabase</span><span class="params">()</span></span>: String &#123; <span class="comment">//(4)</span></span><br><span class="line">    delay(<span class="number">1000</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"coroutine@kotlin.org"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">suspend</span> <span class="function"><span class="keyword">fun</span> <span class="title">sendEmailSuspending</span><span class="params">()</span></span>: <span class="built_in">Boolean</span> &#123;</span><br><span class="line">    <span class="keyword">val</span> msg = GlobalScope.async &#123; <span class="comment">//(3)</span></span><br><span class="line">        delay(<span class="number">500</span>)</span><br><span class="line">        <span class="string">"The message content"</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">val</span> recipient = GlobalScope.async &#123; </span><br><span class="line">        getReceiverAddressFromDatabase() <span class="comment">//(5)</span></span><br><span class="line">    &#125; </span><br><span class="line">    println(<span class="string">"Waiting for email data"</span>)</span><br><span class="line">    <span class="keyword">val</span> sendStatus = GlobalScope.async &#123;</span><br><span class="line">        sendEmail(recipient.await(), msg.await()) <span class="comment">//(7)</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> sendStatus.await() <span class="comment">//(8)</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> = runBlocking &#123; <span class="comment">//(1)</span></span><br><span class="line">    <span class="keyword">val</span> job = GlobalScope.launch &#123;</span><br><span class="line">        sendEmailSuspending() <span class="comment">//(2)</span></span><br><span class="line">        println(<span class="string">"Email sent successfully."</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    job.join() <span class="comment">//(9)</span></span><br><span class="line">    println(<span class="string">"Finished"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先，和之前一样，我们在<code>runBlocking</code> builder 里面起了一个**(1)** <code>launch</code> builder，这样在**(9)** 处就可以等待coroutines结束了。和这个结构一样，<strong>(2)</strong><code>sendEmailSuspending</code> suspending function也不是什么新的语法。这个方法内调用了一个**(3)** inner coroutine来获取message，同时调用另一个<code>suspend</code>方法<code>getReceiverAddressFromDatabase</code>获取发送地址。我们在**(5)** <code>async</code> built的两个单独的coroutines里同时执行这两个task。<br>
+注意，这里的<code>delay</code>表示的coroutines中的一种非阻塞挂起, 和<code>Thread.sleep</code>类似，这里用来模拟耗时操作。</p>
+<h4 id="the-async-coroutine-builder">The async Coroutine Builder</h4>
+<p><code>async</code> builder 在概念上很容易理解。在其他语言里async会返回一个<a href="https://en.wikipedia.org/wiki/Futures_and_promises" target="_blank" rel="noopener">promise</a>, 而在kotlin，则会返回<code>Deferred</code>。顺便说一下，这里的 promise, future, deferred 或者 delay 通常描述的都是同一个概念:  异步方法 <em>promises</em> 许诺会返回一个值我们可以wait或者在之后再去获取。</p>
+<p>在**(7)<strong><code>sendEmail(recipient.await(), msg.await())</code>处返回了<code>sendStatus</code>这个<code>Deferred</code>对象，</strong>(6)** <code>sendEmail</code>调用时传入的则是之前的Deferred对象。调用<code>Deferred.await()</code>会挂起当前函数，直到返回结果可用为止。最终我们在 <strong>(8)</strong> <code>sendStatus.await()</code>处返回发送结果。</p>
+<h2 id="shared-mutable-state">Shared Mutable State</h2>
+<p>虽然前面没有提及，但是读者可能也想到了coroutines之间同步的问题。并发的coroutines之间会共享状态，显然和其他编程语言一样，比如Java，意识到这一点很重要。 我们可以用一些常规的策略来解决同步问题，比如 <em>thread-safe data structures</em>, <em>confining</em> execution to a <em>single thread</em> 或者 使用 <em>locks</em>.<br>
+除了这些常规模式, Kotlin coroutines 鼓励使用 “share by communication” (see <a href="https://kotlinexpertise.com/kotlin-coroutines-guide/#qa" target="_blank" rel="noopener">QA</a>).</p>
+<p>实际上，我们可以使用 “actor” 来表示被多个coroutines共享的状态。Coroutines 之间可以利用actors 来发送和接收消息。</p>
+<h3 id="actors">Actors</h3>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="keyword">sealed</span> <span class="class"><span class="keyword">class</span> <span class="title">CounterMsg</span> </span>&#123;</span><br><span class="line">    <span class="keyword">object</span> IncCounter : CounterMsg() <span class="comment">// one-way message to increment counter</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">GetCounter</span></span>(<span class="keyword">val</span> response: SendChannel&lt;<span class="built_in">Int</span>&gt;) : CounterMsg() <span class="comment">// a request with channel for reply.</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">counterActor</span><span class="params">()</span></span> = GlobalScope.actor&lt;CounterMsg&gt; &#123; <span class="comment">//(1)</span></span><br><span class="line">    <span class="keyword">var</span> counter = <span class="number">0</span> <span class="comment">//(9) &lt;/b&gt;actor state, not shared</span></span><br><span class="line">    <span class="keyword">for</span> (msg <span class="keyword">in</span> channel) &#123; <span class="comment">// handle incoming messages</span></span><br><span class="line">        <span class="keyword">when</span> (msg) &#123;</span><br><span class="line">            <span class="keyword">is</span> CounterMsg.IncCounter -&gt; counter++ <span class="comment">//(4)</span></span><br><span class="line">            <span class="keyword">is</span> CounterMsg.GetCounter -&gt; msg.response.send(counter) <span class="comment">//(3)</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">suspend</span> <span class="function"><span class="keyword">fun</span> <span class="title">getCurrentCount</span><span class="params">(counter: <span class="type">SendChannel</span>&lt;<span class="type">CounterMsg</span>&gt;)</span></span>: <span class="built_in">Int</span> &#123; <span class="comment">//(8)</span></span><br><span class="line">    <span class="keyword">val</span> response = Channel&lt;<span class="built_in">Int</span>&gt;() <span class="comment">//(2)</span></span><br><span class="line">    counter.send(CounterMsg.GetCounter(response))</span><br><span class="line">    <span class="keyword">val</span> receive = response.receive()</span><br><span class="line">    println(<span class="string">"Counter = <span class="variable">$receive</span>"</span>)</span><br><span class="line">    <span class="keyword">return</span> receive</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> = runBlocking&lt;<span class="built_in">Unit</span>&gt; &#123;</span><br><span class="line">    <span class="keyword">val</span> counter = counterActor()</span><br><span class="line"></span><br><span class="line">    GlobalScope.launch &#123; <span class="comment">//(5)</span></span><br><span class="line">            <span class="keyword">while</span>(getCurrentCount(counter) &lt; <span class="number">100</span>)&#123;</span><br><span class="line">                delay(<span class="number">100</span>)</span><br><span class="line">                println(<span class="string">"sending IncCounter message"</span>)</span><br><span class="line">                counter.send(CounterMsg.IncCounter) <span class="comment">//(7)</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    GlobalScope.launch &#123; <span class="comment">//(6)</span></span><br><span class="line">        <span class="keyword">while</span> ( getCurrentCount(counter) &lt; <span class="number">100</span>) &#123;</span><br><span class="line">            delay(<span class="number">200</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;.join()</span><br><span class="line">    counter.close() <span class="comment">// shutdown the actor</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个例子展示了<code>Actor</code>的使用, 实际上<code>Actor</code>本身就是一个coroutine。本例中的 actor 持有了 <strong>(9)</strong> 一个状态量 <code>counter</code>。接下来要介绍下 <strong>(2)</strong> <code>Channel</code>的概念。</p>
+<h4 id="channels">Channels</h4>
+<p><a href="https://github.com/Kotlin/kotlinx.coroutines/blob/master/docs/channels.md" target="_blank" rel="noopener">Channels</a> 提供了一种传递数据流的方法。和Java中的<code>BlockingQueue</code>类似 (消费者生产者pattern) ，不过Channels没有任何阻塞方法，而是提供了 <code>send</code> 和 <code>receive</code> 这两个 suspending functions 来按照<em>FIFO</em>的策略来生产和消费。</p>
+<p>总是会有一个默认的actor和channels连接，通过这个actor可以与别的coroutines **(7)**交互。这上面的例子中，actor遍历了channel中的message，根据message的类型来决定是增加<code>counter</code>还是通过 <code>GetCounter</code>‘s <code>SendChannel</code>发送<code>counter</code> message。</p>
+<p><code>main</code>中的第一个 coroutine 启动了一个一直向actor发送**(7)** <code>IncCounter</code> messages 的任务，直到<code>counter</code>大于100。第二个 <strong>(6)</strong> coroutine则挂起等待，直到<code>counter</code>到达100。每个coroutines都调用了suspending function <strong>(8)</strong><code>getCurrentCounter</code>, 其内部向actor发送了<code>GetCounter</code> message 并且挂起等待<code>receive</code>返回。</p>
+<p>正如我们看到的，可变状态被限制在一个特定的actor coroutine内，并遵循了 <strong>share by communication</strong> 的原则，解决了共享可变状态的问题。</p>
+<h3 id="more-features-and-examples">More Features and Examples</h3>
+<p>更多文档和例子<a href="https://github.com/Kotlin/kotlinx.coroutines/tree/master/docs" target="_blank" rel="noopener">these</a>.</p>
+<h2 id="how-it-works-implementation-of-kotlin-coroutines">How it works – Implementation of Kotlin Coroutines</h2>
+<p>Coroutines的内部实现并不依赖于操作系统或者Java虚拟机。 与之相反，coroutines的实现机制在于编译器。编译器会将coroutines和<code>suspend</code> function转化为一个内部状态机，这个虚拟机可以维护和切换挂起的coroutines，并负责保持coroutines的内部状态。其原理来自于<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines.experimental/-continuation/index.html" target="_blank" rel="noopener">Continuations</a>这个概念。 Continuations 会被编译器作为额外的一个参数传递给每个suspending function。这种技术实现也被称为<a href="https://en.wikipedia.org/wiki/Continuation-passing_style" target="_blank" rel="noopener">“Continuation-passing style”</a>。</p>
+<p>下面我们来看下添加了continuation之后的function长什么样子。</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="keyword">suspend</span> <span class="function"><span class="keyword">fun</span> <span class="title">sampleSuspendFun</span><span class="params">(x: <span class="type">Int</span>)</span></span>: <span class="built_in">Int</span> &#123;</span><br><span class="line">    delay(<span class="number">2000</span>)</span><br><span class="line">    <span class="keyword">return</span> x * x</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>经过编译器转化后新方法：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public static final Object sampleSuspendFun(int x, @NotNull Continuation var1)</span><br></pre></td></tr></table></figure>
+<p>注意到上面的函数多了一个新的参数<code>Continuation</code>。当我们在coroutines里面调用这个方法时，编译器会将<code>sampleSuspendFun</code>之后的代码作为continuation参数传递。当<code>sampleSuspendFun</code>完成后，continuation 会被回调。这就是我们平时熟知的 callback-based 编程模式，只不过被编译器隐藏了实现细节。当然，这只是简化的一种描述，更多细节可以参考<a href="https://github.com/Kotlin/kotlin-coroutines/blob/master/kotlin-coroutines-informal.md#implementation-details" target="_blank" rel="noopener">implementation-details</a>.</p>
+<h2 id="结论">结论</h2>
+<p>相比Java，Kotlin鼓励另一种完全不同的——非阻塞式、并且不会绑定到native thread上的并发编程模式。</p>
+<p>编写 Java 并发编程常常伴随着过多的线程，或者忘记了线程池管理，这些小粗心往往导致代码执行效率问题。Coroutines, 却相反, 正如 <em>“light-weight threads”</em> 这个别称所表明的一样, 它不会映射到物理线程上，而且正因如此，协程也不会遇到并发编程中常常遇到的deadlocks、starvation问。正如我们上面看到的，在协程中，通常不用担心线程阻塞。而且，同步也更加简单直接，甚至在遵循**“share by communication”** 原则后，同步操作都是不必要的，</p>
+<p>协程可以和其他并发编程方式一起工作。其中，许多适配工作已经可以使用，而且其他的并发编程也可以轻松适配。<br>
+对于Java开发者来说，<code>async/await</code> 这种范式是最容易接受的，因为很容易和 <code>future</code> 联系起来。但是，<code>async/await</code>并不是简单的代替<code>future</code>而是功能上的升级。</p>
+<p>在Java中写并发代码总是会写一堆模板代码来处理 <em>checked exceptions</em>, <em>defensive locking</em> 等一堆问题。得益于序列式编程、可管理性和可读性，这一切在coroutines中都得到了改善。</p>
+<h4 id="perspective">Perspective</h4>
+<p>在<a href="https://kotlinlang.org/docs/reference/whatsnew13.html#coroutines-release" target="_blank" rel="noopener">Kotlin 1.3</a>版本中，Coroutines终于移除了<code>experimental</code>包名，API也变得稳定。</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://deskid.github.io">deskid</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://deskid.github.io/2018/11/14/kotlin_coroutines_guide/">https://deskid.github.io/2018/11/14/kotlin_coroutines_guide/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/kotlin/">kotlin</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2018/11/13/android-resource-hook/">
+        <span class="next-text nav-default">Android 资源动态加载(一)</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:deskidzhou@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/deskid" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2018
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">deskid</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://deskid.github.io/2018/11/14/kotlin_coroutines_guide/';
+        this.page.identifier = '2018/11/14/kotlin_coroutines_guide/';
+        this.page.title = 'Kotlin Coroutines Guide';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//deskid.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>
