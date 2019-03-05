@@ -17,12 +17,12 @@
 
 
 
-  <meta name="description" content="[简译]Google 官方 App 架构 Guide(2)">
+  <meta name="description" content="关于 `META-INF/library_release.kotlin_module`">
 
 
 
 
-  <meta name="keywords" content="Android, Deskid's Blog">
+  <meta name="keywords" content="kotlin, Deskid's Blog">
 
 
 
@@ -42,7 +42,7 @@
 
 
 
-<link rel="canonical" href="https://deskid.github.io/2017/05/31/Guide-to-App-Architecture-2/">
+<link rel="canonical" href="https://deskid.github.io/2019/03/05/about-kotlin-module/">
 
 
 
@@ -90,7 +90,7 @@
   window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
 </script>
 
-    <title> [简译]Google 官方 App 架构 Guide(2) - Deskid's Blog </title>
+    <title> 关于 `META-INF/library_release.kotlin_module` - Deskid's Blog </title>
   </head>
 
   <body><div id="mobile-navbar" class="mobile-navbar">
@@ -224,18 +224,20 @@
     <header class="post-header">
       <h1 class="post-title">
         
-          [简译]Google 官方 App 架构 Guide(2)
+          关于 `META-INF/library_release.kotlin_module`
         
       </h1>
 
       <div class="post-meta">
         <span class="post-time">
-          2017-05-31
+          2019-03-05
         </span>
         
           <span class="post-category">
             
               <a href="/categories/Android/">Android</a>
+            
+              <a href="/categories/Android/kotlin/">kotlin</a>
             
           </span>
         
@@ -245,43 +247,32 @@
 
     
     
-  <div class="post-toc" id="post-toc">
-    <h2 class="post-toc-title">Contents</h2>
-    <div class="post-toc-content">
-      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#在项目中使用architecture-components"><span class="toc-text">在项目中使用Architecture Components</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-添加-google-maven-repository"><span class="toc-text">1. 添加 Google Maven repository</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-添加-architecture-components"><span class="toc-text">2. 添加 Architecture Components</span></a></li></ol></li></ol>
-    </div>
-  </div>
-
 
 
     <div class="post-content">
       
-        <p>本文将介绍如何在项目中接入Architecture Components</p>
+        <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">More than one file was found with OS independent path &apos;META-INF/library_release.kotlin_module&apos;</span><br></pre></td></tr></table></figure>
+<p>最近在引入两个kotlin写的aar库时编译器报了这样的一个错误。说是打包时存在两个相同的文件，文件路径是<code>META-INF/library_release.kotlin_module</code>。</p>
+<p>这个文件是干什么用的呢？</p>
 <a id="more"></a>
-<h3 id="在项目中使用architecture-components">在项目中使用Architecture Components</h3>
-<p><strong>注意:</strong> Architecture Components 仍然处于 alpha 阶段，在1.0 release之前可能会有break change</p>
-<h4 id="1-添加-google-maven-repository">1. 添加 Google Maven repository</h4>
-<p>打开 project root 目录下的 <code>build.gradle</code>，添加Google Maven repository</p>
-<figure class="highlight diff"><table><tr><td class="code"><pre><span class="line">allprojects &#123;</span><br><span class="line">    repositories &#123;</span><br><span class="line">        jcenter()</span><br><span class="line"><span class="addition">+        maven &#123; url 'https://maven.google.com' &#125;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<!-- more -->
-<h4 id="2-添加-architecture-components">2. 添加 Architecture Components</h4>
-<p>修改 app module目录下的 <code>build.gradle</code></p>
-<ul>
-<li>使用 <a href="https://developer.android.com/topic/libraries/architecture/lifecycle.html" target="_blank" rel="noopener">Lifecycles</a>, <a href="https://developer.android.com/topic/libraries/architecture/livedata.html" target="_blank" rel="noopener">LiveData</a>, <a href="https://developer.android.com/topic/libraries/architecture/viewmodel.html" target="_blank" rel="noopener">ViewModel</a>, 添加:</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">compile &quot;android.arch.lifecycle:runtime:1.0.0-alpha1&quot;</span><br><span class="line">compile &quot;android.arch.lifecycle:extensions:1.0.0-alpha1&quot;</span><br><span class="line">annotationProcessor &quot;android.arch.lifecycle:compiler:1.0.0-alpha1&quot;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>使用 <a href="https://developer.android.com/topic/libraries/architecture/room.html" target="_blank" rel="noopener">Room</a>, 添加:</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">compile &quot;android.arch.persistence.room:runtime:1.0.0-alpha1&quot;</span><br><span class="line">annotationProcessor &quot;android.arch.persistence.room:compiler:1.0.0-alpha1&quot;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>如果使用 <a href="https://developer.android.com/topic/libraries/architecture/room.html#db-migration-testing" target="_blank" rel="noopener">testing Room migrations</a>, 添加:</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">testCompile &quot;android.arch.persistence.room:testing:1.0.0-alpha1&quot;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>如果需要 <a href="https://developer.android.com/topic/libraries/architecture/room.html#daos-query-rxjava" target="_blank" rel="noopener">Room RxJava</a> 支持, 添加:</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">compile &quot;android.arch.persistence.room:rxjava2:1.0.0-alpha1&quot;</span><br></pre></td></tr></table></figure>
+<p>kotlin 支持文件级别的申明，也就是说我们可以在一个文件中申明变量、方法，而不像Java，必须有一个类。</p>
+<p>每个 kotlin source file 会默认创建一个同样命名，但首字母大写，加了“Kt”后缀的类。</p>
+<p>比如<code>FileExt.kt</code> 会编译成<code>FileExtKt.class</code></p>
+<p>在Java代码中，可以通过编译后的类名访问申明在顶层的函数和变量。因此，在同一包名下，不支持两个命名相同的kotlin source文件。</p>
+<p>通过<code>@file:JvmName(&quot;CustomName&quot;)</code>可以显式的指定一个文件编译后的类名，通过<code>@file:JvmMultifileClass</code>可以指定多个文件共享一个类名。</p>
+<p>为了实现这个功能，kotlin专门引入了一个resource文件，用来指导kotlin的编译。</p>
+<p>没错，这个文件就是 <code>META-INF/&lt;module_name&gt;.kotlin_module</code>.</p>
+<p>网上有很多人解决上面的问题时，将 <code>.kotlin_module</code> 文件在打包流程中exclude，实际上这种做法是不正确的。</p>
+<p>其实只需要保证module名字没有冲突，生成的<code>.kotlin_module</code>文件自然也就不会冲突。</p>
+<p>在 gradle 工程中，这个文件的名字由当前工程的<code>module</code>名字 + <code>build variant</code>组成。</p>
+<p>例如在一个 aar sdk 中，你可能会创建一个叫做 <code>library</code>的module 文件夹，<code>release</code>发布出去后，生成的aar中会带有<code>'META-INF/library_release.kotlin_module'</code>这个文件。</p>
+<p>如果其他的工程也使用了相同的<code>module name</code>，比如另外一个aar刚好也用了<code>library</code>作为module名称，就会报上面的错误。</p>
+<p>通过kotlinOptions可以指定moduleName名称。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">android &#123;</span><br><span class="line">    compileSdkVersion 25</span><br><span class="line">    buildToolsVersion &quot;25.0.0&quot;</span><br><span class="line"></span><br><span class="line">    compileOptions &#123;</span><br><span class="line">        kotlinOptions.freeCompilerArgs += [&apos;-module-name&apos;, &quot;$PUBLISH_GROUP_ID.$PUBLISH_ARTIFACT_ID&quot;]</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    defaultConfig &#123;</span><br><span class="line">        minSdkVersion 8</span><br><span class="line">        targetSdkVersion 25</span><br><span class="line">        versionCode 1</span><br><span class="line">        versionName &quot;1.0.5&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    buildTypes &#123;</span><br><span class="line">        release &#123;</span><br><span class="line">            minifyEnabled false</span><br><span class="line">            proguardFiles getDefaultProguardFile(&apos;proguard-android.txt&apos;), &apos;proguard-rules.pro&apos;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>参考文章：<br>
+<a href="https://github.com/Takhion/android-extras-delegates/issues/1" target="_blank" rel="noopener">https://github.com/Takhion/android-extras-delegates/issues/1</a><br>
+<a href="https://blog.jetbrains.com/kotlin/2015/09/kotlin-m13-is-out/" target="_blank" rel="noopener">https://blog.jetbrains.com/kotlin/2015/09/kotlin-m13-is-out/</a><br>
+<a href="http://kotlinlang.org/docs/reference/java-interop.html#package-level-functions" target="_blank" rel="noopener">http://kotlinlang.org/docs/reference/java-interop.html#package-level-functions</a></p>
 
       
     </div>
@@ -297,7 +288,7 @@
     </p>
     <p class="copyright-item">
       <span>Link: </span>
-      <a href="https://deskid.github.io/2017/05/31/Guide-to-App-Architecture-2/">https://deskid.github.io/2017/05/31/Guide-to-App-Architecture-2/</a>
+      <a href="https://deskid.github.io/2019/03/05/about-kotlin-module/">https://deskid.github.io/2019/03/05/about-kotlin-module/</a>
     </p>
     <p class="copyright-item">
       <span>License: </span>
@@ -317,7 +308,7 @@
         
           <div class="post-tags">
             
-              <a href="/tags/Android/">Android</a>
+              <a href="/tags/kotlin/">kotlin</a>
             
           </div>
         
@@ -325,15 +316,9 @@
         
   <nav class="post-nav">
     
-      <a class="prev" href="/2017/06/01/Guide-to-App-Architecture-3/">
-        <i class="iconfont icon-left"></i>
-        <span class="prev-text nav-default">[简译]Google 官方 App 架构 Guide(3)</span>
-        <span class="prev-text nav-mobile">Prev</span>
-      </a>
     
-    
-      <a class="next" href="/2017/05/27/Guide-to-App-Architecture/">
-        <span class="next-text nav-default">[简译]Google 官方 App 架构 Guide</span>
+      <a class="next" href="/2018/11/14/kotlin_coroutines_guide/">
+        <span class="next-text nav-default">Kotlin Coroutines Guide</span>
         <span class="prev-text nav-mobile">Next</span>
         <i class="iconfont icon-right"></i>
       </a>
@@ -446,9 +431,9 @@
   
   <script type="text/javascript">
     var disqus_config = function () {
-        this.page.url = 'https://deskid.github.io/2017/05/31/Guide-to-App-Architecture-2/';
-        this.page.identifier = '2017/05/31/Guide-to-App-Architecture-2/';
-        this.page.title = '[简译]Google 官方 App 架构 Guide(2)';
+        this.page.url = 'https://deskid.github.io/2019/03/05/about-kotlin-module/';
+        this.page.identifier = '2019/03/05/about-kotlin-module/';
+        this.page.title = '关于 `META-INF/library_release.kotlin_module`';
     };
     (function() {
     var d = document, s = d.createElement('script');
