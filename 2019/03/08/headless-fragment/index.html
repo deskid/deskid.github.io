@@ -17,12 +17,10 @@
 
 
 
-  <meta name="description" content="关于 `META-INF/library_release.kotlin_module`">
+  <meta name="description" content="Headless Fragment 设计模式">
 
 
 
-
-  <meta name="keywords" content="kotlin, Deskid's Blog">
 
 
 
@@ -40,7 +38,7 @@
 
 
 
-<link rel="canonical" href="https://deskid.github.io/2019/03/05/about-kotlin-module/">
+<link rel="canonical" href="https://deskid.github.io/2019/03/08/headless-fragment/">
 
 
 
@@ -98,7 +96,7 @@
   window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
 </script>
 
-    <title> 关于 `META-INF/library_release.kotlin_module` - Deskid's Blog </title>
+    <title> Headless Fragment 设计模式 - Deskid's Blog </title>
   </head>
 
   <body><div id="mobile-navbar" class="mobile-navbar">
@@ -232,20 +230,18 @@
     <header class="post-header">
       <h1 class="post-title">
         
-          关于 `META-INF/library_release.kotlin_module`
+          Headless Fragment 设计模式
         
       </h1>
 
       <div class="post-meta">
         <span class="post-time">
-          2019-03-05
+          2019-03-08
         </span>
         
           <span class="post-category">
             
               <a href="/categories/Android/">Android</a>
-            
-              <a href="/categories/Android/kotlin/">kotlin</a>
             
           </span>
         
@@ -259,28 +255,58 @@
 
     <div class="post-content">
       
-        <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">More than one file was found with OS independent path &apos;META-INF/library_release.kotlin_module&apos;</span><br></pre></td></tr></table></figure>
-<p>最近在引入两个kotlin写的aar库时编译器报了这样的一个错误。说是打包时存在两个相同的文件，文件路径是<code>META-INF/library_release.kotlin_module</code>。</p>
-<p>这个文件是干什么用的呢？</p>
+        <p>Headless Fragment 的定义：没有UI的fragment。也就是说 <code>onCreateView()</code>返回值为<code>null</code>。通常配合<code>setRetainInstance(true)</code>使用。后者可以让fragment在activity旋转重建时无需destroy。</p>
+<p>为什么有 Headless Fragment这个概念，没有 view 的Fragment有什么功能呢？</p>
 <a id="more"></a>
-<p>kotlin 支持文件级别的申明，也就是说我们可以在一个文件中申明变量、方法，而不像Java，必须有一个类。</p>
-<p>每个 kotlin source file 会默认创建一个同样命名，但首字母大写，加了“Kt”后缀的类。</p>
-<p>比如<code>FileExt.kt</code> 会编译成<code>FileExtKt.class</code></p>
-<p>在Java代码中，可以通过编译后的类名访问申明在顶层的函数和变量。因此，在同一包名下，不支持两个命名相同的kotlin source文件。</p>
-<p>通过<code>@file:JvmName(&quot;CustomName&quot;)</code>可以显式的指定一个文件编译后的类名，通过<code>@file:JvmMultifileClass</code>可以指定多个文件共享一个类名。</p>
-<p>为了实现这个功能，kotlin专门引入了一个resource文件，用来指导kotlin的编译。</p>
-<p>没错，这个文件就是 <code>META-INF/&lt;module_name&gt;.kotlin_module</code>.</p>
-<p>网上有很多人解决上面的问题时，将 <code>.kotlin_module</code> 文件在打包流程中exclude，实际上这种做法是不正确的。</p>
-<p>其实只需要保证module名字没有冲突，生成的<code>.kotlin_module</code>文件自然也就不会冲突。</p>
-<p>在 gradle 工程中，这个文件的名字由当前工程的<code>module</code>名字 + <code>build variant</code>组成。</p>
-<p>例如在一个 aar sdk 中，你可能会创建一个叫做 <code>library</code>的module 文件夹，<code>release</code>发布出去后，生成的aar中会带有<code>'META-INF/library_release.kotlin_module'</code>这个文件。</p>
-<p>如果其他的工程也使用了相同的<code>module name</code>，比如另外一个aar刚好也用了<code>library</code>作为module名称，就会报上面的错误。</p>
-<p>通过kotlinOptions可以指定moduleName名称。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">android &#123;</span><br><span class="line">    compileSdkVersion 25</span><br><span class="line">    buildToolsVersion &quot;25.0.0&quot;</span><br><span class="line"></span><br><span class="line">    compileOptions &#123;</span><br><span class="line">        kotlinOptions.freeCompilerArgs += [&apos;-module-name&apos;, &quot;$PUBLISH_GROUP_ID.$PUBLISH_ARTIFACT_ID&quot;]</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    defaultConfig &#123;</span><br><span class="line">        minSdkVersion 8</span><br><span class="line">        targetSdkVersion 25</span><br><span class="line">        versionCode 1</span><br><span class="line">        versionName &quot;1.0.5&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    buildTypes &#123;</span><br><span class="line">        release &#123;</span><br><span class="line">            minifyEnabled false</span><br><span class="line">            proguardFiles getDefaultProguardFile(&apos;proguard-android.txt&apos;), &apos;proguard-rules.pro&apos;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>参考文章：<br>
-<a href="https://github.com/Takhion/android-extras-delegates/issues/1" target="_blank" rel="noopener">https://github.com/Takhion/android-extras-delegates/issues/1</a><br>
-<a href="https://blog.jetbrains.com/kotlin/2015/09/kotlin-m13-is-out/" target="_blank" rel="noopener">https://blog.jetbrains.com/kotlin/2015/09/kotlin-m13-is-out/</a><br>
-<a href="http://kotlinlang.org/docs/reference/java-interop.html#package-level-functions" target="_blank" rel="noopener">http://kotlinlang.org/docs/reference/java-interop.html#package-level-functions</a></p>
+<p>在回答这两个问题之前，先回顾一下在面向对象编程中，代码复用的两种方式：</p>
+<ol>
+<li>组合</li>
+<li>继承</li>
+</ol>
+<p>组合，我们可能会抽象出类似 utils、controller或者helper这种功能代码，业务逻辑是由这些功能代码块组合起来实现的。</p>
+<p>优点：代码内聚，调用逻辑清晰可控。<br>
+缺点：是在Android端，需要注意太多的 Activity lifecycle细节，可能需要通过各种回调来处理跨生命周期的调用，而且还要注意防止内存泄漏。</p>
+<p>继承，我们往往是在 BaseActivity 中实现公共功能，子类通过override、或者设置各种flag来实现功能的组合和差异化。</p>
+<p>优点：Activity生命周期可感知，context获取方便<br>
+缺点：继承侵入性太大，“组合优于继承”，丧失了灵活性，无法处理跨越了 Activity 重建周期的事件回调。</p>
+<p>Headless Fragment 在基于“组合”的代码复用方式的基础上，保留了“继承”复用的优点，同时回避了侵入性大等“继承”的缺点：</p>
+<p>既有感知生命周期的能力（包括跨越activity重建周期的事件监听能力），也具有功能模块内聚性强，调用逻辑清晰的优点。</p>
+<p>常见的使用场景：</p>
+<ol>
+<li>
+<p>Android M runtime permission request，封装成callback，避免在同一个 override 中处理各种权限业务。</p>
+</li>
+<li>
+<p>将 startActivityForResult 的 override 调用形式，封装成 callback 形式调用。好处同上。</p>
+</li>
+<li>
+<p>非侵入式的监听activity、fragment生命周期。</p>
+</li>
+<li>
+<p>处理和生命周期有关的短期异步操作。注意只能是短期，长时间的异步操作建议还是通过AsyncTask或者HandlerThread。</p>
+</li>
+</ol>
+<p>很多常见的开源库都使用了这个小技巧：</p>
+<ul>
+<li>
+<p><a href="https://github.com/zhihu/RxLifecycle" target="_blank" rel="noopener">RxLifecycle</a></p>
+<p>通过<code>BindingFragment</code>监听activity的生命周期，并将<code>LifecycleEvent</code> 用<code>BehaviorSubject</code> emit 出去。</p>
+  <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Observable.interval(<span class="number">0</span>, <span class="number">2</span>, TimeUnit.SECONDS)</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">        .compose(RxLifecycle.bind(<span class="keyword">this</span>)</span><br><span class="line">                .&lt;Long&gt;disposeObservableWhen(LifecycleEvent.DESTROY_VIEW))</span><br><span class="line">        .subscribe();</span><br></pre></td></tr></table></figure>
+<p>当然现在有了arch Lifecycle后，有了更好的实现方式。</p>
+</li>
+<li>
+<p>Google Android Architecture 中的 ViewModel 实现</p>
+<p>通过设置<code>HolderFragment.setRetainInstance(true)</code>，实现 <code>ViewModel</code> 绑定Activity生命周期的同时，又跨越 Activity 重建过程。</p>
+<p><img src="http://img0.didiglobal.com/static/driver_xml_image/img/static/3869f2a4f8d2c3c99d015b63d79da96ed7837770.jpg" alt=""></p>
+</li>
+</ul>
+<ul>
+<li>
+<p><a href="https://github.com/tbruyelle/RxPermissions" target="_blank" rel="noopener">RxPermissions</a></p>
+<p>通过<code>RxPermissionsFragment</code> 将 <code>onRequestPermissionsResult</code> 的override式调用转化为callback式调用。</p>
+  <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">rxPermissions</span><br><span class="line">    .request(Manifest.permission.CAMERA)</span><br><span class="line">    .subscribe(granted -&gt; &#123;</span><br><span class="line">        <span class="keyword">if</span> (granted) &#123; <span class="comment">// Always true pre-M</span></span><br><span class="line">           <span class="comment">// I can control the camera now</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">           <span class="comment">// Oups permission denied</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
 
       
     </div>
@@ -296,7 +322,7 @@
     </p>
     <p class="copyright-item">
       <span>Link: </span>
-      <a href="https://deskid.github.io/2019/03/05/about-kotlin-module/">https://deskid.github.io/2019/03/05/about-kotlin-module/</a>
+      <a href="https://deskid.github.io/2019/03/08/headless-fragment/">https://deskid.github.io/2019/03/08/headless-fragment/</a>
     </p>
     <p class="copyright-item">
       <span>License: </span>
@@ -314,25 +340,13 @@
     
       <footer class="post-footer">
         
-          <div class="post-tags">
-            
-              <a href="/tags/kotlin/">kotlin</a>
-            
-          </div>
-        
         
         
   <nav class="post-nav">
     
-      <a class="prev" href="/2019/03/08/headless-fragment/">
-        <i class="iconfont icon-left"></i>
-        <span class="prev-text nav-default">Headless Fragment 设计模式</span>
-        <span class="prev-text nav-mobile">Prev</span>
-      </a>
     
-    
-      <a class="next" href="/2018/11/14/kotlin_coroutines_guide/">
-        <span class="next-text nav-default">Kotlin Coroutines Guide</span>
+      <a class="next" href="/2019/03/05/about-kotlin-module/">
+        <span class="next-text nav-default">关于 `META-INF/library_release.kotlin_module`</span>
         <span class="prev-text nav-mobile">Next</span>
         <i class="iconfont icon-right"></i>
       </a>
@@ -445,9 +459,9 @@
   
   <script type="text/javascript">
     var disqus_config = function () {
-        this.page.url = 'https://deskid.github.io/2019/03/05/about-kotlin-module/';
-        this.page.identifier = '2019/03/05/about-kotlin-module/';
-        this.page.title = '关于 `META-INF/library_release.kotlin_module`';
+        this.page.url = 'https://deskid.github.io/2019/03/08/headless-fragment/';
+        this.page.identifier = '2019/03/08/headless-fragment/';
+        this.page.title = 'Headless Fragment 设计模式';
     };
     (function() {
     var d = document, s = d.createElement('script');
