@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head><meta name="generator" content="Hexo 3.8.0">
+  <head><meta name="generator" content="Hexo 3.9.0">
     
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -287,8 +287,9 @@
 <p>在 gradle 工程中，这个文件的名字由当前工程的<code>module</code>名字 + <code>build variant</code>组成。</p>
 <p>例如在一个 aar sdk 中，你可能会创建一个叫做 <code>library</code>的module 文件夹，<code>release</code>发布出去后，生成的aar中会带有<code>'META-INF/library_release.kotlin_module'</code>这个文件。</p>
 <p>如果其他的工程也使用了相同的<code>module name</code>，比如另外一个aar刚好也用了<code>library</code>作为module名称，就会报上面的错误。</p>
-<p>通过kotlinOptions可以指定moduleName名称。</p>
+<p>通过kotlinOptions可以指定<code>moduleName</code>名称。比如下面的这段代码会将<code>moduleName</code>修改为项目的<code>group.artifact</code>名字。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">android &#123;</span><br><span class="line">    compileSdkVersion 25</span><br><span class="line">    buildToolsVersion &quot;25.0.0&quot;</span><br><span class="line"></span><br><span class="line">    compileOptions &#123;</span><br><span class="line">        kotlinOptions.freeCompilerArgs += [&apos;-module-name&apos;, &quot;$PUBLISH_GROUP_ID.$PUBLISH_ARTIFACT_ID&quot;]</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    defaultConfig &#123;</span><br><span class="line">        minSdkVersion 8</span><br><span class="line">        targetSdkVersion 25</span><br><span class="line">        versionCode 1</span><br><span class="line">        versionName &quot;1.0.5&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    buildTypes &#123;</span><br><span class="line">        release &#123;</span><br><span class="line">            minifyEnabled false</span><br><span class="line">            proguardFiles getDefaultProguardFile(&apos;proguard-android.txt&apos;), &apos;proguard-rules.pro&apos;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意：<code>PUBLISH_GROUP_ID</code> 和 <code>PUBLISH_ARTIFACT_ID</code> 是自定义的变量，你可以将它改为自己的项目中的具体值。</p>
 <p>参考文章：<br>
 <a href="https://github.com/Takhion/android-extras-delegates/issues/1" target="_blank" rel="noopener">https://github.com/Takhion/android-extras-delegates/issues/1</a><br>
 <a href="https://blog.jetbrains.com/kotlin/2015/09/kotlin-m13-is-out/" target="_blank" rel="noopener">https://blog.jetbrains.com/kotlin/2015/09/kotlin-m13-is-out/</a><br>

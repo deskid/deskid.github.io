@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head><meta name="generator" content="Hexo 3.8.0">
+  <head><meta name="generator" content="Hexo 3.9.0">
     
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -272,7 +272,7 @@
         <p>本文比较了<code>LiveData</code>和<code>RxJava</code>在概念上的不同。</p>
 <a id="more"></a>
 <p>在看<code>LiveData</code>官方文档时，我第一反应是——这是一个自带生命周期的类似RxJava的轮子。<br>
-<img src="/media/14985453596283.jpg" alt=""></p>
+<img src="/media/14985453596283.jpg" alt></p>
 <p>我一开始把它看做RxJava来用，在使用一段时间后，LiveData总是让我觉得别扭。</p>
 <p>问题就在于这两个概念实际上不太一样。</p>
 <!-- more -->
@@ -302,13 +302,13 @@
 <li>LiveData 作为 UI 前端的数据展示层</li>
 <li>RxJava 作为 后端的 network 请求层</li>
 </ol>
-<p><img src="/media/15020765905808.jpg" alt=""></p>
+<p><img src="/media/15020765905808.jpg" alt></p>
 <p>而 Google 官方提供的 Demo 中，是直接让Retrofit 网络请求返回 LiveData。</p>
 <p>两者相比，我觉得还是@chrisbanes的实践更合理。为什么这么说呢？</p>
 <ol>
 <li>
 <p>LiveData 不适合作为 network 请求的返回值。</p>
-<p><img src="/media/15020768865133.jpg" alt=""></p>
+<p><img src="/media/15020768865133.jpg" alt></p>
 <blockquote>
 <p>It’s weird to me to expose an HTTP request as live data because it really isn’t. I would think you would always have some intermediary class which allowed for things like refreshing the HTTP data and updating the existing <code>LiveData</code>.</p>
 </blockquote>

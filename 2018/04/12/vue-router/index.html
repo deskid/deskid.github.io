@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head><meta name="generator" content="Hexo 3.8.0">
+  <head><meta name="generator" content="Hexo 3.9.0">
     
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -284,7 +284,7 @@
 <a id="more"></a>
 <h2 id="1-抽象数据结构">1. 抽象数据结构</h2>
 <h3 id="1-1-router">1.1 Router</h3>
-<p><img src="/media/15235001906565.jpg" alt=""></p>
+<p><img src="/media/15235001906565.jpg" alt></p>
 <p>Router，也就是 VueRouter，在 Vue 根实例化时，将<code>VueRouter</code>作为<code>router</code>参数值传入 Vue 框架。</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> router = <span class="keyword">new</span> VueRouter(&#123;</span><br><span class="line">  mode: <span class="string">'history'</span>,</span><br><span class="line">  routes: routes</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  el: <span class="string">'#app'</span>,</span><br><span class="line">  store,</span><br><span class="line">  router,</span><br><span class="line">  render: <span class="function"><span class="params">h</span> =&gt;</span> h(App)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <p>VueRouter 根据构造函数中传入的<code>option.mode</code> 来实例化不同的 history 对象。</p>
@@ -297,7 +297,7 @@
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">this</span>.$router.push(&#123; <span class="attr">path</span>: <span class="string">'home'</span> &#125;)</span><br><span class="line"><span class="keyword">this</span>.$router.replace(&#123; <span class="attr">name</span>: <span class="string">'user'</span>, <span class="attr">params</span>: &#123; <span class="attr">userId</span>: <span class="number">123</span> &#125;&#125;)</span><br><span class="line"><span class="keyword">this</span>.$router.go(<span class="number">-1</span>)</span><br></pre></td></tr></table></figure>
 <p>在后面会了解到 <code>push</code> 、<code>replace</code>，<code>go</code> 方法只是在 <code>$router.history</code> 的方法上包了一层。</p>
 <h3 id="1-2-route">1.2 Route</h3>
-<p><img src="/media/15234379495016.jpg" alt=""></p>
+<p><img src="/media/15234379495016.jpg" alt></p>
 <p>Route，路由信息对象，记录了路由所需的元信息和 URL 匹配到的 RouteRecord。</p>
 <p>在 <code>VueRouter.install()</code> 时，Vue prototype 上注册了<code>$router</code>的同时，也注册了<code>$route</code>。</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Object</span>.defineProperty(Vue.prototype, <span class="string">'$route'</span>, &#123;</span><br><span class="line">  get () &#123; <span class="keyword">return</span> <span class="keyword">this</span>._routerRoot._route &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
@@ -306,10 +306,10 @@
 <p>每当 <code>_route</code> 值被 set，Vue 就会通知所有依赖的监听者，比如<code>$route</code>。</p>
 <p>通过监听<code>$route</code> 就可以对路由的变化做出响应。在每个子组件中通过<code>this.$route</code> 可以直接取到 query、params 对象，非常实用。</p>
 <p>举个例子，当 path 变化时触发一个 page event，就可以这么写：</p>
-<p><img src="/media/15234387967416.jpg" alt=""></p>
+<p><img src="/media/15234387967416.jpg" alt></p>
 <p>Route 中的 matched 数组存储的是当前路由状态下匹配的 RouterRecord。RouterRecord 中记录了路由对应的 component。</p>
 <p>举个例子，某个 <code>vm.$route</code> 如下:<br>
-<img src="/media/15234378286511.jpg" alt=""></p>
+<img src="/media/15234378286511.jpg" alt></p>
 <p>直觉上一个路由状态匹配一个 Component 组件似乎很合理，那为什么这里<code>matched</code>是一个数组呢? 这个和 vue-router 支持路由嵌套有关，这里不深究。</p>
 <p>通过上面的分析可以总结 ：</p>
 <ol>
@@ -319,7 +319,7 @@
 </ol>
 <h3 id="1-3-history">1.3 History</h3>
 <p>vue-router 中的 history 是根据 <code>mode</code> 初始化的。</p>
-<p><img src="/media/15235056976931.jpg" alt=""></p>
+<p><img src="/media/15235056976931.jpg" alt></p>
 <p><code>HTML5History</code>、<code>HashHistory</code>、<code>AbstractHistory</code> 都继承于 父类 <code>History</code>。</p>
 <ul>
 <li>

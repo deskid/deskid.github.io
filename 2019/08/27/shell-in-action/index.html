@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="Shell 编程实践">
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Deskid's Blog">
+
+
+
+
+
+
+<link rel="canonical" href="https://deskid.github.io/2019/08/27/shell-in-action/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-110544275-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-110544275-1');
+</script>
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "n0bYG2FvODJbAiY1Rprfa0cr-gzGzoHsz",
+      appKey: "3VnBnQ7nTzd6q6YsKNIePPOr"
+    });
+  </script>
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":"n0bYG2FvODJbAiY1Rprfa0cr-gzGzoHsz","app_key":"3VnBnQ7nTzd6q6YsKNIePPOr"},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> Shell 编程实践 - Deskid's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Deskid's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            Categories
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Deskid's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              Categories
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Shell 编程实践
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2019-08-27
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/linux/">linux</a>
+            
+              <a href="/categories/linux/shell/">shell</a>
+            
+          </span>
+        
+        
+        <span class="post-visits" data-url="/2019/08/27/shell-in-action/" data-title="Shell 编程实践">
+          阅读次数 0
+        </span>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#一-模块化"><span class="toc-text">一. 模块化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-定义main函数"><span class="toc-text">1.1 定义main函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-功能函数化"><span class="toc-text">1.2 功能函数化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-脚本引用"><span class="toc-text">1.3 脚本引用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二-错误处理"><span class="toc-text">二. 错误处理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-使用短路逻辑运算符"><span class="toc-text">2.1 使用短路逻辑运算符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-使用-set-e"><span class="toc-text">2.2 使用 set -e</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-使用-trap-捕获信号量"><span class="toc-text">2.3 使用 trap 捕获信号量</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三-调试"><span class="toc-text">三. 调试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-log-日志"><span class="toc-text">3.1 log 日志</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-set-x"><span class="toc-text">3.2 set -x</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#四-一些有用的code-snipper"><span class="toc-text">四. 一些有用的code snipper</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-获取当前工作目录"><span class="toc-text">4.1 获取当前工作目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-json处理"><span class="toc-text">4.2 json处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#五-参考链接"><span class="toc-text">五. 参考链接</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>对于习惯了使用高级语言编程的程序员来说，shell 脚本的语法实在是有点原始。但是，shell 脚本开箱即用的特点使得它尤其适合在 Linux 服务器上运行。而例如 Python、NodeJS等语言都需要宿主上安装运行环境才可以使用。</p>
+<p>最近出于工作的需要，写了不少 shell 脚本，这里简单记录下编写 shell 过程中的一些实践。</p>
+<a id="more"></a>
+<h2 id="一-模块化">一. 模块化</h2>
+<p>许多 shell 脚本从头到尾都是命令的堆积，一个脚本上千行，一个命令做了N件事情，到处定义和引用全局变量。</p>
+<p>其实 shell 脚本也需要按照功能划分模块，良好的模块拆分带来更好的代码可读性和可维护性，同时也方便测试。</p>
+<h3 id="1-1-定义main函数">1.1 定义main函数</h3>
+<p>一个shell脚本，可以像 Python 一样定义一个<code>__main__</code>函数</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span>!/usr/bin/env bash</span><br><span class="line"></span><br><span class="line">func1()&#123;</span><br><span class="line">    #do sth</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func2()&#123;</span><br><span class="line">    #do sth</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">main()&#123;</span><br><span class="line">    func1</span><br><span class="line">    func2</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">main "$@"</span><br></pre></td></tr></table></figure>
+<p>这样可以方便的找到程序的入口和退出点。</p>
+<h3 id="1-2-功能函数化">1.2 功能函数化</h3>
+<p>正如一个类只负责一件事，在 shell 中一个 function 也应该只做一件事，并且我们要尽可能的将事情的步骤分解为function。</p>
+<p>在写 shell function 时，和其他语言不一样，shell 中的变量声明默认是全剧作用域的。所以在定义函数内变量时总是要指定<code>local</code>关键字，如果该变量是只读(readonly)的常量，还可以加上<code>-r</code>。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">test1() &#123;</span><br><span class="line">  local -r var="$1"</span><br><span class="line">  var="balabala" # error: var: readonly variable</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>shell 的函数定义不能指定入参名称和个数，也不能定义函数的返回值，参数及返回值的取值是按照下表约定的。</p>
+<table>
+<thead>
+<tr>
+<th>$参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$0</code></td>
+<td>当前脚本的名称</td>
+</tr>
+<tr>
+<td><code>$1</code></td>
+<td>命令的第一个参数</td>
+</tr>
+<tr>
+<td><code>$2</code></td>
+<td>命令的第二个参数</td>
+</tr>
+<tr>
+<td>…</td>
+<td>以此类推</td>
+</tr>
+<tr>
+<td><code>$#</code></td>
+<td>参数的个数</td>
+</tr>
+<tr>
+<td><code>$*</code></td>
+<td>单字符串表示的所有参数</td>
+</tr>
+<tr>
+<td><code>$@</code></td>
+<td>多字符串表示的所有参数</td>
+</tr>
+<tr>
+<td><code>$?</code></td>
+<td>返回值，0 正常退出</td>
+</tr>
+</tbody>
+</table>
+<p>函数的返回值有4种方式返回。</p>
+<ul>
+<li>在函数内将返回结果赋值给全局变量。</li>
+<li>在函数内将结果通过<code>echo</code>输出到标准输出，由于标准输出是会被shell子进程继承的，所以这种方式支持子进程向父进程返回结果。</li>
+<li>在函数内 <code>return 0/1</code> ，通过<code>$?</code>可以获取return的值。</li>
+<li>通过写result文件返回结果，这种思路和赋值给全局变量一样，不过写文件很方便传递多行字符串结果。</li>
+</ul>
+<h3 id="1-3-脚本引用">1.3 脚本引用</h3>
+<p>多个脚本之间复用的函数和公共参数可以抽为单独的文件，通过<code>source utils.sh</code> 来引入。不建议使用<code>sh</code> 和 <code>exec</code> 的方式调用别的shell脚本，除非你明确知道你在做什么。</p>
+<h2 id="二-错误处理">二. 错误处理</h2>
+<p>脚本中如果有运行失败的命令，shell 会默认继续执行，这个默认特性会给错误处理造成麻烦。</p>
+<p>例如有时候，我们需要区分系统错误和业务错误：当碰到系统出错，脚本需要停止继续执行；当遇到业务错误，在处理完错误后，脚本可能需要继续执行。下面有几种方式可以控制 shell 的错误处理逻辑。</p>
+<h3 id="2-1-使用短路逻辑运算符">2.1 使用短路逻辑运算符</h3>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">command || exit 1</span><br></pre></td></tr></table></figure>
+<p>等价于</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">command</span><br><span class="line">if [ "$?" -ne 0 ]; then echo "command failed"; exit 1; fi</span><br></pre></td></tr></table></figure>
+<p>如果<code>command</code>正常退出，返回0，<code>||</code> 运算符右半部分被短路，脚本继续执行。<br>
+如果<code>command</code>异常退出，返回非0， 运算符右半部分执行，脚本<code>exit 1</code>。</p>
+<h3 id="2-2-使用-set-e">2.2 使用 <code>set -e</code></h3>
+<p><code>set -e</code> 等价于<code>-o errexit</code>，表示打开 shell 脚本的错误退出选项，当脚本运行出现非零返回值时，不再继续运行下面的命令。</p>
+<p><code>set +e</code> 表示关闭返回值判断选项，总是继续运行出错命令后面的命令。</p>
+<p>配合这两个条命令，可以灵活的控制 shell 脚本处理业务错误和系统错误。</p>
+<h3 id="2-3-使用-trap-捕获信号量">2.3 使用 <code>trap</code> 捕获信号量</h3>
+<p>shell 脚本在运行期间会产生三种“伪信号量”，通过 <code>trap ‘command’ signal</code> 可以捕获这些信号。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">信号名</th>
+<th style="text-align:left">何时产生</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">EXIT</td>
+<td style="text-align:left">从一个函数中退出或整个脚本执行完毕</td>
+</tr>
+<tr>
+<td style="text-align:left">ERR</td>
+<td style="text-align:left">当一条命令返回非零状态时(代表命令执行不成功)</td>
+</tr>
+<tr>
+<td style="text-align:left">DEBUG</td>
+<td style="text-align:left">脚本中每一条命令执行之前</td>
+</tr>
+</tbody>
+</table>
+<p>其中监听 <code>ERR</code> 可以在使得我们在 shell 出错后，有机会做一些比如清理工作现场、发送错误、报警日志到IM等工作。</p>
+<h2 id="三-调试">三. 调试</h2>
+<p>shell 脚本没法直接调试，只能依靠print大法（有个开源工具<a href="http://bashdb.sourceforge.net/" target="_blank" rel="noopener">bashdb</a>，可以单步调试shell，对于大型的shell脚本可能有帮助），因此一个清晰的日志可以帮助排查很多问题。</p>
+<h3 id="3-1-log-日志">3.1 log 日志</h3>
+<ul>
+<li>按照日期时间组织log文件</li>
+<li>标准输出到terminal时，使用color</li>
+<li>使用 tee 在标准输出的同时重定向到文件</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">LOG_LEVEL_ALL=-1</span><br><span class="line">LOG_LEVEL_DEBUG=100</span><br><span class="line">LOG_LEVEL_INFO=200</span><br><span class="line">LOG_LEVEL_WARN=300</span><br><span class="line">LOG_LEVEL_ERROR=400</span><br><span class="line">LOG_LEVEL_OFF=9000</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [[ abc<span class="variable">$&#123;LOG_LEVEL&#125;</span> = <span class="string">"abc"</span> ]]; <span class="keyword">then</span></span><br><span class="line">    LOG_LEVEL=<span class="variable">$&#123;LOG_LEVEL_ALL&#125;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [[ abc<span class="variable">$&#123;LOG_4_SH_DIR&#125;</span> = <span class="string">"abc"</span> ]]; <span class="keyword">then</span></span><br><span class="line">    LOG_4_SH_DIR=<span class="variable">$&#123;WORK_PATH&#125;</span>/logs</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 根据日期获取当天日志名称</span></span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">getLogFile</span></span>() &#123;</span><br><span class="line">    <span class="keyword">if</span> [[ ! -e <span class="variable">$&#123;LOG_4_SH_DIR&#125;</span> ]]; <span class="keyword">then</span></span><br><span class="line">        mkdir -p <span class="variable">$&#123;LOG_4_SH_DIR&#125;</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">    <span class="built_in">local</span> logDate=$(date +<span class="string">"%Y%m%d"</span>)</span><br><span class="line">    <span class="built_in">local</span> todayLogFile=<span class="variable">$&#123;LOG_4_SH_DIR&#125;</span>/log_<span class="variable">$&#123;logDate&#125;</span>.<span class="built_in">log</span></span><br><span class="line">    <span class="keyword">if</span> [[ ! -e <span class="variable">$&#123;todayLogFile&#125;</span> ]]; <span class="keyword">then</span></span><br><span class="line">        touch <span class="variable">$&#123;todayLogFile&#125;</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"############################ <span class="variable">$(date +%Y-%m-%d)</span> #######################"</span> &gt;&gt; <span class="variable">$&#123;todayLogFile&#125;</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="variable">$&#123;todayLogFile&#125;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> debug_color_print &#123;</span><br><span class="line">    <span class="built_in">echo</span> -e <span class="string">"\033[0;32m<span class="variable">$1</span>\033[0m"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">logDebug</span></span>() &#123;</span><br><span class="line">    <span class="keyword">if</span> [[ <span class="variable">$&#123;LOG_LEVEL&#125;</span> -le <span class="variable">$&#123;LOG_LEVEL_DEBUG&#125;</span> ]]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">local</span> message=<span class="string">" [ "</span><span class="variable">$0</span><span class="string">" ] (DEBUG) "</span>$*</span><br><span class="line">        debug_color_print <span class="string">"<span class="variable">$message</span>"</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="variable">$&#123;message&#125;</span> &gt;&gt; $(getLogFile)</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>$0</code> 代表当前shell脚本的名字<br>
+<code>$LINENO</code> 代表shell脚本的当前行号<br>
+<code>$FUNCNAME[]</code> 代表当前命令所属的函数名，通过遍历<code>$FUNCNAME[]</code>数组可以知道当前的函数调用栈。</p>
+<h3 id="3-2-set-x">3.2 <code>set -x</code></h3>
+<p><code>set -x</code>  进入跟踪方式，显示所执行的每一条命令。配合<code>trap command DEBUG</code>可以在显示执行命令前打印一些有用的帮助信息。</p>
+<p>通过设置<code>export PS4='+{$LINENO:${FUNCNAME[0]}} '</code>还可以改变<code>set -x</code>模式下的输出格式，可以在每一条实际执行的命令前面显示其行号以及所属的函数名。</p>
+<h2 id="四-一些有用的code-snipper">四. 一些有用的code snipper</h2>
+<h3 id="4-1-获取当前工作目录">4.1 获取当前工作目录</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> get_working_dir()&#123;</span><br><span class="line">    <span class="built_in">local</span> CURRENT_DIR=$(<span class="built_in">pwd</span>)</span><br><span class="line">    <span class="built_in">local</span> WORK_DIR=$(dirname <span class="variable">$0</span>)</span><br><span class="line">    <span class="built_in">cd</span> ./<span class="variable">$&#123;WORK_DIR&#125;</span></span><br><span class="line">    WORK_DIR=$(<span class="built_in">pwd</span>)</span><br><span class="line">    <span class="built_in">cd</span> <span class="variable">$&#123;CURRENT_DIR&#125;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="variable">$&#123;WORK_DIR&#125;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="4-2-json处理">4.2 json处理</h3>
+<p>简单的 json 的处理，可以直接使用awk，sed、grep。如果有<code>Python</code> 环境，还可以用Python来帮助解析。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">repo_id=$(<span class="built_in">echo</span> <span class="variable">$repo_info_response</span> | python -c <span class="string">"import sys, json; print(json.load(sys.stdin)['id'])"</span>)</span><br></pre></td></tr></table></figure>
+<p>不过最终还是推荐直接使用<a href="https://stedolan.github.io/jq" target="_blank" rel="noopener"> jq </a>。jq提供了一套完整的命令行环境下的json解析功能。使用jq时，如果有语法不熟悉的，可以用这个网站测试—— <a href="https://jqplay.org" target="_blank" rel="noopener">https://jqplay.org</a></p>
+<ul>
+<li>json decode</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 取 &#123; "id": "value"&#125; 中的id</span></span><br><span class="line">repo_id=$(<span class="built_in">echo</span> <span class="variable">$&#123;repo_info_response&#125;</span> | jq -r <span class="string">'.id'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 取  [ &#123; "web_url": "value"&#125; ] 中的数组第一个</span></span><br><span class="line">mr_iid=$(<span class="built_in">echo</span> <span class="variable">$&#123;mr_iid_response&#125;</span> | <span class="variable">$&#123;JQ&#125;</span> -r <span class="string">'.[0]'</span>)</span><br><span class="line"><span class="comment"># 取  [ &#123; "web_url": "value"&#125; ] 中的数组第一个对象的web_url</span></span><br><span class="line">mr_web_url=$(<span class="built_in">echo</span> <span class="variable">$&#123;mr_iid_response&#125;</span> | <span class="variable">$&#123;JQ&#125;</span> -r <span class="string">'.[0].web_url'</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>json 数组遍历</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> $(<span class="built_in">echo</span> <span class="string">"<span class="variable">$&#123;response&#125;</span>"</span> | <span class="variable">$&#123;JQ&#125;</span> -r <span class="string">'.[] | @base64'</span>); <span class="keyword">do</span></span><br><span class="line">        <span class="function"><span class="title">_jq</span></span>() &#123;</span><br><span class="line">            <span class="built_in">echo</span> <span class="variable">$&#123;row&#125;</span> | base64 --decode | <span class="variable">$&#123;JQ&#125;</span> -r <span class="variable">$&#123;1&#125;</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">local</span> language_repo_id=$(_jq <span class="string">'.id'</span>)</span><br><span class="line">        <span class="built_in">local</span> language_repo_name=$(_jq <span class="string">'.name'</span>)</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<p>注意这里 base64 是用来将json数组中的某一个多行元素转化为一行输出，方便 for 循环处理。</p>
+<ul>
+<li>json encode</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">message_json=<span class="string">"<span class="variable">$($&#123;JQ&#125; -nc --arg str "$message_text" '&#123;"text": $str&#125;')</span>"</span></span><br></pre></td></tr></table></figure>
+<p>上面的代码将$message_text encode输出到<code>{&quot;text&quot;:&quot;message_text&quot;}</code>中。</p>
+<h2 id="五-参考链接">五. 参考链接</h2>
+<p><a href="http://www.ruanyifeng.com/blog/2017/11/bash-set.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2017/11/bash-set.html</a><br>
+<a href="https://www.ibm.com/developerworks/cn/linux/l-cn-shell-debug/index.html" target="_blank" rel="noopener">https://www.ibm.com/developerworks/cn/linux/l-cn-shell-debug/index.html</a></p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://deskid.github.io">deskid</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://deskid.github.io/2019/08/27/shell-in-action/">https://deskid.github.io/2019/08/27/shell-in-action/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+        
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2019/04/17/android-string-xml-escape/">
+        <span class="next-text nav-default">Android strings xml 的转义</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:deskidzhou@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/deskid" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">deskid</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://deskid.github.io/2019/08/27/shell-in-action/';
+        this.page.identifier = '2019/08/27/shell-in-action/';
+        this.page.title = 'Shell 编程实践';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//deskid.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

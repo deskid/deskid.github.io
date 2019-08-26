@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head><meta name="generator" content="Hexo 3.8.0">
+  <head><meta name="generator" content="Hexo 3.9.0">
     
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -317,7 +317,7 @@ fragments都通过</p>
 </ul>
 <h3 id="viewmodel的生命周期">ViewModel的生命周期</h3>
 <p><code>ViewModel</code> 的生命会绑定到调用<code>ViewModelProvider</code> 时传入的<code>Lifecycle</code>对象。直到<code>Lifecycle</code>对象永久的销毁了（<code>Activity.finish()</code>/<code>fragment.detach()</code>）， <code>ViewModel</code> 都一直keep在内存中。</p>
-<p><img src="/media/viewmodel-lifecycle.png" alt=""></p>
+<p><img src="/media/viewmodel-lifecycle.png" alt></p>
 <h3 id="viewmodel-vs-savedinstancestate">ViewModel vs SavedInstanceState</h3>
 <p>ViewModels 会在 configuration changes 时维持数据，但在系统kill应用时不会将数据持久化到本地。</p>
 <p>举例说明，如果用户离开应用，几个小时后再回来，应用进程这时已经被系统kill，之前打开的Activity会根据save state重建现场。<br>

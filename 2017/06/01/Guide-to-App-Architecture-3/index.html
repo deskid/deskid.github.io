@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head><meta name="generator" content="Hexo 3.8.0">
+  <head><meta name="generator" content="Hexo 3.9.0">
     
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -303,7 +303,7 @@
 <blockquote>
 <p>记录component 当前的生命周期状态</p>
 </blockquote>
-<p><img src="/media/lifecycle-states.png" alt=""></p>
+<p><img src="/media/lifecycle-states.png" alt></p>
 <p>用图数据结构理解的话，status就是节点，而event是连接各个节点的边。</p>
 <p>要想监控component的生命周期，只需要在对应方法上面添加相应annotations</p>
 <figure class="highlight diff"><table><tr><td class="code"><pre><span class="line">public class MyObserver implements LifecycleObserver &#123;</span><br><span class="line"><span class="addition">+  @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)</span></span><br><span class="line">    public void onResume() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="addition">+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)</span></span><br><span class="line">    public void onPause() &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">aLifecycleOwner.getLifecycle().addObserver(new MyObserver());</span><br></pre></td></tr></table></figure>

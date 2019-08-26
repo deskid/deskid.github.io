@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head><meta name="generator" content="Hexo 3.8.0">
+  <head><meta name="generator" content="Hexo 3.9.0">
     
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -337,7 +337,7 @@
 <p>LiveData 会保证在 fragment 处于 active 状态时[onStart，onStop] 才调用<code>onChanged</code>，并在<code>onDestroy()</code>时移除observer。</p>
 <p>在configuration changes（旋转屏幕后），重建的 fragment 会恢复同一个 ViewModel 实例（从这个意义上说ViewModel独立于View生命周期）<br>
 See<a href="https://developer.android.com/topic/libraries/architecture/viewmodel.html#the_lifecycle_of_a_viewmodel" target="_blank" rel="noopener">The lifecycle of a ViewModel</a>.<br>
-<img src="/media/14958803845939.jpg" alt=""></p>
+<img src="/media/14958803845939.jpg" alt></p>
 <blockquote>
 <p>so far so good, but how to init LiveData<user> through net api ?</user></p>
 </blockquote>
@@ -395,7 +395,7 @@ See<a href="https://developer.android.com/topic/libraries/architecture/viewmodel
 <h3 id="6-如何测试">6. 如何测试</h3>
 <p>如何分别测试各个Module（略）</p>
 <h3 id="7-最终架构图">7. 最终架构图</h3>
-<p><img src="/media/final-architecture.png" alt=""></p>
+<p><img src="/media/final-architecture.png" alt></p>
 <h2 id="guiding-principles">Guiding principles</h2>
 <hr>
 <p>这里是 google 官方总结的一些建议</p>
@@ -415,7 +415,7 @@ See<a href="https://developer.android.com/topic/libraries/architecture/viewmodel
 <p>Below is a sample implementation:</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//a generic class that describes a data with a status</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Resource</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@NonNull</span> <span class="keyword">public</span> <span class="keyword">final</span> Status status;</span><br><span class="line">    <span class="meta">@Nullable</span> <span class="keyword">public</span> <span class="keyword">final</span> T data;</span><br><span class="line">    <span class="meta">@Nullable</span> <span class="keyword">public</span> <span class="keyword">final</span> String message;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Resource</span><span class="params">(@NonNull Status status, @Nullable T data, @Nullable String message)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.status = status;</span><br><span class="line">        <span class="keyword">this</span>.data = data;</span><br><span class="line">        <span class="keyword">this</span>.message = message;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">Resource&lt;T&gt; <span class="title">success</span><span class="params">(@NonNull T data)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Resource&lt;&gt;(SUCCESS, data, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">Resource&lt;T&gt; <span class="title">error</span><span class="params">(String msg, @Nullable T data)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Resource&lt;&gt;(ERROR, data, msg);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">Resource&lt;T&gt; <span class="title">loading</span><span class="params">(@Nullable T data)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Resource&lt;&gt;(LOADING, data, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><code>NetworkBoundResource</code>是一个Helper类。负责决策数据来源于disk还是network。</p>
-<p><img src="/media/network-bound-resource.png" alt=""></p>
+<p><img src="/media/network-bound-resource.png" alt></p>
 <ol>
 <li>
 <p>观察database的数据变动，并判断数据库的数据是否足够好来决定dispatch数据、以及fetch from network。</p>

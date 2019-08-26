@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head><meta name="generator" content="Hexo 3.8.0">
+  <head><meta name="generator" content="Hexo 3.9.0">
     
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -308,7 +308,7 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public static String escapeXml(String orig) &#123;</span><br><span class="line">    return StringGroovyMethods.collectReplacements(orig, new Closure&lt;String&gt;((Object)null) &#123;</span><br><span class="line">        public String doCall(Character arg) &#123;</span><br><span class="line">            switch(arg) &#123;</span><br><span class="line">            case &apos;&quot;&apos;:</span><br><span class="line">                return &quot;&amp;quot;&quot;;</span><br><span class="line">            case &apos;&amp;&apos;:</span><br><span class="line">                return &quot;&amp;amp;&quot;;</span><br><span class="line">            case &apos;\&apos;&apos;:</span><br><span class="line">                return &quot;&amp;apos;&quot;;</span><br><span class="line">            case &apos;&lt;&apos;:</span><br><span class="line">                return &quot;&amp;lt;&quot;;</span><br><span class="line">            case &apos;&gt;&apos;:</span><br><span class="line">                return &quot;&amp;gt;&quot;;</span><br><span class="line">            default:</span><br><span class="line">                return null;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>可以看到这里按照xml的规定处理了所有的转义。</p>
 <p>android的string资源也是定义在xml中的，在<a href="https://developer.android.com/guide/topics/resources/string-resource" target="_blank" rel="noopener">官方文档</a>中也有说明这些特殊符号如何转义。</p>
-<p><img src="http://img0.didiglobal.com/static/driver_xml_image/img/static/012403c3ff9e924c615186088fdd8742e99516e8.jpg" alt=""></p>
+<p><img src="http://img0.didiglobal.com/static/driver_xml_image/img/static/012403c3ff9e924c615186088fdd8742e99516e8.jpg" alt></p>
 <p>可以见到这里对转义的处理有些不一样。这是因为android中的string既可以直接用在xml attribute中，也可以注册在strings.xml文件中。所以上面列举了双引号和单引号的几种不同处理方式。</p>
 <p>再来看下android util 包下处理escapeText的函数</p>
 <p><code>com.android.utils.XmlUtils.java</code></p>
@@ -374,6 +374,12 @@
         
         
   <nav class="post-nav">
+    
+      <a class="prev" href="/2019/08/27/shell-in-action/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Shell 编程实践</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
     
     
       <a class="next" href="/2019/03/08/headless-fragment/">

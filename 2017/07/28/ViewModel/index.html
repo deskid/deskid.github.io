@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head><meta name="generator" content="Hexo 3.8.0">
+  <head><meta name="generator" content="Hexo 3.9.0">
     
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -341,16 +341,16 @@
 <li><code>onAttach(Activity)</code> and <code>onActivityCreated(Bundle)</code> <strong>will</strong> still be called.</li>
 </ul>
 <p>上面这段话体现在Fragment生命周期上如图所示：</p>
-<p><img src="/media/15011367324387.jpg" alt=""></p>
+<p><img src="/media/15011367324387.jpg" alt></p>
 <p>注意，在官方图的基础上加的红线部分就是设置了<code>setRetainInstance</code>之后的生命周期变动。</p>
 <p>Fragment在设置<code>setRetainInstance(true)</code>后，当 host Activity re-creation 时，fragment不会被destroyed，而是keep在内存中。当re-creation时，fragment 跳过 <code>onDestroy()</code> 和 <code>onCreate()</code>生命周期，并重新执行一遍 <code>onAttach()</code> 和 <code>onDetach()</code>之间的回调。</p>
 <p>因此在 Activity re-creation 后，fragment还是原来的那个实例。</p>
 <p>看完这个介绍，是不是有所启发了？</p>
 <p>回到 ViewModel 的实现来。</p>
 <p>下面大图是 Google Android Architecture Components 的部分框架(图来自<a href="https://medium.com/@hitherejoe" target="_blank" rel="noopener">Joe Birch</a>)，</p>
-<p><img src="/media/15011493872486.jpg" alt=""></p>
+<p><img src="/media/15011493872486.jpg" alt></p>
 <p>红色框线部分是<code>ViewModel</code>的部分。</p>
-<p><img src="/media/15011494656226.jpg" alt=""></p>
+<p><img src="/media/15011494656226.jpg" alt></p>
 <p>可见ViewModel主要构成部分如下：</p>
 <ul>
 <li><code>ViewModelProviders</code></li>
@@ -370,7 +370,7 @@
 <li>再通过<code>ViewModelProvider.get()</code>获取ViewModel实例。</li>
 </ol>
 <p><code>ViewModelProviders</code> 是创建<code>ViewModelProvider</code>的工具类，通过<code>of()</code>方法获取<code>ViewModelProvider</code><br>
-<img src="/media/15011510361313.jpg" alt=""></p>
+<img src="/media/15011510361313.jpg" alt></p>
 <p>贴<code>of</code>代码(其一)：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@MainThread</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ViewModelProvider <span class="title">of</span><span class="params">(@NonNull Activity activity, @NonNull Factory factory)</span> </span>&#123;</span><br><span class="line">   <span class="keyword">return</span> <span class="keyword">new</span> ViewModelProvider(ViewModelStores.of(activity), factory);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>上述代码简单的调用构造函数创建了<code>ViewModelProvider</code>。</p>
@@ -379,7 +379,7 @@
 <p>由上面代码可以看到，构造函数传入的<code>ViewModelStore</code>（<code>ViewModelStores.of()</code> 的返回值） 这里充当了ViewModel缓存的功能，<code>Factory</code>则直接负责ViewModel的创建。</p>
 <p><code>ViewModelStores</code>和<code>ViewModelStore</code>的关系也是类似的，<code>ViewModelStores</code>是创建<code>ViewModelStore</code>的工具类。</p>
 <p><code>ViewModelStores</code>也有几个<code>of</code>方法。<br>
-<img src="/media/15011531800293.jpg" alt=""></p>
+<img src="/media/15011531800293.jpg" alt></p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ViewModelStore <span class="title">of</span><span class="params">(FragmentActivity activity)</span> </span>&#123;</span><br><span class="line">   <span class="keyword">return</span> HolderFragment.holderFragmentFor(activity).getViewModelStore();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>在上述代码的具体实现中，注意<code>holderFragmentFor</code>这里，大概猜到了具体实现和<code>Fragment</code>有关。</p>
 <p>继续深入。</p>
