@@ -275,11 +275,12 @@
 <p>最近在引入两个kotlin写的aar库时编译器报了这样的一个错误。说是打包时存在两个相同的文件，文件路径是<code>META-INF/library_release.kotlin_module</code>。</p>
 <p>这个文件是干什么用的呢？</p>
 <a id="more"></a>
-<p>kotlin 支持文件级别的申明，也就是说我们可以在一个文件中申明变量、方法，而不像Java，必须有一个类。</p>
-<p>每个 kotlin source file 会默认创建一个同样命名，但首字母大写，加了“Kt”后缀的类。</p>
+<p>这就要从 kotlin 的<code>package-level-functions</code>说起了。</p>
+<p>我们都知道 kotlin 支持文件级别的函数、变量申明，也就是说我们可以直接在一个文件中申明变量、方法，而不像Java，必须有一个类来承接这些定义。</p>
+<p>每个这种有了文件级别的申明的 kotlin source file，都会默认创建一个同样命名，但首字母大写，末尾加了“Kt”后缀的class类。</p>
 <p>比如<code>FileExt.kt</code> 会编译成<code>FileExtKt.class</code></p>
-<p>在Java代码中，可以通过编译后的类名访问申明在顶层的函数和变量。因此，在同一包名下，不支持两个命名相同的kotlin source文件。</p>
-<p>通过<code>@file:JvmName(&quot;CustomName&quot;)</code>可以显式的指定一个文件编译后的类名，通过<code>@file:JvmMultifileClass</code>可以指定多个文件共享一个类名。</p>
+<p>在Java代码中，可以通过编译后的类名访问 kotlin 申明在顶层的函数和变量。因此，在同一包名下，不支持两个命名相同的kotlin source文件。</p>
+<p>但是，我们通过<code>@file:JvmName(&quot;CustomName&quot;)</code>可以显式的指定一个文件编译后的类名，或者通过<code>@file:JvmMultifileClass</code>指定哪几个文件共享一个类名。这就是通过注解告诉kotlin编译器，我这个文件要编译到哪个生成类中。</p>
 <p>为了实现这个功能，kotlin专门引入了一个resource文件，用来指导kotlin的编译。</p>
 <p>没错，这个文件就是 <code>META-INF/&lt;module_name&gt;.kotlin_module</code>.</p>
 <p>网上有很多人解决上面的问题时，将 <code>.kotlin_module</code> 文件在打包流程中exclude，实际上这种做法是不正确的。</p>
